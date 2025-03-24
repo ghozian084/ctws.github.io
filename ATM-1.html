@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Computational Thinking Worksheet</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <style>
+            .center{
+                text-align: center;
+            }
+            .center-item{
+                align-items: center;
+            }
+            .margin-5{
+                margin: 5px;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class="container card">
+        <div class="jumbotron p-3 my-3 bg-dark text-white">
+            <h1 class="center">Lembar Kerja SPLSV</h1>
+          </div>
+          <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="container card center-item">
+                        <h5 class="center"><a class="btn btn-primary" href="mainmenu.html" role="button"><i class="fa fa-home"></i></a><br><small id="proses">1/4</small></h5>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" onclick="pindah(1);">1</button>
+                            <button type="button" class="btn btn-primary" onclick="pindah(2);">2</button>
+                            <button type="button" class="btn btn-primary" onclick="pindah(3);">3</button>
+                            <button type="button" class="btn btn-primary" onclick="pindah(4);">4</button>
+                          </div>
+                    </div>
+                    <br>
+                    <div class="container card">
+                        <p id="pertanyaan">Apa Informasi yang anda peroleh dari masalah di samping? Tulis secara rincian dan tulis semua daftar pertanyaan yang dapat dibuat berdasarkan masalah disamping</p>
+                        <div class="form-group">
+                            <label for="comment">Tulis dibawah ini:</label>
+                            <textarea class="form-control" rows="5" id="jawaban"></textarea>
+                            <button type="submit" class="btn btn-primary margin-5" onclick="simpan()">Simpan</button>
+                            <div id="keterangan"></div>
+                          </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="alert alert-success">
+                        <h3>Tema: ATM(Anjungan Tunai Mandiri)</h3>
+                      </div>
+                    <p>
+                        <i>Ali akan membeli beberapa barang sebagai berikut:
+                        <br>
+                        <ul class="list-group">
+                            <li class="list-group-item">1 pasang sepatu harga Rp 150.000,00</li>
+                            <li class="list-group-item">1 printer harga Rp 650.000,00</li>
+                            <li class="list-group-item">2 pasang kaos kaki harga Rp 45.000,00</li>
+                            <li class="list-group-item">1 jam tangan harga Rp 280.000,00</li>
+                          </ul>
+                        <br>
+                        Uang yang ada dalam dompet Ali saat ini hanya Rp 75.000,00. Untuk kekurangannya, Ali akan mengambil di ATM. Apabila Ali berhasil menarik uang dari sebuah ATM dengan nominal Rp 100.000,00 sebanyak 4 lembar, berapa lembar lagi uang yang harus diambil Ali dari ATM dengan nominal Rp 50.000,00? Jelaskan langkah-langkahnya!
+                        <br>
+                        <br>
+                        <p class="text-right">(Sumber soal = Try Out Online Soal Asesmen Kompetensi Minimum (AKM) (Puspendik) dapat diakses http://118.98.227.194/simulasi/question/)</p>
+
+                    </i>
+                    </p>
+                </div>
+              </div>        
+          </div>
+        </div>
+        <script>
+            var txtPertanyaan=document.getElementById("pertanyaan");
+            var jawaban=document.getElementById("jawaban");
+            var keterangan=document.getElementById("keterangan");
+            var proses=document.getElementById("proses");
+
+            function pindah(number){
+                if (number==1){
+                    txtPertanyaan.innerText='Apa Informasi yang anda peroleh dari masalah di samping? Tulis secara rincian dan tulis semua daftar pertanyaan yang dapat dibuat berdasarkan masalah disamping';
+                    reset();
+                    proses.innerText="1/4";              
+                }
+                if (number==2){
+                    txtPertanyaan.innerText='(A) Menghitung kekurangan uang Ali \n(B) Total kekurangan uang Ali dalam lembar 50000 \n(C) Menghitung total belanja Ali \n(D) Menghitung total uang yang sudah dimiliki Ali \n Urutkan langkah-langkah yang menurut anda tepat dan beri alasan! \nContoh: A-B-C-D, Karena ...';
+                    reset();
+                    proses.innerText="2/4";  
+                }
+                if (number==3){
+                    txtPertanyaan.innerText='Tuliskan persamaan berdasarkan langkah yang anda tentukan, lalu selesaikan!';
+                    reset();
+                    proses.innerText="3/4";  
+                }
+                if (number==4){
+                    txtPertanyaan.innerText='Tuliskan kesimpulan anda untuk menunjukan masalah di samping telah selesai!';
+                    reset();
+                    proses.innerText="4/4";  
+                }
+            }
+
+            function simpan(){
+                keterangan.innerText="Sukses menyimpan";
+                keterangan.setAttribute("class","alert alert-success");
+            }
+
+            function reset(){
+                jawaban.value="";
+                keterangan.innerText="";
+                keterangan.setAttribute("class","");
+            }
+        </script>
+    </body>
+</html>
