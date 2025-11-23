@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - Muhammad Ghozian Kafi Ahsan</title>
+    <!-- Menggunakan Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ffab00;
+            --bg: #f4f6f8;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.3);
+            object-fit: cover;
+            background: white;
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .title {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-top: 5px;
+            font-weight: 300;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Main Action Buttons */
+        .main-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 25px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        .btn-media { background-color: #e3f2fd; color: #1565c0; }
+        .btn-steam { background-color: #e8f5e9; color: #2e7d32; }
+        .btn-scholar { background-color: #fff3e0; color: #ef6c00; }
+
+        .btn-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Section: Tentang Saya (NEW) */
+        .about-section {
+            padding: 20px 30px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .about-section h2 {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-text {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .motto-box {
+            background: #f0f4c3; /* Warna lembut */
+            color: #556b2f;
+            padding: 12px;
+            border-radius: 8px;
+            display: inline-block;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .hobbies {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Accordion Section */
+        .accordion {
+            padding: 20px;
+        }
+
+        .acc-item {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .acc-header {
+            background: #fff;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary);
+            transition: background 0.3s;
+        }
+
+        .acc-header:hover {
+            background: #f9f9f9;
+        }
+
+        .acc-header i {
+            transition: transform 0.3s;
+        }
+
+        .acc-header.active i {
+            transform: rotate(180deg);
+        }
+
+        .acc-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #fafafa;
+        }
+
+        .acc-inner {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        /* List Styles inside Accordion */
+        ul.timeline {
+            list-style-type: none;
+            position: relative;
+            padding-left: 30px;
+            margin: 0;
+        }
+
+        ul.timeline:before {
+            content: ' ';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 10px;
+            width: 2px;
+            height: 100%;
+            z-index: 400;
+        }
+
+        ul.timeline > li {
+            margin: 20px 0;
+            padding-left: 10px;
+        }
+
+        ul.timeline > li:before {
+            content: ' ';
+            background: white;
+            display: inline-block;
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid var(--secondary);
+            left: 3px;
+            width: 12px;
+            height: 12px;
+            z-index: 400;
+        }
+
+        .item-title { font-weight: bold; display: block; margin-bottom: 4px; }
+        .item-meta { font-size: 0.85em; color: #666; display: block; margin-bottom: 4px; }
+        
+        .simple-list li { margin-bottom: 8px; line-height: 1.5; }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #eee;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <!-- Foto Profil -->
+        <img src="https://scholar.google.com/citations?view_op=medium_photo&user=p6XV21wAAAAJ" alt="Ghozian" class="profile-img">
+        
+        <h1 class="name">Muhammad Ghozian Kafi Ahsan, M.Pd</h1>
+        <div class="title">Mathematics & Robotic Teacher | Researcher | STEAM Educator</div>
+        
+        <!-- Kontak Info -->
+        <div class="contact-info">
+            <a href="mailto:mghozianka@semesta.sch.id" class="contact-link">
+                <i class="fas fa-envelope"></i> mghozianka@semesta.sch.id
+            </a>
+            <a href="https://instagram.com/mghozian" target="_blank" class="contact-link">
+                <i class="fab fa-instagram"></i> mghozian
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 Tombol Utama -->
+    <div class="main-links">
+        <a href="https://mr-ghozi.vercel.app" target="_blank" class="btn-link btn-media">
+            <i class="fas fa-laptop-code"></i> Learning Media
+        </a>
+        <a href="https://linktr.ee/mrghozisemesta" target="_blank" class="btn-link btn-steam">
+            <i class="fas fa-atom"></i> STEAM Learning
+        </a>
+        <a href="https://scholar.google.com/citations?user=p6XV21wAAAAJ&hl=id" target="_blank" class="btn-link btn-scholar">
+            <i class="fas fa-graduation-cap"></i> Google Scholar
+        </a>
+    </div>
+
+    <!-- BAGIAN TENTANG SAYA (BARU) -->
+    <div class="about-section">
+        <h2>Tentang Saya</h2>
+        <p class="about-text">
+            Saya adalah seorang pendidik Matematika dan Robotika dari Magelang yang berdedikasi untuk mengintegrasikan teknologi dalam pendidikan. Lulusan S2 Pendidikan Matematika UNNES, saya aktif meneliti tentang <i>Augmented Reality</i> dan <i>Machine Learning</i> dalam pembelajaran. Saat ini, saya mengajar di Semesta Bilingual Boarding School sembari mengembangkan riset bersama Math Trail Research Group.
+        </p>
+        <div class="motto-box">
+            <i class="fas fa-quote-left"></i> Jika kau memiliki kesempatan, ambillah, daripada penasaran seumur hidup. <i class="fas fa-quote-right"></i>
+        </div>
+        <div class="hobbies">
+            <i class="fas fa-heart" style="color: #e91e63;"></i> Hobi: Menulis, Membaca, Programming, Streaming
+        </div>
+    </div>
+
+    <!-- Accordion Menu -->
+    <div class="accordion">
+        
+        <!-- Riwayat Pendidikan -->
+        <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-university"></i> Riwayat Pendidikan</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <ul class="timeline">
+                        <li>
+                            <span class="item-title">Pendidikan Profesi Guru (.Gr)</span>
+                            <span class="item-meta">Universitas Muhammadiyah Prof.Dr.Hamka (2025)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">S2 Pendidikan Matematika (M.Pd.)</span>
+                            <span class="item-meta">Universitas Negeri Semarang (2020-2023)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">S1 Pendidikan Matematika (S.Pd.)</span>
+                            <span class="item-meta">Univeristas Negeri Semarang (2015-2020)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">SMA Negeri 1 Muntilan</span>
+                            <span class="item-meta">2012-2015</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pengalaman Bekerja -->
+        <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-briefcase"></i> Pengalaman Bekerja</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <ul class="timeline">
+                        <li>
+                            <span class="item-title">Mathematics & Robotic Teacher</span>
+                            <span class="item-meta">Semesta Bilingual Boarding School | 2021 - Sekarang</span>
+                        </li>
+                        <li>
+                            <span class="item-title">Researcher & Assistant</span>
+                            <span class="item-meta">Math Trail Research Group | 2021 - Sekarang</span>
+                        </li>
+                        <li>
+                            <span class="item-title">Reviewer</span>
+                            <span class="item-meta">MathCityMap Indonesia | 2021 - Sekarang</span>
+                        </li>
+                        <li>
+                            <span class="item-title">Trainer Olimpiade & IT/Multimedia</span>
+                            <span class="item-meta">Genio Institute | 2021-2022</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prestasi -->
+        <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-trophy"></i> Daftar Prestasi</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <ul class="simple-list">
+                        <li><span class="badge">2022</span> Juara 1 Lomba Media Pembelajaran Olimpiade Matematika (Universitas Riau)</li>
+                        <li><span class="badge">2022</span> Silver Medal Olimpiade Sains dan Statistika Nasional (Kategori Guru)</li>
+                        <li><span class="badge">2021</span> Presenter Terbaik Permutasi (UGM)</li>
+                        <li><span class="badge">2021</span> Bronze Medal Olimpiade Guru Nasional (POSI)</li>
+                        <li><span class="badge">2019</span> Juara 3 Lomba Media Pembelajaran Tingkat Nasional (UMS)</li>
+                        <li><span class="badge">2018</span> Juara 2 Mathematics Lesson Plan and Teaching Competition (UNRAM)</li>
+                        <li><span class="badge">2015</span> Peserta Terbaik Leadership and Managerial in Mathematics (UNNES)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Publikasi -->
+        <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-book"></i> Publikasi Ilmiah</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <ul class="simple-list">
+                        <li><strong>2024:</strong> Designing digital math trail environment assisted by augmented reality using mathematical modeling learning approach (AIP Conference)</li>
+                        <li><strong>2023:</strong> Learning Mathematical Modelling with Digital Tools: A Systematic Literature Review (AIP Conference)</li>
+                        <li><strong>2023:</strong> Learning mathematical modeling in a virtual mobile math trails environment (Co-author)</li>
+                        <li><strong>2023:</strong> Mendesain MathCityMap Trails di Taman Kota untuk Mendukung Program Smart City (PRISMA)</li>
+                        <li><strong>2021:</strong> Desain Web-apps-based Student Worksheet dengan Pendekatan Computational Thinking (PRISMA)</li>
+                        <li><strong>2020:</strong> Designing augmented reality-based mathematics mobile apps for outdoor mathematics learning (J. Phys: Conf. Ser)</li>
+                        <li><strong>2020:</strong> LEARNING MATHEMATICAL MODELLING WITH AUGMENTED REALITY MOBILE MATH TRAILS PROGRAM (Journal on Mathematics Education)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pembicara & Pelatihan -->
+        <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-microphone"></i> Pembicara & Pelatihan</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <p><strong>Pengalaman Pembicara (Selected):</strong></p>
+                    <ul class="simple-list">
+                        <li><strong>2025:</strong> Best Practice Technology for Education "STEAM Class Preparation" - Komunitas Belajar SMP Semarang</li>
+                        <li><strong>2025:</strong> Seminar P5 "Kreativitas Tanpa Batas" - SMAN 12 Semarang</li>
+                        <li><strong>2023:</strong> Development of Teaching Proficiency "Calculator Skills"</li>
+                        <li><strong>2021:</strong> SEAMEO QIATEP MATH Workshop "Math City Map"</li>
+                    </ul>
+                    <hr>
+                    <p><strong>Pelatihan yang Diikuti (Selected):</strong></p>
+                    <ul class="simple-list">
+                        <li>International AI, Python, and Robotics Bootcamp by STEMPedia (2023)</li>
+                        <li>MathCityMap Training for Teacher & Digital Classroom (2019-2020)</li>
+                        <li>Academy Future Teacher Eduversal (212 Jam)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+         <!-- Pengalaman Organisasi -->
+         <div class="acc-item">
+            <div class="acc-header">
+                <span><i class="fas fa-users"></i> Pengalaman Organisasi</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="acc-content">
+                <div class="acc-inner">
+                    <ul class="timeline">
+                        <li>
+                            <span class="item-title">Desamind Indonesia</span>
+                            <span class="item-meta">Associate Creative Media (2021-2023)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">Centre for Research in Mathematics, Technology, and Education</span>
+                            <span class="item-meta">Peneliti (2020-Sekarang)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">BEM FMIPA UNNES</span>
+                            <span class="item-meta">Kepala Dept. Advokasi & Kesejahteraan Mahasiswa (2018)</span>
+                        </li>
+                        <li>
+                            <span class="item-title">HIMATIKA FMIPA UNNES</span>
+                            <span class="item-meta">Wakil Ketua Umum (2017)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End Accordion -->
+    
+    <div style="text-align: center; padding: 20px; font-size: 0.8em; color: #888;">
+        &copy; 2025 Muhammad Ghozian Kafi Ahsan
+    </div>
+</div>
+
+<script>
+    // Script untuk Accordion
+    const accHeaders = document.querySelectorAll('.acc-header');
+
+    accHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            // Toggle active class
+            header.classList.toggle('active');
+            
+            // Toggle content max-height
+            const content = header.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                // Opsional: Tutup accordion lain saat satu dibuka (jika diinginkan, hilangkan komentar di bawah)
+                /*
+                document.querySelectorAll('.acc-content').forEach(item => item.style.maxHeight = null);
+                document.querySelectorAll('.acc-header').forEach(item => item.classList.remove('active'));
+                header.classList.add('active');
+                */
+                
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
