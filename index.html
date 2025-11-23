@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio - Muhammad Ghozian Kafi Ahsan</title>
+    <title>Portofolio - Mr. Ghozi</title>
     <!-- Menggunakan Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -124,7 +124,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        /* Section: Tentang Saya (NEW) */
+        /* Section: Tentang Saya */
         .about-section {
             padding: 20px 30px;
             text-align: center;
@@ -146,7 +146,7 @@
         }
 
         .motto-box {
-            background: #f0f4c3; /* Warna lembut */
+            background: #f0f4c3;
             color: #556b2f;
             padding: 12px;
             border-radius: 8px;
@@ -271,7 +271,8 @@
         <!-- Foto Profil -->
         <img src="https://scholar.google.com/citations?view_op=medium_photo&user=p6XV21wAAAAJ" alt="Ghozian" class="profile-img">
         
-        <h1 class="name">Muhammad Ghozian Kafi Ahsan, M.Pd</h1>
+        <!-- NAMA DIUBAH DISINI -->
+        <h1 class="name">Mr. Ghozi, M.Pd</h1>
         <div class="title">Mathematics & Robotic Teacher | Researcher | STEAM Educator</div>
         
         <!-- Kontak Info -->
@@ -298,7 +299,7 @@
         </a>
     </div>
 
-    <!-- BAGIAN TENTANG SAYA (BARU) -->
+    <!-- BAGIAN TENTANG SAYA -->
     <div class="about-section">
         <h2>Tentang Saya</h2>
         <p class="about-text">
@@ -475,8 +476,9 @@
 
     </div> <!-- End Accordion -->
     
+    <!-- NAMA DIUBAH DISINI -->
     <div style="text-align: center; padding: 20px; font-size: 0.8em; color: #888;">
-        &copy; 2025 Muhammad Ghozian Kafi Ahsan
+        &copy; 2025 Mr. Ghozi
     </div>
 </div>
 
@@ -494,13 +496,6 @@
             if (content.style.maxHeight) {
                 content.style.maxHeight = null;
             } else {
-                // Opsional: Tutup accordion lain saat satu dibuka (jika diinginkan, hilangkan komentar di bawah)
-                /*
-                document.querySelectorAll('.acc-content').forEach(item => item.style.maxHeight = null);
-                document.querySelectorAll('.acc-header').forEach(item => item.classList.remove('active'));
-                header.classList.add('active');
-                */
-                
                 content.style.maxHeight = content.scrollHeight + "px";
             }
         });
