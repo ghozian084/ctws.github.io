@@ -7,21 +7,33 @@
     <!-- Google Fonts for a nicer look -->
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* General Body Styling */
-        body {
-            font-family: 'Poppins', sans-serif;
+        /* HTML and Body base styles - PENTING UNTUK FIXED POSITIONING */
+        html, body {
+            height: 100%; /* Pastikan elemen root dan body punya tinggi penuh */
             margin: 0;
             padding: 0;
+            overflow-x: hidden; /* Tetap mencegah scroll horizontal */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; /* Gunakan min-height untuk fleksibilitas */
             background: linear-gradient(to bottom, #73c6b6, #d4f2e7);
             color: #333;
             text-align: center;
-            overflow-x: hidden;
             position: relative;
             perspective: 1000px;
+        }
+
+        /* Class untuk menonaktifkan scroll di body saat popup aktif */
+        body.no-scroll {
+            overflow: hidden;
+            position: fixed; /* Menambahkan fixed agar body tidak bergeser saat scroll dinonaktifkan */
+            width: 100%;
+            height: 100%;
         }
 
         /* Dekorasi Bintang Bergerak */
@@ -51,6 +63,8 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
+            /* Hapus transform: translateY dari sini jika ada, karena bisa mengganggu fixed positioning */
+            /* Jika ada efek floatUp, pastikan hanya pada gambar di dalamnya, bukan container */
         }
 
         @keyframes fadeIn {
@@ -125,7 +139,7 @@
 
         /* Card Section Styling - DEFAULT HIDDEN */
         .card-section {
-            display: none; /* TETAP HIDDEN SECARA DEFAULT */
+            display: none;
             animation: slideIn 1s ease-out forwards;
             margin-top: 30px;
             height: auto;
@@ -136,7 +150,7 @@
 
         /* Class untuk menampilkan dan memusatkan card-section */
         .card-section.active {
-            display: flex; /* Ditampilkan ketika class 'active' ditambahkan */
+            display: flex;
             justify-content: center;
             align-items: center;
         }
@@ -152,7 +166,7 @@
             border-radius: 15px;
             padding: 30px;
             max-width: 650px;
-            width: 90%; /* Menggunakan persentase untuk responsivitas */
+            width: 90%;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
@@ -163,7 +177,6 @@
             transition: transform 0.2s ease-out;
             will-change: transform;
             cursor: grab;
-            /* Pastikan card tidak terlalu kecil di mobile */
             min-width: 280px;
         }
 
@@ -263,10 +276,10 @@
             top: 50%;
         }
 
-        /* Gift Popup Section - Dikonfirmasi Fixed Position */
+        /* Gift Popup Section */
         .gift-content {
             display: none;
-            position: fixed; /* Ini memastikan pop-up tidak ikut scroll */
+            position: fixed; /* Sudah benar */
             top: 0;
             left: 0;
             width: 100%;
@@ -274,11 +287,10 @@
             background-color: rgba(0, 0, 0, 0.75);
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Pastikan z-index tinggi */
+            z-index: 1000;
             animation: fadeIn 0.3s ease;
-            /* Tambahkan overflow-y agar popup bisa discroll jika kontennya panjang */
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Untuk iOS smooth scrolling */
+            overflow-y: auto; /* Memungkinkan scroll internal popup */
+            -webkit-overflow-scrolling: touch;
         }
 
         .gift-content.active {
@@ -295,7 +307,8 @@
             text-align: center;
             animation: popUp 0.4s ease-out;
             position: relative;
-            margin: 20px auto; /* Tambahkan margin vertikal agar tidak terlalu mepet layar */
+            margin: auto; /* Gunakan margin auto untuk pemusatan vertikal/horizontal saat overflow-y:auto */
+            transform: none !important; /* Pastikan tidak ada transform yang mengganggu positioning */
         }
 
         .gift-popup img {
@@ -365,7 +378,7 @@
             .input-section button { padding: 15px 30px; font-size: 1.2em; }
             .gift-boxes { flex-direction: column; align-items: center; }
             .gift-box { width: 140px; height: 140px; font-size: 1.1em;}
-            .greeting-card { /* Sesuaikan lebar kartu di tablet */
+            .greeting-card {
                 max-width: 500px;
                 padding: 25px;
                 width: 95%;
@@ -385,18 +398,24 @@
             .input-section input[type="text"] { width: 95%; font-size: 1.1em; }
             .input-section button { padding: 12px 25px; font-size: 1.1em; }
             .gift-box { width: 120px; height: 120px; font-size: 1em;}
-            .greeting-card { /* Sesuaikan lebar kartu di smartphone */
-                max-width: 100%; /* Lebar penuh */
-                padding: 20px;
-                width: 98%; /* Agar ada sedikit margin */
+            .greeting-card { /* Penyesuaian khusus untuk smartphone */
+                max-width: 320px; /* Batasi lebar agar tidak terlalu besar di ponsel kecil */
+                width: 90%; /* Mengambil 90% dari lebar container */
+                padding: 15px; /* Kurangi padding */
+                border-width: 3px; /* Kurangi ketebalan border */
             }
-            .greeting-card p {font-size: 1em;}
-            .greeting-card .recipient-name {font-size: 1.3em;}
-            .greeting-card .arabic-text { font-size: 1.5em; }
+            .greeting-card p {font-size: 0.9em;} /* Kurangi ukuran font */
+            .greeting-card .recipient-name {font-size: 1.2em;}
+            .greeting-card .arabic-text { font-size: 1.3em; margin: 15px 0; }
+            .greeting-card .sender-names { font-size: 1em; margin-top: 20px; }
             .gift-popup h3 { font-size: 1.5em; }
             .gift-popup p { font-size: 1em; }
             .card-section.active { min-height: 300px; }
-            .gift-popup { margin: 10px auto; } /* Kurangi margin vertikal di mobile */
+            .gift-popup { /* Penyesuaian popup di smartphone */
+                width: 95%;
+                padding: 20px;
+                margin: 10px auto; /* Lebih sedikit margin vertikal */
+            }
         }
 
     </style>
@@ -450,7 +469,7 @@
                 </a>
                 <a href="#" class="gift-box rendang" onclick="openGift('rendang'); return false;">
                     Rendang 🌶️
-                </a>
+</a>
             </div>
         </div>
     </div>
@@ -478,8 +497,7 @@
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            // Sesuaikan sensitivitas rotasi untuk pengalaman yang lebih baik di perangkat yang berbeda
-            const rotationSensitivity = 10; // Rotasi maks 10 derajat
+            const rotationSensitivity = 10;
 
             const rotateX = ((y - centerY) / centerY) * rotationSensitivity;
             const rotateY = ((x - centerX) / centerX) * -rotationSensitivity;
@@ -514,15 +532,9 @@
 
                     // Aktifkan event listener 3D setelah kartu terlihat
                     if (greetingCard) {
-                        // Cek apakah perangkat adalah touchscreen atau desktop
                         if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
                             greetingCard.addEventListener('mousemove', handleMouseMove);
                             greetingCard.addEventListener('mouseleave', handleMouseLeave);
-                        } else {
-                            // Opsional: Untuk perangkat sentuh, mungkin ingin rotasi yang berbeda atau nonaktifkan
-                            // Untuk saat ini, kita biarkan saja efek 3D nya tidak aktif via mousemove/mouseleave
-                            // karena di perangkat sentuh, mousemove tidak ada.
-                            // Jika ingin efek 3D sentuh, perlu implementasi touchstart/touchmove/touchend.
                         }
                     }
                 }, 500);
@@ -558,13 +570,11 @@
             giftMessage.textContent = message;
 
             giftPopup.classList.add('active');
-            // Menambah class ke body agar scroll di body dinonaktifkan saat popup aktif
             document.body.classList.add('no-scroll');
         }
 
         function closeGift() {
             document.getElementById('giftPopup').classList.remove('active');
-            // Menghapus class dari body untuk mengaktifkan scroll kembali
             document.body.classList.remove('no-scroll');
         }
     </script>
