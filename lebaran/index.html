@@ -21,7 +21,6 @@
             text-align: center;
             overflow-x: hidden;
             position: relative;
-            /* Untuk efek 3D kartu: */
             perspective: 1000px; /* Jarak pandang untuk efek 3D */
         }
 
@@ -124,17 +123,22 @@
             box-shadow: 0 8px 20px rgba(255, 179, 0, 0.6);
         }
 
-        /* Card Section Styling */
+        /* Card Section Styling - DEFAULT HIDDEN */
         .card-section {
-            display: none;
+            display: none; /* TETAP HIDDEN SECARA DEFAULT */
             animation: slideIn 1s ease-out forwards;
             margin-top: 30px;
-            /* Untuk efek 3D: */
-            display: flex; /* Untuk memusatkan kartu */
+            height: auto;
+            min-height: 400px;
+            flex-direction: column; /* Ubah ke column agar kado di bawah kartu */
+            gap: 40px; /* Jarak antara kartu dan kado */
+        }
+
+        /* Class untuk menampilkan dan memusatkan card-section */
+        .card-section.active {
+            display: flex; /* Ditampilkan ketika class 'active' ditambahkan */
             justify-content: center;
             align-items: center;
-            height: auto; /* Sesuaikan tinggi */
-            min-height: 400px; /* Minimal tinggi agar ada ruang untuk rotasi */
         }
 
         @keyframes slideIn {
@@ -147,8 +151,8 @@
             border: 5px solid #4CAF50;
             border-radius: 15px;
             padding: 30px;
-            margin: 0 auto 40px auto;
             max-width: 650px;
+            width: 100%; /* Agar responsif dalam flex container */
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
@@ -156,9 +160,9 @@
 
             /* Properti 3D Card */
             transform-style: preserve-3d;
-            transition: transform 0.2s ease-out; /* Transisi untuk rotasi halus */
-            will-change: transform; /* Memberi tahu browser untuk mengoptimalkan animasi */
-            cursor: grab; /* Menunjukkan kartu bisa digeser */
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+            cursor: grab;
         }
 
         .greeting-card:active {
@@ -205,7 +209,7 @@
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 50px;
+            /* margin-top: 50px; <-- Dihapus karena sudah ada gap di card-section */
             flex-wrap: wrap;
         }
 
@@ -234,7 +238,6 @@
         .gift-box.opor { background-color: #ffee58; color: #333;}
         .gift-box.rendang { background-color: #bf360c; }
 
-
         .gift-box:hover {
             transform: scale(1.1);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -258,7 +261,6 @@
             transform: translateY(-50%);
             top: 50%;
         }
-
 
         /* Gift Popup Section */
         .gift-content {
@@ -363,7 +365,7 @@
             .greeting-card .arabic-text { font-size: 1.8em; }
             .gift-popup h3 { font-size: 1.7em; }
             .gift-popup p { font-size: 1.1em; }
-            .card-section { min-height: 350px; } /* Sesuaikan untuk mobile */
+            .card-section.active { min-height: 350px; } /* Sesuaikan untuk mobile */
         }
 
         @media (max-width: 480px) {
@@ -378,11 +380,10 @@
             .greeting-card .arabic-text { font-size: 1.5em; }
             .gift-popup h3 { font-size: 1.5em; }
             .gift-popup p { font-size: 1em; }
-            .card-section { min-height: 300px; } /* Sesuaikan untuk mobile */
+            .card-section.active { min-height: 300px; } /* Sesuaikan untuk mobile */
         }
 
     </style>
-    <!-- Untuk font Arab (Amiri) dan Font Umum (Poppins, Amatic SC) -->
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -401,7 +402,6 @@
         <h1>Selamat Hari Raya Idul Fitri ✨</h1>
         <h2>1447 Hijriah</h2>
 
-        <!-- Gambar utama yang sudah diupdate path-nya -->
         <img src="lebaran/halaman-depan.png" alt="Dekorasi Lebaran" class="decoration-image">
 
         <div class="input-section" id="inputSection">
@@ -412,12 +412,11 @@
         </div>
 
         <div class="card-section" id="cardSection">
-            <div class="greeting-card" id="greetingCard"> <!-- Tambahkan ID untuk JavaScript -->
+            <div class="greeting-card" id="greetingCard">
                 <p class="recipient-name">Untuk <span id="displayUserName"></span>, Selamat Idul Fitri! 🌙</p>
                 <p>Di hari yang fitri ini, kami sekeluarga mengucapkan Selamat Hari Raya Idul Fitri 1447 Hijriah.</p>
                 <p>Mohon Maaf Lahir dan Batin 🙏. Semoga keberkahan senantiasa menyertai langkah kita semua. ✨</p>
 
-                <!-- Kaligrafi Arab -->
                 <p class="arabic-text">
                     تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ
                 </p>
@@ -453,30 +452,49 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const greetingCard = document.getElementById('greetingCard');
-            if (greetingCard) {
-                greetingCard.addEventListener('mousemove', (e) => {
-                    const rect = greetingCard.getBoundingClientRect();
-                    const x = e.clientX - rect.left; // x position within the element.
-                    const y = e.clientY - rect.top;  // y position within the element.
+            const cardSection = document.getElementById('cardSection'); // Ambil referensi cardSection
 
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-
-                    const rotateX = ((y - centerY) / centerY) * 10; // Rotasi maks 10 derajat
-                    const rotateY = ((x - centerX) / centerX) * -10; // Rotasi maks 10 derajat, invers untuk y
-
-                    greetingCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-
-                greetingCard.addEventListener('mouseleave', () => {
-                    greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Kembali ke posisi semula
-                });
+            // Fungsi untuk mengaktifkan/menonaktifkan event listener 3D
+            function toggle3DInteraction(enable) {
+                if (enable && greetingCard) {
+                    greetingCard.addEventListener('mousemove', handleMouseMove);
+                    greetingCard.addEventListener('mouseleave', handleMouseLeave);
+                } else if (greetingCard) {
+                    greetingCard.removeEventListener('mousemove', handleMouseMove);
+                    greetingCard.removeEventListener('mouseleave', handleMouseLeave);
+                    greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Reset transform
+                }
             }
+
+            // Handler untuk mousemove
+            function handleMouseMove(e) {
+                const rect = greetingCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * 10;
+                const rotateY = ((x - centerX) / centerX) * -10;
+
+                greetingCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            }
+
+            // Handler untuk mouseleave
+            function handleMouseLeave() {
+                greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            }
+
+            // Awalnya, nonaktifkan interaksi 3D karena kartu tersembunyi
+            toggle3DInteraction(false);
         });
 
         function showGreetingCard() {
             const userNameInput = document.getElementById('userName');
             const userName = userNameInput.value.trim();
+            const cardSection = document.getElementById('cardSection'); // Dapatkan referensi di sini
+            const greetingCard = document.getElementById('greetingCard'); // Dan di sini
 
             if (userName) {
                 document.getElementById('displayUserName').textContent = userName;
@@ -485,9 +503,14 @@
                 inputSection.style.transform = 'translateY(-20px)';
                 setTimeout(() => {
                     inputSection.style.display = 'none';
-                    document.getElementById('cardSection').style.display = 'flex'; // Menggunakan flex untuk memusatkan kartu 3D
-                    document.getElementById('cardSection').style.opacity = '1';
-                    document.getElementById('cardSection').style.transform = 'translateY(0)';
+                    cardSection.classList.add('active'); // Tambahkan class 'active' untuk menampilkan
+                    cardSection.style.opacity = '1';
+                    cardSection.style.transform = 'translateY(0)';
+                    // Aktifkan interaksi 3D setelah kartu terlihat
+                    if (greetingCard) {
+                        const toggle3D = document.querySelector('script').previousElementSibling.querySelector('#greetingCard') || document.getElementById('greetingCard'); // Dapatkan fungsi toggle3DInteraction
+                        toggle3DInteraction(true);
+                    }
                 }, 500);
             } else {
                 alert('Silakan masukkan nama Anda terlebih dahulu! 😊');
@@ -503,15 +526,15 @@
             let imageUrl, title, message;
 
             if (giftType === 'ketupat') {
-                imageUrl = 'lebaran/ketupat.png'; // Path diupdate
+                imageUrl = 'lebaran/ketupat.png';
                 title = 'Lezatnya Ketupat! 😋';
                 message = 'Simbol kebersamaan dan maaf di hari raya. Selamat menikmati hidangan Lebaran ini! 💚';
             } else if (giftType === 'opor') {
-                imageUrl = 'lebaran/opor.png'; // Path diupdate
+                imageUrl = 'lebaran/opor.png';
                 title = 'Nikmatnya Opor Ayam! 🍲';
                 message = 'Hidangan wajib Lebaran yang selalu dinanti. Selamat menyantap dan merayakan kebersamaan! ✨';
             } else if (giftType === 'rendang') {
-                imageUrl = 'lebaran/rendang.png'; // Path diupdate
+                imageUrl = 'lebaran/rendang.png';
                 title = 'Rendang Istimewa! 🔥';
                 message = 'Rasa otentik yang kaya rempah, favorit sepanjang masa. Selamat mencoba sajian lezat ini! 🌶️';
             }
