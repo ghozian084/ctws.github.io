@@ -3,26 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Idul Fitri 1447 H</title>
+    <title>Selamat Idul Fitri 1447 H 🎉</title>
+    <!-- Google Fonts for a nicer look -->
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* General Body Styling */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom, #73c6b6, #d4f2e7); /* Gradient Hijau-Putih */
+            background: linear-gradient(to bottom, #73c6b6, #d4f2e7);
             color: #333;
             text-align: center;
-            overflow-x: hidden; /* Mencegah scroll horizontal */
+            overflow-x: hidden;
+            position: relative;
+            /* Untuk efek 3D kartu: */
+            perspective: 1000px; /* Jarak pandang untuk efek 3D */
+        }
+
+        /* Dekorasi Bintang Bergerak */
+        .star {
+            position: fixed;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 4s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
         /* Container for the whole page content */
         .container {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -30,7 +50,8 @@
             width: 90%;
             animation: fadeIn 1.5s ease-out;
             position: relative;
-            overflow: hidden; /* For decorative elements */
+            overflow: hidden;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -40,15 +61,16 @@
 
         /* Header Styling */
         h1 {
-            color: #2e8b57; /* Hijau tua */
-            font-size: 3em;
+            color: #2e8b57;
+            font-family: 'Amatic SC', cursive;
+            font-size: 3.8em;
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            color: #4CAF50; /* Hijau sedang */
-            font-size: 1.8em;
+            color: #4CAF50;
+            font-size: 2em;
             margin-bottom: 30px;
         }
 
@@ -61,51 +83,58 @@
         }
 
         .input-section label {
-            font-size: 1.2em;
-            margin-bottom: 10px;
+            font-size: 1.3em;
+            margin-bottom: 15px;
             color: #555;
         }
 
         .input-section input[type="text"] {
-            padding: 12px 20px;
+            padding: 15px 25px;
             width: 70%;
-            max-width: 300px;
-            border: 2px solid #a5d6a7; /* Border hijau muda */
+            max-width: 350px;
+            border: 2px solid #a5d6a7;
             border-radius: 30px;
-            font-size: 1.1em;
+            font-size: 1.2em;
             outline: none;
             transition: all 0.3s ease;
             text-align: center;
         }
 
         .input-section input[type="text"]:focus {
-            border-color: #4CAF50; /* Border hijau saat fokus */
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
         }
 
         .input-section button {
-            background-color: #ffb300; /* Kuning keemasan */
+            background-color: #ffb300;
             color: white;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border: none;
             border-radius: 30px;
-            font-size: 1.2em;
+            font-size: 1.3em;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            margin-top: 25px;
             box-shadow: 0 5px 15px rgba(255, 179, 0, 0.4);
         }
 
         .input-section button:hover {
-            background-color: #ffa000; /* Kuning lebih gelap saat hover */
-            transform: translateY(-3px);
+            background-color: #ffa000;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 179, 0, 0.6);
         }
 
         /* Card Section Styling */
         .card-section {
-            display: none; /* Hidden by default */
+            display: none;
             animation: slideIn 1s ease-out forwards;
             margin-top: 30px;
+            /* Untuk efek 3D: */
+            display: flex; /* Untuk memusatkan kartu */
+            justify-content: center;
+            align-items: center;
+            height: auto; /* Sesuaikan tinggi */
+            min-height: 400px; /* Minimal tinggi agar ada ruang untuk rotasi */
         }
 
         @keyframes slideIn {
@@ -114,35 +143,60 @@
         }
 
         .greeting-card {
-            background: linear-gradient(to top right, #e8f5e9, #c8e6c9); /* Gradient hijau muda */
+            background: linear-gradient(to top right, #e8f5e9, #c8e6c9);
             border: 5px solid #4CAF50;
             border-radius: 15px;
             padding: 30px;
             margin: 0 auto 40px auto;
-            max-width: 600px;
+            max-width: 650px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
+            animation: cardPopUp 0.6s ease-out;
+
+            /* Properti 3D Card */
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out; /* Transisi untuk rotasi halus */
+            will-change: transform; /* Memberi tahu browser untuk mengoptimalkan animasi */
+            cursor: grab; /* Menunjukkan kartu bisa digeser */
+        }
+
+        .greeting-card:active {
+            cursor: grabbing;
+        }
+
+        @keyframes cardPopUp {
+            from { transform: scale(0.8) rotateY(0deg) rotateX(0deg); opacity: 0; }
+            to { transform: scale(1) rotateY(0deg) rotateX(0deg); opacity: 1; }
         }
 
         .greeting-card p {
-            font-size: 1.1em;
-            line-height: 1.6;
+            font-size: 1.2em;
+            line-height: 1.8;
             color: #444;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .greeting-card .recipient-name {
-            font-size: 1.5em;
+            font-size: 1.8em;
             font-weight: bold;
             color: #2e8b57;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .greeting-card .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2.2em;
+            color: #00796b;
+            margin: 20px 0;
+            direction: rtl;
+            text-align: center;
         }
 
         .greeting-card .sender-names {
             font-style: italic;
-            margin-top: 25px;
-            font-size: 1.05em;
+            margin-top: 30px;
+            font-size: 1.15em;
             color: #666;
         }
 
@@ -150,15 +204,15 @@
         .gift-boxes {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-top: 40px;
+            gap: 30px;
+            margin-top: 50px;
             flex-wrap: wrap;
         }
 
         .gift-box {
-            background-color: #ff7043; /* Oranye cerah */
-            width: 150px;
-            height: 150px;
+            background-color: #ff7043;
+            width: 160px;
+            height: 160px;
             border-radius: 15px;
             display: flex;
             flex-direction: column;
@@ -166,235 +220,277 @@
             align-items: center;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 112, 67, 0.4);
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
             font-weight: bold;
             color: white;
-            font-size: 1.1em;
+            font-size: 1.2em;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-decoration: none;
         }
 
-        .gift-box.ketupat { background-color: #66bb6a; } /* Hijau untuk ketupat */
-        .gift-box.opor { background-color: #ffee58; color: #333;} /* Kuning untuk opor */
-        .gift-box.rendang { background-color: #bf360c; } /* Merah kecoklatan untuk rendang */
+        .gift-box.ketupat { background-color: #66bb6a; }
+        .gift-box.opor { background-color: #ffee58; color: #333;}
+        .gift-box.rendang { background-color: #bf360c; }
 
 
         .gift-box:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 20px rgba(255, 112, 67, 0.6);
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .gift-box::before { /* Pita */
+        .gift-box::before {
             content: '';
             position: absolute;
-            width: 40px;
+            width: 45px;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.4);
             transform: translateX(-50%);
             left: 50%;
         }
-        .gift-box::after { /* Pita */
+        .gift-box::after {
             content: '';
             position: absolute;
-            height: 40px;
+            height: 45px;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-50%);
             top: 50%;
         }
 
 
-       .gift-content {
-            display: none; /* Popup harus HIDDEN secara default */
+        /* Gift Popup Section */
+        .gift-content {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            justify-content: center; /* Ini hanya relevan saat display:flex */
-            align-items: center;     /* Ini hanya relevan saat display:flex */
+            background-color: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
 
         .gift-content.active {
-            display: flex; /* Popup akan ditampilkan saat memiliki kelas 'active' */
+            display: flex;
         }
 
         .gift-popup {
             background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            max-width: 500px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            max-width: 550px;
             width: 90%;
             text-align: center;
             animation: popUp 0.4s ease-out;
             position: relative;
         }
 
-        @keyframes popUp {
-            from { transform: scale(0.7); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
         .gift-popup img {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            animation: imageScaleIn 0.5s ease-out;
+        }
+
+        @keyframes imageScaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .gift-popup h3 {
             color: #2e8b57;
-            font-size: 1.8em;
-            margin-bottom: 10px;
+            font-size: 2em;
+            margin-bottom: 12px;
         }
 
         .gift-popup p {
             color: #555;
-            font-size: 1.1em;
-            margin-bottom: 20px;
+            font-size: 1.2em;
+            margin-bottom: 25px;
         }
 
         .close-btn {
-            background-color: #f44336; /* Merah */
+            background-color: #f44336;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 12px 25px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .close-btn:hover {
-            background-color: #d32f2f; /* Merah lebih gelap */
-        }
-
-        /* Decorative Elements (using pseudo-elements for simplicity) */
-        .container::before, .container::after {
-            content: '';
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .container::before { /* Bedug kiri */
-            width: 100px;
-            height: 100px;
-            top: -30px;
-            left: -30px;
-            background: url('https://via.placeholder.com/100x100?text=Bedug') no-repeat center center / contain;
-            opacity: 0.2;
-            transform: rotate(-20deg);
-        }
-
-        .container::after { /* Lentera kanan */
-            width: 80px;
-            height: 80px;
-            bottom: -20px;
-            right: -20px;
-            background: url('https://via.placeholder.com/80x80?text=Lentera') no-repeat center center / contain;
-            opacity: 0.2;
-            transform: rotate(15deg);
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5em; }
-            h2 { font-size: 1.5em; }
-            .container { padding: 30px; }
-            .input-section input[type="text"] { width: 80%; }
-            .gift-boxes { flex-direction: column; align-items: center; }
-            .gift-box { width: 120px; height: 120px; }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 2em; }
-            h2 { font-size: 1.2em; }
-            .container { padding: 20px; }
-            .input-section input[type="text"] { width: 90%; font-size: 1em; }
-            .input-section button { padding: 12px 25px; font-size: 1.1em; }
-            .gift-box { width: 100px; height: 100px; font-size: 0.9em;}
-            .greeting-card p {font-size: 1em;}
-            .greeting-card .recipient-name {font-size: 1.3em;}
+            background-color: #d32f2f;
+            transform: translateY(-3px);
         }
 
         /* Placeholder image for inspiration */
         .decoration-image {
             width: 100%;
             height: auto;
-            max-width: 600px; /* Adjust as needed */
+            max-width: 600px;
             margin: 30px auto;
             display: block;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            animation: floatUp 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 3em; }
+            h2 { font-size: 1.7em; }
+            .container { padding: 30px; }
+            .input-section input[type="text"] { width: 85%; }
+            .input-section button { padding: 15px 30px; font-size: 1.2em; }
+            .gift-boxes { flex-direction: column; align-items: center; }
+            .gift-box { width: 140px; height: 140px; font-size: 1.1em;}
+            .greeting-card p {font-size: 1.1em;}
+            .greeting-card .recipient-name {font-size: 1.5em;}
+            .greeting-card .arabic-text { font-size: 1.8em; }
+            .gift-popup h3 { font-size: 1.7em; }
+            .gift-popup p { font-size: 1.1em; }
+            .card-section { min-height: 350px; } /* Sesuaikan untuk mobile */
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 1.4em; }
+            .container { padding: 20px; }
+            .input-section input[type="text"] { width: 95%; font-size: 1.1em; }
+            .input-section button { padding: 12px 25px; font-size: 1.1em; }
+            .gift-box { width: 120px; height: 120px; font-size: 1em;}
+            .greeting-card p {font-size: 1em;}
+            .greeting-card .recipient-name {font-size: 1.3em;}
+            .greeting-card .arabic-text { font-size: 1.5em; }
+            .gift-popup h3 { font-size: 1.5em; }
+            .gift-popup p { font-size: 1em; }
+            .card-section { min-height: 300px; } /* Sesuaikan untuk mobile */
         }
 
     </style>
+    <!-- Untuk font Arab (Amiri) dan Font Umum (Poppins, Amatic SC) -->
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
+    <!-- Animasi Bintang-bintang di Latar Belakang -->
+    <div class="star" style="width: 5px; height: 5px; top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="star" style="width: 7px; height: 7px; top: 50%; left: 80%; animation-delay: 1.5s;"></div>
+    <div class="star" style="width: 4px; height: 4px; top: 70%; left: 40%; animation-delay: 0.8s;"></div>
+    <div class="star" style="width: 6px; height: 6px; top: 25%; left: 60%; animation-delay: 2.2s;"></div>
+    <div class="star" style="width: 8px; height: 8px; top: 85%; left: 10%; animation-delay: 3s;"></div>
+    <div class="star" style="width: 5px; height: 5px; top: 30%; left: 90%; animation-delay: 0.5s;"></div>
+    <div class="star" style="width: 7px; height: 7px; top: 65%; left: 25%; animation-delay: 2s;"></div>
+
+
     <div class="container">
-        <h1>Selamat Hari Raya Idul Fitri</h1>
+        <h1>Selamat Hari Raya Idul Fitri ✨</h1>
         <h2>1447 Hijriah</h2>
 
-        <img src="lebaran/halaman-depan.png" alt="Dekorasi Lebaran" class="decoration-image"><!-- Placeholder for your first generated image -->
+        <!-- Gambar utama yang sudah diupdate path-nya -->
+        <img src="lebaran/halaman-depan.png" alt="Dekorasi Lebaran" class="decoration-image">
 
         <div class="input-section" id="inputSection">
-            <label for="userName">Masukkan Nama Anda:</label>
+            <label for="userName">Masukkan Nama Anda: 👇</label>
             <input type="text" id="userName" placeholder="Nama Anda di Sini...">
-            <button onclick="showGreetingCard()">Buka Kartu Ucapan</button>
+            <button onclick="showGreetingCard()">Buka Kartu Ucapan 🎉</button>
             <p style="margin-top: 30px; font-style: italic; color: #777;">Dari: Ghozian, Nazzun, dan Alhazen</p>
         </div>
 
         <div class="card-section" id="cardSection">
-            <div class="greeting-card">
-                <p class="recipient-name">Untuk <span id="displayUserName"></span>,</p>
+            <div class="greeting-card" id="greetingCard"> <!-- Tambahkan ID untuk JavaScript -->
+                <p class="recipient-name">Untuk <span id="displayUserName"></span>, Selamat Idul Fitri! 🌙</p>
                 <p>Di hari yang fitri ini, kami sekeluarga mengucapkan Selamat Hari Raya Idul Fitri 1447 Hijriah.</p>
-                <p>Mohon Maaf Lahir dan Batin.</p>
-                <p>Semoga keberkahan senantiasa menyertai langkah kita semua.</p>
+                <p>Mohon Maaf Lahir dan Batin 🙏. Semoga keberkahan senantiasa menyertai langkah kita semua. ✨</p>
+
+                <!-- Kaligrafi Arab -->
+                <p class="arabic-text">
+                    تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ
+                </p>
+
                 <p class="sender-names">Hormat kami,<br>Ghozian, Nazzun, dan Alhazen</p>
             </div>
 
-            <p style="font-size: 1.3em; color: #555; margin-top: 40px; margin-bottom: 20px;">Buka Kado Spesial Anda!</p>
+            <p style="font-size: 1.4em; color: #555; margin-top: 40px; margin-bottom: 25px;">Buka Kado Spesial Anda! 🎁</p>
             <div class="gift-boxes">
-                <div class="gift-box ketupat" onclick="openGift('ketupat')">
-                    Ketupat
-                </div>
-                <div class="gift-box opor" onclick="openGift('opor')">
-                    Opor Ayam
-                </div>
-                <div class="gift-box rendang" onclick="openGift('rendang')">
-                    Rendang
-                </div>
+                <a href="#" class="gift-box ketupat" onclick="openGift('ketupat'); return false;">
+                    Ketupat 🍚
+                </a>
+                <a href="#" class="gift-box opor" onclick="openGift('opor'); return false;">
+                    Opor Ayam 🍗
+                </a>
+                <a href="#" class="gift-box rendang" onclick="openGift('rendang'); return false;">
+                    Rendang 🌶️
+                </a>
             </div>
         </div>
     </div>
 
-   <!-- Gift Popup Section (Hidden by default) -->
+    <!-- Gift Popup Section (Hidden by default) -->
     <div class="gift-content" id="giftPopup">
         <div class="gift-popup">
             <img id="giftImage" src="" alt="Isi Kado">
             <h3 id="giftTitle"></h3>
             <p id="giftMessage"></p>
-            <button class="close-btn" onclick="closeGift()">Tutup</button> <!-- Pastikan ini ada -->
+            <button class="close-btn" onclick="closeGift()">Tutup ❌</button>
         </div>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                greetingCard.addEventListener('mousemove', (e) => {
+                    const rect = greetingCard.getBoundingClientRect();
+                    const x = e.clientX - rect.left; // x position within the element.
+                    const y = e.clientY - rect.top;  // y position within the element.
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = ((y - centerY) / centerY) * 10; // Rotasi maks 10 derajat
+                    const rotateY = ((x - centerX) / centerX) * -10; // Rotasi maks 10 derajat, invers untuk y
+
+                    greetingCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                greetingCard.addEventListener('mouseleave', () => {
+                    greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)'; // Kembali ke posisi semula
+                });
+            }
+        });
+
         function showGreetingCard() {
             const userNameInput = document.getElementById('userName');
             const userName = userNameInput.value.trim();
 
             if (userName) {
                 document.getElementById('displayUserName').textContent = userName;
-                document.getElementById('inputSection').style.display = 'none';
-                document.getElementById('cardSection').style.display = 'block';
+                const inputSection = document.getElementById('inputSection');
+                inputSection.style.opacity = '0';
+                inputSection.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    inputSection.style.display = 'none';
+                    document.getElementById('cardSection').style.display = 'flex'; // Menggunakan flex untuk memusatkan kartu 3D
+                    document.getElementById('cardSection').style.opacity = '1';
+                    document.getElementById('cardSection').style.transform = 'translateY(0)';
+                }, 500);
             } else {
-                alert('Silakan masukkan nama Anda terlebih dahulu!');
+                alert('Silakan masukkan nama Anda terlebih dahulu! 😊');
             }
         }
 
@@ -407,17 +503,17 @@
             let imageUrl, title, message;
 
             if (giftType === 'ketupat') {
-                imageUrl = 'lebaran/ketupat.png'; // Menggunakan nama file lokal
-                title = 'Lezatnya Ketupat!';
-                message = 'Simbol kebersamaan dan maaf di hari raya. Selamat menikmati!';
+                imageUrl = 'lebaran/ketupat.png'; // Path diupdate
+                title = 'Lezatnya Ketupat! 😋';
+                message = 'Simbol kebersamaan dan maaf di hari raya. Selamat menikmati hidangan Lebaran ini! 💚';
             } else if (giftType === 'opor') {
-                imageUrl = 'lebaran/opor.png'; // Menggunakan nama file lokal
-                title = 'Nikmatnya Opor Ayam!';
-                message = 'Hidangan wajib Lebaran yang selalu dinanti. Selamat menyantap!';
+                imageUrl = 'lebaran/opor.png'; // Path diupdate
+                title = 'Nikmatnya Opor Ayam! 🍲';
+                message = 'Hidangan wajib Lebaran yang selalu dinanti. Selamat menyantap dan merayakan kebersamaan! ✨';
             } else if (giftType === 'rendang') {
-                imageUrl = 'lebaran/rendang.png'; // Menggunakan nama file lokal
-                title = 'Rendang Istimewa!';
-                message = 'Rasa otentik yang kaya rempah, favorit sepanjang masa. Selamat mencoba!';
+                imageUrl = 'lebaran/rendang.png'; // Path diupdate
+                title = 'Rendang Istimewa! 🔥';
+                message = 'Rasa otentik yang kaya rempah, favorit sepanjang masa. Selamat mencoba sajian lezat ini! 🌶️';
             }
 
             giftImage.src = imageUrl;
