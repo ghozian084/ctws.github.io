@@ -205,23 +205,22 @@
         }
 
 
-        .gift-content {
-            display: none; /* Pastikan ini ada dan tidak tertimpa oleh rule lain */
+       .gift-content {
+            display: none; /* Popup harus HIDDEN secara default */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            /* display: flex; <--- Ini harusnya hanya aktif saat ada class 'active' */
-            justify-content: center;
-            align-items: center;
+            justify-content: center; /* Ini hanya relevan saat display:flex */
+            align-items: center;     /* Ini hanya relevan saat display:flex */
             z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
 
         .gift-content.active {
-            display: flex; /* Ini yang akan menampilkan popup */
+            display: flex; /* Popup akan ditampilkan saat memiliki kelas 'active' */
         }
 
         .gift-popup {
