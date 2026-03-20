@@ -7,33 +7,26 @@
     <!-- Google Fonts for a nicer look -->
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* HTML and Body base styles - PENTING UNTUK FIXED POSITIONING */
-        html, body {
-            height: 100%; /* Pastikan elemen root dan body punya tinggi penuh */
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden; /* Tetap mencegah scroll horizontal */
-        }
-
+        /* General Body Styling */
         body {
             font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Gunakan min-height untuk fleksibilitas */
+            min-height: 100vh; /* Pastikan body setinggi viewport */
             background: linear-gradient(to bottom, #73c6b6, #d4f2e7);
             color: #333;
             text-align: center;
+            overflow-x: hidden;
             position: relative;
             perspective: 1000px;
         }
 
         /* Class untuk menonaktifkan scroll di body saat popup aktif */
         body.no-scroll {
-            overflow: hidden;
-            position: fixed; /* Menambahkan fixed agar body tidak bergeser saat scroll dinonaktifkan */
-            width: 100%;
-            height: 100%;
+            overflow: hidden; /* Cukup ini, tidak perlu fixed pada body */
         }
 
         /* Dekorasi Bintang Bergerak */
@@ -60,11 +53,10 @@
             max-width: 900px;
             width: 90%;
             animation: fadeIn 1.5s ease-out;
-            position: relative;
+            position: relative; /* Penting agar z-index bekerja dengan benar dalam konteks */
             overflow: hidden;
             z-index: 1;
-            /* Hapus transform: translateY dari sini jika ada, karena bisa mengganggu fixed positioning */
-            /* Jika ada efek floatUp, pastikan hanya pada gambar di dalamnya, bukan container */
+            /* Hapus transform: translateY dari sini jika ada, karena dapat mengganggu fixed positioning anak */
         }
 
         @keyframes fadeIn {
@@ -285,6 +277,8 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.75);
+            /* Pemusatan dengan flexbox pada container fixed */
+            display: flex; /* Aktifkan flex untuk pemusatan anak */
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -294,7 +288,11 @@
         }
 
         .gift-content.active {
-            display: flex;
+            display: flex; /* Tetap pakai active untuk mengontrol visibility */
+        }
+        /* Override default display:none di .gift-content, hanya active yang visible */
+        .gift-content:not(.active) {
+            display: none !important;
         }
 
         .gift-popup {
@@ -307,8 +305,13 @@
             text-align: center;
             animation: popUp 0.4s ease-out;
             position: relative;
-            margin: auto; /* Gunakan margin auto untuk pemusatan vertikal/horizontal saat overflow-y:auto */
-            transform: none !important; /* Pastikan tidak ada transform yang mengganggu positioning */
+            /* margin: auto; <-- Hapus, karena sudah diatur oleh flex parent */
+            /* transform: none !important; <-- Hapus, biarkan animasi popUp bekerja */
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .gift-popup img {
@@ -398,23 +401,23 @@
             .input-section input[type="text"] { width: 95%; font-size: 1.1em; }
             .input-section button { padding: 12px 25px; font-size: 1.1em; }
             .gift-box { width: 120px; height: 120px; font-size: 1em;}
-            .greeting-card { /* Penyesuaian khusus untuk smartphone */
-                max-width: 320px; /* Batasi lebar agar tidak terlalu besar di ponsel kecil */
-                width: 90%; /* Mengambil 90% dari lebar container */
-                padding: 15px; /* Kurangi padding */
-                border-width: 3px; /* Kurangi ketebalan border */
+            .greeting-card {
+                max-width: 300px; /* Lebih kecil lagi */
+                width: 95%; /* Mengambil 95% dari lebar container, bukan 100% */
+                padding: 15px;
+                border-width: 3px;
+                margin: 0 auto; /* Pastikan terpusat */
             }
-            .greeting-card p {font-size: 0.9em;} /* Kurangi ukuran font */
+            .greeting-card p {font-size: 0.9em;}
             .greeting-card .recipient-name {font-size: 1.2em;}
             .greeting-card .arabic-text { font-size: 1.3em; margin: 15px 0; }
             .greeting-card .sender-names { font-size: 1em; margin-top: 20px; }
             .gift-popup h3 { font-size: 1.5em; }
             .gift-popup p { font-size: 1em; }
             .card-section.active { min-height: 300px; }
-            .gift-popup { /* Penyesuaian popup di smartphone */
+            .gift-popup {
                 width: 95%;
                 padding: 20px;
-                margin: 10px auto; /* Lebih sedikit margin vertikal */
             }
         }
 
@@ -469,7 +472,7 @@
                 </a>
                 <a href="#" class="gift-box rendang" onclick="openGift('rendang'); return false;">
                     Rendang 🌶️
-</a>
+                </a>
             </div>
         </div>
     </div>
@@ -485,6 +488,15 @@
     </div>
 
     <script>
+        // Variabel untuk menyimpan posisi sentuhan awal
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+        let currentRotateX = 0;
+        let currentRotateY = 0;
+        const rotationSensitivityTouch = 0.2; // Sensitivitas rotasi untuk sentuhan
+
         // Handler untuk mousemove
         function handleMouseMove(e) {
             const greetingCard = document.getElementById('greetingCard');
@@ -497,7 +509,7 @@
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            const rotationSensitivity = 10;
+            const rotationSensitivity = 10; // Rotasi maks 10 derajat
 
             const rotateX = ((y - centerY) / centerY) * rotationSensitivity;
             const rotateY = ((x - centerX) / centerX) * -rotationSensitivity;
@@ -512,6 +524,77 @@
                 greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
             }
         }
+
+        // Handler untuk touchstart
+        function handleTouchStart(e) {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+            // Dapatkan rotasi saat ini jika ada
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                 const st = window.getComputedStyle(greetingCard, null);
+                 const tr = st.getPropertyValue("-webkit-transform") ||
+                            st.getPropertyValue("-moz-transform") ||
+                            st.getPropertyValue("-ms-transform") ||
+                            st.getPropertyValue("-o-transform") ||
+                            st.getPropertyValue("transform") ||
+                            "none";
+
+                 if (tr !== "none" && tr.startsWith("matrix3d")) {
+                    const values = tr.split('(')[1].split(')')[0].split(',');
+                    // Mendapatkan rotasi dari matrix3d cukup kompleks, kita bisa menyimpan rotasi terakhir
+                    // Untuk kesederhanaan, kita anggap rotasi awal 0 jika tidak ada sistem yang menyimpan
+                    // atau reset ke 0 saat touchstart.
+                    // Untuk saat ini, kita akan reset agar lebih mudah dikontrol
+                     currentRotateX = 0;
+                     currentRotateY = 0;
+                 } else {
+                     currentRotateX = 0;
+                     currentRotateY = 0;
+                 }
+            }
+        }
+
+        // Handler untuk touchmove
+        function handleTouchMove(e) {
+            e.preventDefault(); // Mencegah scrolling default
+            const greetingCard = document.getElementById('greetingCard');
+            if (!greetingCard) return;
+
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - lastTouchX;
+            const deltaY = touch.clientY - lastTouchY;
+
+            // Sesuaikan rotasi berdasarkan pergerakan sentuhan
+            currentRotateY += deltaX * rotationSensitivityTouch;
+            currentRotateX -= deltaY * rotationSensitivityTouch; // Invers Y untuk rotasi X
+
+            // Batasi rotasi agar tidak berputar terlalu jauh
+            currentRotateX = Math.max(-20, Math.min(20, currentRotateX));
+            currentRotateY = Math.max(-20, Math.min(20, currentRotateY));
+
+            greetingCard.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+        }
+
+        // Handler untuk touchend
+        function handleTouchEnd() {
+            // Setelah sentuhan berakhir, kartu akan perlahan kembali ke posisi semula
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                // Untuk efek kembali halus, kita bisa pakai transisi CSS yang sudah ada
+                // Atau reset transform langsung jika tidak ada transisi yang diinginkan
+                setTimeout(() => { // Memberi sedikit waktu untuk melihat hasil rotasi
+                    greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                }, 300); // Kembali setelah 300ms
+            }
+        }
+
 
         function showGreetingCard() {
             const userNameInput = document.getElementById('userName');
@@ -533,8 +616,15 @@
                     // Aktifkan event listener 3D setelah kartu terlihat
                     if (greetingCard) {
                         if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
+                            // Desktop (Mouse)
                             greetingCard.addEventListener('mousemove', handleMouseMove);
                             greetingCard.addEventListener('mouseleave', handleMouseLeave);
+                        } else {
+                            // Touchscreen (HP)
+                            greetingCard.addEventListener('touchstart', handleTouchStart);
+                            greetingCard.addEventListener('touchmove', handleTouchMove);
+                            greetingCard.addEventListener('touchend', handleTouchEnd);
+                            greetingCard.addEventListener('touchcancel', handleTouchEnd); // Penanganan sentuhan dibatalkan
                         }
                     }
                 }, 500);
