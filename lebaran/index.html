@@ -271,7 +271,7 @@
         /* Gift Popup Section */
         .gift-content {
             display: none;
-            position: static; /* Sudah benar */
+            position: fixed; /* Sudah benar */
             top: 0;
             left: 0;
             width: 100%;
@@ -660,7 +660,7 @@
             giftMessage.textContent = message;
 
             giftPopup.classList.add('active');
-            document.body.classList.add('no-scroll');
+            //document.body.classList.add('no-scroll');
         }
 
         function closeGift() {
