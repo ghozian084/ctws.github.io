@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Idul Fitri 1447 H</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #73c6b6, #d4f2e7); /* Gradient Hijau-Putih */
+            color: #333;
+            text-align: center;
+            overflow-x: hidden; /* Mencegah scroll horizontal */
+        }
+
+        /* Container for the whole page content */
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-out;
+            position: relative;
+            overflow: hidden; /* For decorative elements */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header Styling */
+        h1 {
+            color: #2e8b57; /* Hijau tua */
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50; /* Hijau sedang */
+            font-size: 1.8em;
+            margin-bottom: 30px;
+        }
+
+        /* Input and Button Styling */
+        .input-section {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-section label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .input-section input[type="text"] {
+            padding: 12px 20px;
+            width: 70%;
+            max-width: 300px;
+            border: 2px solid #a5d6a7; /* Border hijau muda */
+            border-radius: 30px;
+            font-size: 1.1em;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .input-section input[type="text"]:focus {
+            border-color: #4CAF50; /* Border hijau saat fokus */
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+        }
+
+        .input-section button {
+            background-color: #ffb300; /* Kuning keemasan */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(255, 179, 0, 0.4);
+        }
+
+        .input-section button:hover {
+            background-color: #ffa000; /* Kuning lebih gelap saat hover */
+            transform: translateY(-3px);
+        }
+
+        /* Card Section Styling */
+        .card-section {
+            display: none; /* Hidden by default */
+            animation: slideIn 1s ease-out forwards;
+            margin-top: 30px;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting-card {
+            background: linear-gradient(to top right, #e8f5e9, #c8e6c9); /* Gradient hijau muda */
+            border: 5px solid #4CAF50;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 0 auto 40px auto;
+            max-width: 600px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .greeting-card p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .greeting-card .recipient-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2e8b57;
+            margin-bottom: 20px;
+        }
+
+        .greeting-card .sender-names {
+            font-style: italic;
+            margin-top: 25px;
+            font-size: 1.05em;
+            color: #666;
+        }
+
+        /* Gift Boxes Styling */
+        .gift-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .gift-box {
+            background-color: #ff7043; /* Oranye cerah */
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 112, 67, 0.4);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            color: white;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .gift-box.ketupat { background-color: #66bb6a; } /* Hijau untuk ketupat */
+        .gift-box.opor { background-color: #ffee58; color: #333;} /* Kuning untuk opor */
+        .gift-box.rendang { background-color: #bf360c; } /* Merah kecoklatan untuk rendang */
+
+
+        .gift-box:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(255, 112, 67, 0.6);
+        }
+
+        .gift-box::before { /* Pita */
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%);
+            left: 50%;
+        }
+        .gift-box::after { /* Pita */
+            content: '';
+            position: absolute;
+            height: 40px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%);
+            top: 50%;
+        }
+
+
+        .gift-content {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .gift-content.active {
+            display: flex;
+        }
+
+        .gift-popup {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: popUp 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .gift-popup img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .gift-popup h3 {
+            color: #2e8b57;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .gift-popup p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background-color: #f44336; /* Merah */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f; /* Merah lebih gelap */
+        }
+
+        /* Decorative Elements (using pseudo-elements for simplicity) */
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .container::before { /* Bedug kiri */
+            width: 100px;
+            height: 100px;
+            top: -30px;
+            left: -30px;
+            background: url('https://via.placeholder.com/100x100?text=Bedug') no-repeat center center / contain;
+            opacity: 0.2;
+            transform: rotate(-20deg);
+        }
+
+        .container::after { /* Lentera kanan */
+            width: 80px;
+            height: 80px;
+            bottom: -20px;
+            right: -20px;
+            background: url('https://via.placeholder.com/80x80?text=Lentera') no-repeat center center / contain;
+            opacity: 0.2;
+            transform: rotate(15deg);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 1.5em; }
+            .container { padding: 30px; }
+            .input-section input[type="text"] { width: 80%; }
+            .gift-boxes { flex-direction: column; align-items: center; }
+            .gift-box { width: 120px; height: 120px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.2em; }
+            .container { padding: 20px; }
+            .input-section input[type="text"] { width: 90%; font-size: 1em; }
+            .input-section button { padding: 12px 25px; font-size: 1.1em; }
+            .gift-box { width: 100px; height: 100px; font-size: 0.9em;}
+            .greeting-card p {font-size: 1em;}
+            .greeting-card .recipient-name {font-size: 1.3em;}
+        }
+
+        /* Placeholder image for inspiration */
+        .decoration-image {
+            width: 100%;
+            height: auto;
+            max-width: 600px; /* Adjust as needed */
+            margin: 30px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Selamat Hari Raya Idul Fitri</h1>
+        <h2>1447 Hijriah</h2>
+
+        <img src="https://i.imgur.com/your-first-image.png" alt="Dekorasi Lebaran" class="decoration-image"> <!-- Placeholder for your first generated image -->
+
+        <div class="input-section" id="inputSection">
+            <label for="userName">Masukkan Nama Anda:</label>
+            <input type="text" id="userName" placeholder="Nama Anda di Sini...">
+            <button onclick="showGreetingCard()">Buka Kartu Ucapan</button>
+            <p style="margin-top: 30px; font-style: italic; color: #777;">Dari: Ghozian, Nazzun, dan Alhazen</p>
+        </div>
+
+        <div class="card-section" id="cardSection">
+            <div class="greeting-card">
+                <p class="recipient-name">Untuk <span id="displayUserName"></span>,</p>
+                <p>Di hari yang fitri ini, kami sekeluarga mengucapkan Selamat Hari Raya Idul Fitri 1447 Hijriah.</p>
+                <p>Mohon Maaf Lahir dan Batin.</p>
+                <p>Semoga keberkahan senantiasa menyertai langkah kita semua.</p>
+                <p class="sender-names">Hormat kami,<br>Ghozian, Nazzun, dan Alhazen</p>
+            </div>
+
+            <p style="font-size: 1.3em; color: #555; margin-top: 40px; margin-bottom: 20px;">Buka Kado Spesial Anda!</p>
+            <div class="gift-boxes">
+                <div class="gift-box ketupat" onclick="openGift('ketupat')">
+                    Ketupat
+                </div>
+                <div class="gift-box opor" onclick="openGift('opor')">
+                    Opor Ayam
+                </div>
+                <div class="gift-box rendang" onclick="openGift('rendang')">
+                    Rendang
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gift Popup Section (Hidden by default) -->
+    <div class="gift-content" id="giftPopup">
+        <div class="gift-popup">
+            <img id="giftImage" src="" alt="Isi Kado">
+            <h3 id="giftTitle"></h3>
+            <p id="giftMessage"></p>
+            <button class="close-btn" onclick="closeGift()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        function showGreetingCard() {
+            const userNameInput = document.getElementById('userName');
+            const userName = userNameInput.value.trim();
+
+            if (userName) {
+                document.getElementById('displayUserName').textContent = userName;
+                document.getElementById('inputSection').style.display = 'none';
+                document.getElementById('cardSection').style.display = 'block';
+            } else {
+                alert('Silakan masukkan nama Anda terlebih dahulu!');
+            }
+        }
+
+        function openGift(giftType) {
+            const giftPopup = document.getElementById('giftPopup');
+            const giftImage = document.getElementById('giftImage');
+            const giftTitle = document.getElementById('giftTitle');
+            const giftMessage = document.getElementById('giftMessage');
+
+            let imageUrl, title, message;
+
+            if (giftType === 'ketupat') {
+                imageUrl = 'https://via.placeholder.com/400x300?text=Gambar+Ketupat'; // Placeholder
+                title = 'Lezatnya Ketupat!';
+                message = 'Simbol kebersamaan dan maaf di hari raya. Selamat menikmati!';
+            } else if (giftType === 'opor') {
+                imageUrl = 'https://via.placeholder.com/400x300?text=Gambar+Opor+Ayam'; // Placeholder
+                title = 'Nikmatnya Opor Ayam!';
+                message = 'Hidangan wajib Lebaran yang selalu dinanti. Selamat menyantap!';
+            } else if (giftType === 'rendang') {
+                imageUrl = 'https://via.placeholder.com/400x300?text=Gambar+Rendang'; // Placeholder
+                title = 'Rendang Istimewa!';
+                message = 'Rasa otentik yang kaya rempah, favorit sepanjang masa. Selamat mencoba!';
+            }
+
+            giftImage.src = imageUrl;
+            giftTitle.textContent = title;
+            giftMessage.textContent = message;
+
+            giftPopup.classList.add('active'); // Show the popup
+        }
+
+        function closeGift() {
+            document.getElementById('giftPopup').classList.remove('active'); // Hide the popup
+        }
+    </script>
+</body>
+</html>
