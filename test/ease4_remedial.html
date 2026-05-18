@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EASE 4 Remedial Examination</title>
+    
+    <!-- Tailwind CSS for clean UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        /* Disable text selection and protect contents */
+        body { background-color: #f3f4f6; user-select: none; -webkit-user-select: none; } 
+        .hidden { display: none !important; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+        
+        /* Custom Table Styling for Statistical Diagrams */
+        .stat-table { border-collapse: collapse; margin: 0 auto; font-family: monospace; font-size: 1.125rem; }
+        .stat-table td { padding: 0.25rem 0.5rem; }
+        .stem-border { border-right: 2px solid #374151; text-align: right; font-weight: bold; padding-right: 1rem; }
+        .data-table { border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 1rem; }
+        .data-table th, .data-table td { border: 1px solid #9ca3af; padding: 0.5rem; }
+        .data-table th { background-color: #d1d5db; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- PAGE 1: Login / Start -->
+    <div id="page-login" class="page">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-2xl font-bold mb-2 text-blue-700">EASE 4 Remedial</h1>
+            <p class="text-gray-500 mb-6 font-semibold">23 Randomized Questions | 90 Minutes | Max Score: 100</p>
+            <div class="text-left text-gray-700 mb-6 text-sm bg-blue-50 p-4 rounded border border-blue-200">
+                <strong>Strict Rules:</strong><br>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Test requires <b>Fullscreen</b>.</li>
+                    <li>You <b>cannot go backward</b> to previous questions.</li>
+                    <li>Right-click is disabled.</li>
+                    <li class="text-red-600 font-bold">DO NOT ALT-TAB or switch windows. If you leave the screen, your test will automatically submit instantly.</li>
+                </ul>
+            </div>
+            <input type="text" id="studentName" placeholder="Enter your full name" class="w-full border border-gray-300 p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+            <button onclick="startQuiz()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition shadow-lg">Start Quiz in Fullscreen</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Quiz Interface -->
+    <div id="page-quiz" class="page hidden justify-start pt-10">
+        <div class="w-full max-w-4xl">
+            <!-- Header: Timer and Progress -->
+            <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-lg shadow">
+                <div class="font-bold text-gray-700" id="studentDisplay"></div>
+                <div class="font-bold text-red-600 text-2xl tracking-widest" id="timerDisplay">90:00</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-300 rounded-full h-2.5 mb-6">
+                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Container -->
+            <div class="bg-white p-8 rounded-lg shadow-md mb-4">
+                <h2 class="text-md font-bold text-gray-400 mb-2 uppercase tracking-wider">Question <span id="qNumber"></span> / <span id="qTotal"></span></h2>
+                <div id="questionText" class="text-xl mb-8 text-gray-800 font-medium leading-relaxed"></div>
+                
+                <div id="optionsContainer" class="flex flex-col gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+
+            <!-- Front-End Warning Message -->
+            <div class="flex justify-end items-center mb-2">
+                <p id="warningMessage" class="text-red-500 font-bold hidden mr-4">⚠️ Please select an answer to continue.</p>
+                <button onclick="nextQuestion()" class="bg-blue-600 text-white px-8 py-3 rounded font-bold hover:bg-blue-700 transition shadow-lg">Next Question &rarr;</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 3: Final Report -->
+    <div id="page-report" class="page hidden">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-3xl font-bold mb-2 text-green-600">Quiz Finished</h1>
+            <p id="finishReason" class="text-red-500 font-bold mb-6 text-sm"></p>
+            
+            <div class="bg-gray-100 p-5 rounded text-left mb-6 font-mono text-sm border border-gray-200" id="reportCard">
+                <!-- Report details injected here -->
+            </div>
+
+            <button onclick="copyReport()" class="w-full bg-gray-800 text-white font-bold py-3 rounded hover:bg-gray-900 transition mb-3">📋 Copy Report to Clipboard</button>
+            
+            <!-- Retake Quiz Button -->
+            <button onclick="retakeQuiz()" class="w-full bg-blue-100 text-blue-700 border border-blue-300 font-bold py-3 rounded hover:bg-blue-200 transition">🔄 Retake Quiz</button>
+            
+            <p class="text-xs text-gray-500 mt-4">You may now exit fullscreen and take a screenshot.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA VISUALIZATION HTML BLOCKS ---
+        const SVG_HISTOGRAM = `
+            <div class="flex justify-center mb-6">
+                <svg width="400" height="250" viewBox="-30 -20 450 270" class="bg-white border rounded shadow p-2">
+                    <line x1="0" y1="200" x2="400" y2="200" stroke="#000" stroke-width="2"/>
+                    <line x1="0" y1="0" x2="0" y2="200" stroke="#000" stroke-width="2"/>
+                    <rect x="0" y="160" width="80" height="40" fill="#cbd5e1" stroke="#000" stroke-width="1"/>
+                    <rect x="80" y="0" width="120" height="200" fill="#cbd5e1" stroke="#000" stroke-width="1"/>
+                    <rect x="200" y="120" width="40" height="80" fill="#cbd5e1" stroke="#000" stroke-width="1"/>
+                    <rect x="240" y="160" width="160" height="40" fill="#cbd5e1" stroke="#000" stroke-width="1"/>
+                    <text x="0" y="215" font-size="12" text-anchor="middle">0</text>
+                    <text x="80" y="215" font-size="12" text-anchor="middle">10</text>
+                    <text x="200" y="215" font-size="12" text-anchor="middle">25</text>
+                    <text x="240" y="215" font-size="12" text-anchor="middle">30</text>
+                    <text x="400" y="215" font-size="12" text-anchor="middle">50</text>
+                    <text x="-15" y="100" font-size="12" transform="rotate(-90 -15,100)" text-anchor="middle">Frequency Density</text>
+                </svg>
+            </div>`;
+
+        const STEM_LEAF_COMPANIES = `
+            <div class="mb-6 p-4 bg-gray-50 rounded border flex justify-center">
+                <table class="stat-table">
+                    <tr><td class="stem-border">1</td><td class="pl-4">0 8 8 8 8 9 9</td><td class="pl-8 text-sm italic">Key: <b>1 | 0</b></td></tr>
+                    <tr><td class="stem-border">2</td><td class="pl-4">0 5 6 6 7 7 8 9</td><td class="pl-8 text-sm italic">represents 10</td></tr>
+                    <tr><td class="stem-border">3</td><td class="pl-4">0 1 1 2 9</td><td class="pl-8 text-sm italic">employees</td></tr>
+                </table>
+            </div>`;
+
+        const STEM_LEAF_FERRIES = `
+            <div class="mb-6 p-4 bg-gray-50 rounded border overflow-x-auto flex justify-center">
+                <table class="stat-table text-center text-sm">
+                    <tr><th class="pr-2 border-b-2 border-gray-800">Ferry A (14)</th><th class="border-b-2 border-gray-800">|</th><th class="pl-2 border-b-2 border-gray-800">Ferry Z (14)</th><th class="pl-8 text-left italic font-normal text-xs">Key: 3 | 5 | 0<br>represents 53<br>on A and 50<br>on Z</th></tr>
+                    <tr><td class="pr-4 text-right">8 7 6</td><td class="px-3 border-l-2 border-r-2 border-black font-bold">2</td><td class="pl-4 text-left"></td><td></td></tr>
+                    <tr><td class="pr-4 text-right">7 6 4 0</td><td class="px-3 border-l-2 border-r-2 border-black font-bold">3</td><td class="pl-4 text-left">0 5 8</td><td></td></tr>
+                    <tr><td class="pr-4 text-right">8 6 5 3</td><td class="px-3 border-l-2 border-r-2 border-black font-bold">4</td><td class="pl-4 text-left">3 4 5 7 7 7</td><td></td></tr>
+                    <tr><td class="pr-4 text-right">5 3 3</td><td class="px-3 border-l-2 border-r-2 border-black font-bold">5</td><td class="pl-4 text-left">0 2 6 6 9</td><td></td></tr>
+                </table>
+            </div>`;
+
+        const STEM_LEAF_60 = `
+            <div class="mb-6 p-4 bg-gray-50 rounded border flex justify-center">
+                <table class="stat-table">
+                    <tr><td class="stem-border">0</td><td class="pl-4">9</td><td class="pl-8 text-sm italic">Key: <b>2 | 5</b> represents a<br>mark of 25 out of 60</td></tr>
+                    <tr><td class="stem-border">1</td><td class="pl-4">4</td><td></td></tr>
+                    <tr><td class="stem-border">2</td><td class="pl-4">5 8</td><td></td></tr>
+                    <tr><td class="stem-border">3</td><td class="pl-4">0 1 1 7 9</td><td></td></tr>
+                    <tr><td class="stem-border">4</td><td class="pl-4">3 5 6 8</td><td></td></tr>
+                    <tr><td class="stem-border">5</td><td class="pl-4">0 9</td><td></td></tr>
+                </table>
+            </div>`;
+
+        const STEM_LEAF_IQR = `
+            <div class="mb-6 p-4 bg-[#f8faf6] rounded border flex justify-center">
+                <table class="stat-table text-[#8B6E32]">
+                    <tr class="text-green-700 font-bold"><td class="stem-border">Stem</td><td class="pl-4">Leaf</td><td class="pl-8 text-sm italic text-black font-normal">"4 | 3" represents a score of 43</td></tr>
+                    <tr><td class="stem-border">4</td><td class="pl-4">3 5 7 8</td><td></td></tr>
+                    <tr><td class="stem-border">5</td><td class="pl-4">0 2 2 6</td><td></td></tr>
+                    <tr><td class="stem-border">6</td><td class="pl-4">1 3 3 5</td><td></td></tr>
+                    <tr><td class="stem-border">7</td><td class="pl-4">0 4</td><td></td></tr>
+                </table>
+            </div>`;
+
+        const TABLE_FREQ = `
+            <table class="data-table">
+                <tr><th>Number, $x$</th><th>Frequency, $f$</th></tr>
+                <tr><td>1</td><td>15</td></tr>
+                <tr><td>2</td><td>25</td></tr>
+                <tr><td>3</td><td>16</td></tr>
+                <tr><td>4</td><td>20</td></tr>
+                <tr><td>5</td><td>13</td></tr>
+                <tr><td>6</td><td>11</td></tr>
+            </table>`;
+            
+        const TABLE_HEIGHTS = `
+            <table class="data-table text-sm">
+                <tr><th>Height (cm)</th><td>10-19</td><td>20-29</td><td>30-39</td><td>40-44</td><td>45-49</td><td>50-54</td><td>55-59</td></tr>
+                <tr><th>Frequency</th><td>10</td><td>18</td><td>32</td><td>42</td><td>28</td><td>14</td><td>6</td></tr>
+            </table>`;
+
+        const VENN_DIAGRAM = `
+            <div class="flex justify-center mb-6">
+                <svg width="350" height="200" viewBox="0 0 350 200" class="bg-white shadow border rounded p-2">
+                    <rect x="5" y="5" width="340" height="190" fill="none" stroke="#000"/>
+                    <text x="15" y="25" font-family="serif" font-style="italic" font-size="16">E</text>
+                    <circle cx="120" cy="110" r="60" fill="none" stroke="#000" stroke-width="1.5"/>
+                    <circle cx="210" cy="110" r="60" fill="none" stroke="#000" stroke-width="1.5"/>
+                    <text x="100" y="40" text-anchor="middle" font-size="12">Have a computer</text>
+                    <text x="230" y="40" text-anchor="middle" font-size="12">Have a phone</text>
+                    <text x="80" y="115" font-size="14">7</text>
+                    <text x="165" y="115" font-size="14">8</text>
+                    <text x="240" y="115" font-size="14">23</text>
+                    <text x="320" y="170" font-size="14">2</text>
+                </svg>
+            </div>`;
+
+        // --- 1. QUIZ DATA BANK (23 Questions x 3 Variations) ---
+        const TOTAL_QUESTIONS = 23;
+        const questionBank = [
+            // Q1: Data types
+            [
+                { question: "Farah found some data on rainfall, in millimetres, in Australia over the last 30 years from a website.<br><br>Which option best describes the type of data she found?", options: ["qualitative and continuous", "quantitative and continuous", "quantitative and discrete", "qualitative and discrete"], correctIndex: 1 },
+                { question: "Farah recorded the exact number of cars passing through a toll gate each day for a month.<br><br>Which option best describes the type of data she found?", options: ["quantitative and discrete", "qualitative and continuous", "quantitative and continuous", "qualitative and discrete"], correctIndex: 0 },
+                { question: "Farah noted the eye colours of all the employees working in her office.<br><br>Which option best describes the type of data she found?", options: ["quantitative and continuous", "quantitative and discrete", "qualitative and discrete", "qualitative and continuous"], correctIndex: 2 }
+            ],
+            // Q2: Stem and Leaf (Companies)
+            [
+                { question: "This stem-and-leaf diagram shows the number of employees at 20 companies.<br>" + STEM_LEAF_COMPANIES + "What percentage of the companies have <b>more than 30</b> employees?", options: ["15%", "20%", "25%", "30%"], correctIndex: 1 },
+                { question: "This stem-and-leaf diagram shows the number of employees at 20 companies.<br>" + STEM_LEAF_COMPANIES + "What percentage of the companies have <b>fewer than 20</b> employees?", options: ["25%", "30%", "35%", "40%"], correctIndex: 2 },
+                { question: "This stem-and-leaf diagram shows the number of employees at 20 companies.<br>" + STEM_LEAF_COMPANIES + "What percentage of the companies have <b>between 20 and 29 inclusive</b> employees?", options: ["20%", "30%", "40%", "50%"], correctIndex: 2 }
+            ],
+            // Q3: Back-to-Back Stem and Leaf (Ferries)
+            [
+                { question: "Over a 14-day period, data were collected on the number of passengers travelling on two ferries, A and Z.<br>" + STEM_LEAF_FERRIES + "How many more passengers travelled on ferry Z than on ferry A?", options: ["79", "88", "93", "105"], correctIndex: 1 },
+                { question: "Over a 14-day period, data were collected on the number of passengers travelling on two ferries, A and Z.<br>" + STEM_LEAF_FERRIES + "What is the <b>median</b> number of passengers for Ferry Z?", options: ["47", "45", "46", "44"], correctIndex: 0 },
+                { question: "Over a 14-day period, data were collected on the number of passengers travelling on two ferries, A and Z.<br>" + STEM_LEAF_FERRIES + "What is the <b>median</b> number of passengers for Ferry A?", options: ["40", "36", "37", "43"], correctIndex: 0 }
+            ],
+            // Q4: Histogram
+            [
+                { question: "The lengths of the 575 items in a candle maker's workshop are represented in the histogram.<br>" + SVG_HISTOGRAM + "What number of the items have lengths <b>between 10 and 25</b>?", options: ["375", "150", "75", "25"], correctIndex: 0 },
+                { question: "The lengths of the 575 items in a candle maker's workshop are represented in the histogram.<br>" + SVG_HISTOGRAM + "What number of the items have lengths <b>between 0 and 10</b>?", options: ["25", "50", "75", "100"], correctIndex: 1 },
+                { question: "The lengths of the 575 items in a candle maker's workshop are represented in the histogram.<br>" + SVG_HISTOGRAM + "What number of the items have lengths <b>between 30 and 50</b>?", options: ["50", "100", "150", "200"], correctIndex: 1 }
+            ],
+            // Q5: Data Representation
+            [
+                { question: "Mila noted each student's answer when her year group was asked to name their favourite colour. Mila wishes to emphasise that the favourite colour of exactly three-quarters of the students is blue.<br><br>Which type of representation of data would be the most effective for Mila to use?", options: ["Pictogram", "Pie chart", "Cumulative frequency graph", "Histogram"], correctIndex: 1 },
+                { question: "Mila measured the weights of all students in her year. She wishes to display the median weight and the interquartile spread of the data effectively.<br><br>Which type of representation of data would be the most effective?", options: ["Box plot", "Pie chart", "Bar chart", "Pictogram"], correctIndex: 0 },
+                { question: "Mila collected data on test scores and wants to easily estimate how many students scored below a certain passing mark without calculating raw frequencies.<br><br>Which type of representation of data would be the most effective?", options: ["Box plot", "Pie chart", "Cumulative frequency graph", "Scatter plot"], correctIndex: 2 }
+            ],
+            // Q6: Mode of Words
+            [
+                { question: "Which of the eleven words in this sentence is the mode?<br><br>\"Which of the eleven words in this sentence is the mode?\"", options: ["the", "sentence", "of", "words"], correctIndex: 0 },
+                { question: "Which word is the mode in the following sentence?<br><br>\"What is the mode of the words in the current question text?\"", options: ["the", "words", "mode", "is"], correctIndex: 0 },
+                { question: "Identify the mode of the words used in this specific sentence:<br><br>\"Find the mode of the words in the sentence you are reading now.\"", options: ["mode", "words", "the", "sentence"], correctIndex: 2 }
+            ],
+            // Q7: Algebra & Mean
+            [
+                { question: "Four numbers are \\( x \\), \\( 3x \\), \\( x-24 \\), and \\( 100-x \\).<br>The <b>smallest</b> of these four numbers if their <b>mean</b> is equal to 42 is...", options: ["42", "23", "11", "-1"], correctIndex: 3 },
+                { question: "Four numbers are \\( x \\), \\( 3x \\), \\( x-24 \\), and \\( 100-x \\).<br>The <b>largest</b> of these four numbers if their <b>mean</b> is equal to 42 is...", options: ["69", "77", "100", "23"], correctIndex: 1 },
+                { question: "Four numbers are \\( x \\), \\( 3x \\), \\( x-24 \\), and \\( 100-x \\).<br>The <b>range</b> of these four numbers if their <b>mean</b> is equal to 42 is...", options: ["78", "68", "101", "70"], correctIndex: 0 }
+            ],
+            // Q8: Median basic
+            [
+                { question: "Find the <b>median</b> of the following dataset:<br>5, 12, 3, 8, 5, 10, 7", options: ["5", "6", "7", "8"], correctIndex: 2 },
+                { question: "Find the <b>median</b> of the following dataset:<br>8, 2, 9, 4, 8, 1, 6", options: ["4", "6", "8", "9"], correctIndex: 1 },
+                { question: "Find the <b>median</b> of the following dataset:<br>10, 15, 8, 12, 10, 18, 9", options: ["8", "9", "10", "12"], correctIndex: 2 }
+            ],
+            // Q9: Median from Freq Table
+            [
+                { question: "A bag contained six counters numbered 1 to 6. A counter was drawn from the bag, its number noted and returned. Repeated 100 times, the results were recorded below:<br>" + TABLE_FREQ + "<br>Find the <b>Median</b>.", options: ["2", "3", "4", "5"], correctIndex: 1 },
+                { question: "A bag contained six counters numbered 1 to 6. A counter was drawn from the bag, its number noted and returned. Repeated 100 times, the results were recorded below:<br>" + TABLE_FREQ + "<br>Find the <b>Mode</b>.", options: ["1", "2", "3", "4"], correctIndex: 1 },
+                { question: "A bag contained six counters numbered 1 to 6. A counter was drawn from the bag, its number noted and returned. Repeated 100 times, the results were recorded below:<br>" + TABLE_FREQ + "<br>How many times was a number <b>greater than 4</b> drawn?", options: ["24", "13", "11", "33"], correctIndex: 0 }
+            ],
+            // Q10: Range from Stem & Leaf
+            [
+                { question: "The following stem-and-leaf diagram shows the marks out of 60 obtained by 15 students in a Science test.<br>" + STEM_LEAF_60 + "Find the <b>range</b> of the marks.", options: ["41", "43", "45", "50"], correctIndex: 3 },
+                { question: "The following stem-and-leaf diagram shows the marks out of 60 obtained by 15 students in a Science test.<br>" + STEM_LEAF_60 + "Find the <b>median</b> of the marks.", options: ["37", "31", "30", "39"], correctIndex: 0 },
+                { question: "The following stem-and-leaf diagram shows the marks out of 60 obtained by 15 students in a Science test.<br>" + STEM_LEAF_60 + "Find the <b>mode</b> of the marks.", options: ["31", "37", "28", "43"], correctIndex: 0 }
+            ],
+            // Q11: Simple Range
+            [
+                { question: "Find the <b>range</b> of the Math exam scores for Grade 11 students:<br>Scores: 88, 85, 100, 92, 89, 93, 90, 99, 95", options: ["100", "65", "20", "15"], correctIndex: 3 },
+                { question: "Find the <b>median</b> of the Math exam scores for Grade 11 students:<br>Scores: 88, 85, 100, 92, 89, 93, 90, 99, 95", options: ["89", "90", "92", "93"], correctIndex: 2 },
+                { question: "Find the <b>highest score</b> from the Math exam scores for Grade 11 students:<br>Scores: 88, 85, 100, 92, 89, 93, 90, 99, 95", options: ["95", "99", "100", "101"], correctIndex: 2 }
+            ],
+            // Q12: IQR Stem Leaf
+            [
+                { question: "The stem-and-leaf below shows the quiz scores (out of 100) for 14 students.<br>" + STEM_LEAF_IQR + "Find the <b>interquartile range (IQR)</b> of the scores.", options: ["5", "7", "14", "15"], correctIndex: 3 },
+                { question: "The stem-and-leaf below shows the quiz scores (out of 100) for 14 students.<br>" + STEM_LEAF_IQR + "Find the <b>median</b> of the scores.", options: ["54", "52", "56", "55"], correctIndex: 0 },
+                { question: "The stem-and-leaf below shows the quiz scores (out of 100) for 14 students.<br>" + STEM_LEAF_IQR + "Find the <b>range</b> of the scores.", options: ["21", "28", "31", "35"], correctIndex: 2 }
+            ],
+            // Q13: Variance Property
+            [
+                { question: "If each value in a data set is increased by 3, <b>what happens to the variance?</b>", options: ["It increases by 3", "It increases by 9", "It stays the same", "It becomes zero"], correctIndex: 2 },
+                { question: "If each value in a data set is increased by 3, <b>what happens to the mean?</b>", options: ["It increases by 3", "It stays the same", "It increases by 9", "It is multiplied by 3"], correctIndex: 0 },
+                { question: "If each value in a data set is increased by 3, <b>what happens to the standard deviation?</b>", options: ["It increases by 3", "It increases by 9", "It stays the same", "It becomes zero"], correctIndex: 2 }
+            ],
+            // Q14: Std Dev from Grouped Data
+            [
+                { question: "On a certain day, the heights of 150 sunflower plants are measured, correct to the nearest cm.<br>" + TABLE_HEIGHTS + "<br>Calculate the estimate for the <b>standard deviation</b> of the heights.", options: ["12.6", "9.6", "112.76", "10.6"], correctIndex: 3 },
+                { question: "On a certain day, the heights of 150 sunflower plants are measured, correct to the nearest cm.<br>" + TABLE_HEIGHTS + "<br>Calculate the estimate for the <b>variance</b> of the heights.", options: ["10.6", "112.76", "12.6", "106.3"], correctIndex: 1 },
+                { question: "On a certain day, the heights of 150 sunflower plants are measured, correct to the nearest cm.<br>" + TABLE_HEIGHTS + "<br>Calculate the estimate for the <b>mean</b> of the heights.", options: ["38.9", "40.5", "37.2", "39.5"], correctIndex: 0 }
+            ],
+            // Q15: Word Probability
+            [
+                { question: "One letter is randomly selected from the word \"EXPERIMENT\".<br>Find the <b>probability</b> that the letter is an E.", options: ["10%", "20%", "30%", "40%"], correctIndex: 2 },
+                { question: "One letter is randomly selected from the word \"EXPERIMENT\".<br>Find the <b>probability</b> that the letter is a consonant.", options: ["40%", "50%", "60%", "70%"], correctIndex: 2 },
+                { question: "One letter is randomly selected from the word \"EXPERIMENT\".<br>Find the <b>probability</b> that the letter is a vowel.", options: ["20%", "30%", "40%", "50%"], correctIndex: 2 }
+            ],
+            // Q16: Workforce Probability
+            [
+                { question: "One employee is randomly selected from a workforce that includes 40 females. The probability that a male is selected is 0.375.<br>Find the <b>probability</b> that a <i>particular</i> female is selected.", options: ["\\( \\frac{1}{32} \\)", "\\( \\frac{1}{64} \\)", "\\( \\frac{1}{16} \\)", "\\( \\frac{5}{8} \\)"], correctIndex: 1 },
+                { question: "One employee is randomly selected from a workforce that includes 40 females. The probability that a male is selected is 0.375.<br>What is the <b>total number of male employees</b>?", options: ["20", "24", "32", "64"], correctIndex: 1 },
+                { question: "One employee is randomly selected from a workforce that includes 40 females. The probability that a male is selected is 0.375.<br>Find the <b>probability</b> that a female is selected.", options: ["0.375", "0.625", "0.500", "0.800"], correctIndex: 1 }
+            ],
+            // Q17: Mutually Exclusive
+            [
+                { question: "Events A and B are mutually exclusive. Given that \\( P(A) = 0.25 \\) and \\( P(B) = 0.45 \\), what is the value of \\( P(A \\cup B) \\)?", options: ["0.1125", "0.20", "0.60", "0.70"], correctIndex: 3 },
+                { question: "Events A and B are mutually exclusive. Given that \\( P(A) = 0.25 \\) and \\( P(B) = 0.45 \\), what is the value of \\( P(A \\cap B) \\)?", options: ["0.70", "0.1125", "0.00", "0.20"], correctIndex: 2 },
+                { question: "Events A and B are mutually exclusive. Given that \\( P(A) = 0.25 \\) and \\( P(B) = 0.45 \\), what is the value of \\( P(A' \\cap B') \\)?", options: ["0.30", "0.70", "0.45", "0.8875"], correctIndex: 0 }
+            ],
+            // Q18: Venn Diagram Probability
+            [
+                { question: "40 children were asked if they have a computer or a phone or both. The Venn diagram shows the results.<br>" + VENN_DIAGRAM + "A child is chosen at random <i>from the children who have a computer.</i><br>Find the <b>probability</b> that this child also has a phone.", options: ["\\( \\frac{8}{15} \\)", "\\( \\frac{8}{31} \\)", "\\( \\frac{8}{40} \\)", "\\( \\frac{15}{40} \\)"], correctIndex: 0 },
+                { question: "40 children were asked if they have a computer or a phone or both. The Venn diagram shows the results.<br>" + VENN_DIAGRAM + "A child is chosen at random <i>from the children who have a phone.</i><br>Find the <b>probability</b> that this child also has a computer.", options: ["\\( \\frac{8}{15} \\)", "\\( \\frac{8}{31} \\)", "\\( \\frac{8}{40} \\)", "\\( \\frac{23}{31} \\)"], correctIndex: 1 },
+                { question: "40 children were asked if they have a computer or a phone or both. The Venn diagram shows the results.<br>" + VENN_DIAGRAM + "A child is chosen at random from all the children.<br>Find the <b>probability</b> that the child has a phone OR a computer.", options: ["\\( \\frac{31}{40} \\)", "\\( \\frac{15}{40} \\)", "\\( \\frac{38}{40} \\)", "\\( \\frac{8}{40} \\)"], correctIndex: 2 }
+            ],
+            // Q19: Independent Events
+            [
+                { question: "Events A and B are independent. If \\( P(B) = 0.48 \\) and \\( P(A \\cap B) = 0.12 \\), calculate \\( P(A') \\).", options: ["0.45", "0.62", "0.75", "0.81"], correctIndex: 2 },
+                { question: "Events A and B are independent. If \\( P(B) = 0.48 \\) and \\( P(A \\cap B) = 0.12 \\), calculate \\( P(A) \\).", options: ["0.12", "0.25", "0.36", "0.60"], correctIndex: 1 },
+                { question: "Events A and B are independent. If \\( P(B) = 0.48 \\) and \\( P(A \\cap B) = 0.12 \\), calculate \\( P(A \\cup B) \\).", options: ["0.60", "0.61", "0.73", "0.85"], correctIndex: 1 }
+            ],
+            // Q20: Sports Probability (Win/Draw/Lose)
+            [
+                { question: "The probabilities that a team wins, draws or loses any particular game are 0.6, 0.1 and 0.3, respectively.<br>Find the <b>probability</b> that the team wins <b>at least one</b> of its next two games.", options: ["0.84", "0.48", "0.36", "0.72"], correctIndex: 0 },
+                { question: "The probabilities that a team wins, draws or loses any particular game are 0.6, 0.1 and 0.3, respectively.<br>Find the <b>probability</b> that the team wins <b>exactly one</b> of its next two games.", options: ["0.36", "0.84", "0.48", "0.24"], correctIndex: 2 },
+                { question: "The probabilities that a team wins, draws or loses any particular game are 0.6, 0.1 and 0.3, respectively.<br>Find the <b>probability</b> that the team wins <b>both</b> of its next two games.", options: ["0.36", "0.12", "0.60", "0.84"], correctIndex: 0 }
+            ],
+            // Q21: Olympiad Award Probability
+            [
+                { question: "Ameer is participating in the Math Olympiad in Dubai. He has a 70% chance of winning a Gold award in any given round.<br>What is the <b>probability</b> that he wins <b>exactly one</b> of the next two rounds?", options: ["21%", "30%", "42%", "70%"], correctIndex: 2 },
+                { question: "Ameer is participating in the Math Olympiad in Dubai. He has a 70% chance of winning a Gold award in any given round.<br>What is the <b>probability</b> that he wins <b>both</b> of the next two rounds?", options: ["42%", "49%", "70%", "91%"], correctIndex: 1 },
+                { question: "Ameer is participating in the Math Olympiad in Dubai. He has a 70% chance of winning a Gold award in any given round.<br>What is the <b>probability</b> that he wins <b>at least one</b> of the next two rounds?", options: ["49%", "70%", "91%", "100%"], correctIndex: 2 }
+            ],
+            // Q22: Drawing Balls without replacement
+            [
+                { question: "A box contains 5 red balls and 3 blue balls. Two balls are drawn <b>without replacement</b>.<br>What is the <b>probability</b> that the first ball is red and the second ball is blue?", options: ["\\( \\frac{3}{7} \\)", "\\( \\frac{15}{56} \\)", "\\( \\frac{24}{35} \\)", "\\( \\frac{35}{56} \\)"], correctIndex: 1 },
+                { question: "A box contains 5 red balls and 3 blue balls. Two balls are drawn <b>without replacement</b>.<br>What is the <b>probability</b> that both balls drawn are red?", options: ["\\( \\frac{5}{14} \\)", "\\( \\frac{15}{56} \\)", "\\( \\frac{25}{64} \\)", "\\( \\frac{5}{8} \\)"], correctIndex: 0 },
+                { question: "A box contains 5 red balls and 3 blue balls. Two balls are drawn <b>without replacement</b>.<br>What is the <b>probability</b> that both balls drawn are blue?", options: ["\\( \\frac{9}{64} \\)", "\\( \\frac{3}{28} \\)", "\\( \\frac{1}{8} \\)", "\\( \\frac{3}{56} \\)"], correctIndex: 1 }
+            ],
+            // Q23: Books without replacement
+            [
+                { question: "On a bookshelf there are three novels, seven comics and two magazines. Two books are randomly selected <b>without replacement</b> from these.<br>Find the <b>probability</b> that the selected books are <b>both novels</b>.", options: ["\\( \\frac{1}{16} \\)", "\\( \\frac{3}{44} \\)", "\\( \\frac{1}{22} \\)", "\\( \\frac{1}{24} \\)"], correctIndex: 2 },
+                { question: "On a bookshelf there are three novels, seven comics and two magazines. Two books are randomly selected <b>without replacement</b> from these.<br>Find the <b>probability</b> that the selected books are <b>both comics</b>.", options: ["\\( \\frac{7}{22} \\)", "\\( \\frac{49}{144} \\)", "\\( \\frac{21}{66} \\)", "\\( \\frac{7}{24} \\)"], correctIndex: 0 },
+                { question: "On a bookshelf there are three novels, seven comics and two magazines. Two books are randomly selected <b>without replacement</b> from these.<br>Find the <b>probability</b> that the selected books are <b>both magazines</b>.", options: ["\\( \\frac{1}{33} \\)", "\\( \\frac{1}{66} \\)", "\\( \\frac{4}{144} \\)", "\\( \\frac{1}{72} \\)"], correctIndex: 1 }
+            ]
+        ];
+
+        // --- 2. APPLICATION STATE ---
+        const TIME_LIMIT_SECONDS = 90 * 60; // 90 Minutes
+        const MAX_SCORE = 100;
+        
+        let activeQuiz = [];
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let timeRemaining = TIME_LIMIT_SECONDS;
+        let timerInterval;
+        let studentName = "";
+        let isQuizActive = false;
+        let startTimeString = "";
+
+        // --- 3. CORE LOGIC ---
+        const pageLogin = document.getElementById('page-login');
+        const pageQuiz = document.getElementById('page-quiz');
+        const pageReport = document.getElementById('page-report');
+        const warningMessage = document.getElementById('warningMessage');
+
+        function startQuiz() {
+            studentName = document.getElementById('studentName').value.trim();
+            if(!studentName) {
+                alert("Please enter your name to begin.");
+                return;
+            }
+
+            // Generate Randomized Active Quiz Data
+            activeQuiz = [];
+            for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const randIndex = Math.floor(Math.random() * 3);
+                activeQuiz.push(questionBank[i][randIndex]);
+            }
+
+            // Attempt Fullscreen
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    initiateQuizState();
+                }).catch(err => {
+                    alert("Fullscreen is required. Please allow fullscreen to start the exam.");
+                });
+            } else {
+                initiateQuizState(); // Fallback
+            }
+        }
+
+        function initiateQuizState() {
+            pageLogin.classList.add('hidden');
+            pageQuiz.classList.remove('hidden');
+            
+            document.getElementById('studentDisplay').innerText = `Student: ${studentName}`;
+            document.getElementById('qTotal').innerText = activeQuiz.length;
+            startTimeString = new Date().toLocaleTimeString();
+            
+            isQuizActive = true;
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestion >= activeQuiz.length) {
+                endQuiz("Completed Successfully");
+                return;
+            }
+
+            warningMessage.classList.add('hidden');
+
+            // Update Progress Bar
+            let progress = (currentQuestion / activeQuiz.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            const qData = activeQuiz[currentQuestion];
+            document.getElementById('qNumber').innerText = currentQuestion + 1;
+            document.getElementById('questionText').innerHTML = qData.question;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            // Render Options
+            qData.options.forEach((opt, index) => {
+                const label = document.createElement('label');
+                label.className = "block bg-gray-50 border border-gray-200 p-4 rounded-lg cursor-pointer hover:bg-blue-100 transition flex items-center gap-4";
+                label.onclick = () => warningMessage.classList.add('hidden');
+
+                label.innerHTML = `
+                    <input type="radio" name="q_option" value="${index}" class="w-5 h-5 text-blue-600 focus:ring-blue-500">
+                    <span class="text-xl">${opt}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+
+            // Trigger LaTeX rendering
+            renderMathInElement(pageQuiz, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function nextQuestion() {
+            const qData = activeQuiz[currentQuestion];
+            const selected = document.querySelector('input[name="q_option"]:checked');
+            
+            if(!selected) {
+                warningMessage.classList.remove('hidden');
+                return;
+            }
+
+            const answerIndex = parseInt(selected.value);
+            if(answerIndex === qData.correctIndex) {
+                correctAnswers++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if(timeRemaining <= 0) {
+                    endQuiz("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            let s = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function endQuiz(reason) {
+            isQuizActive = false;
+            clearInterval(timerInterval);
+
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log("Exit fullscreen bypassed by browser"));
+            }
+
+            pageQuiz.classList.add('hidden');
+            pageReport.classList.remove('hidden');
+
+            if (reason !== "Completed Successfully") {
+                document.getElementById('finishReason').innerText = `Notice: ${reason}`;
+            } else {
+                document.getElementById('finishReason').innerText = "";
+            }
+
+            const finalScore = Math.round((correctAnswers / TOTAL_QUESTIONS) * MAX_SCORE);
+
+            const reportText = `====== FINAL REPORT ======
+Subject : EASE 4 Remedial Math
+Student : ${studentName}
+Date    : ${new Date().toLocaleDateString()}
+Started : ${startTimeString}
+Ended   : ${new Date().toLocaleTimeString()}
+--------------------------
+Score   : ${finalScore} / ${MAX_SCORE}
+Correct : ${correctAnswers} out of ${TOTAL_QUESTIONS}
+==========================`;
+            
+            document.getElementById('reportCard').innerText = reportText;
+        }
+
+        function copyReport() {
+            const text = document.getElementById('reportCard').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Report successfully copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy. Please take a screenshot instead.");
+            });
+        }
+
+        function retakeQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            timeRemaining = TIME_LIMIT_SECONDS;
+            isQuizActive = false;
+            clearInterval(timerInterval);
+            
+            warningMessage.classList.add('hidden');
+            document.getElementById('progressBar').style.width = `0%`;
+            document.getElementById('finishReason').innerText = "";
+
+            pageReport.classList.add('hidden');
+            pageLogin.classList.remove('hidden');
+        }
+
+        // --- ANTI-CHEAT & SECURITY ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && isQuizActive) {
+                endQuiz("VIOLATION: You changed tabs or minimized the browser.");
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            if (isQuizActive) {
+                endQuiz("VIOLATION: The exam window lost focus (Alt-Tab detected).");
+            }
+        });
+    </script>
+</body>
+</html>
