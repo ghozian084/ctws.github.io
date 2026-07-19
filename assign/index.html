@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Ghozi | Pro Homework Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-light: #cbd5e1;
+            --badge-green-bg: #dcfce7;
+            --badge-green-text: #166534;
+            --badge-red-bg: #fee2e2;
+            --badge-red-text: #991b1b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- SPA Navigation --- */
+        .view { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
+        .view.active { display: block; opacity: 1; }
+
+        /* --- Main Menu --- */
+        #menu-view { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+        .menu-header { text-align: center; margin-bottom: 3rem; }
+        .menu-title { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.025em; }
+        
+        .class-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 600px; width: 100%; }
+        .btn-class {
+            background: var(--bg-card); border: 2px solid transparent; padding: 2.5rem 1.5rem; border-radius: 1rem;
+            font-size: 1.75rem; font-weight: 700; color: var(--primary); cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-class:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2); }
+
+        /* --- Password Modal --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; opacity: 0; transition: opacity 0.2s;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: white; padding: 2rem; border-radius: 1rem; width: 90%; max-width: 400px; transform: scale(0.95); transition: transform 0.2s; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+        .modal-input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--border-light); border-radius: 0.5rem; font-size: 1rem; margin-bottom: 0.5rem; outline: none; }
+        .modal-input:focus { border-color: var(--primary); }
+        .modal-error { color: var(--badge-red-text); font-size: 0.875rem; margin-bottom: 1.5rem; display: none; font-weight: 500; }
+        .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .btn-cancel { padding: 0.5rem 1rem; border: none; background: #f1f5f9; cursor: pointer; border-radius: 0.5rem; }
+        .btn-submit { padding: 0.5rem 1.25rem; border: none; background: var(--primary); color: white; cursor: pointer; border-radius: 0.5rem; font-weight: bold; }
+
+        /* --- Dashboard Header --- */
+        #dashboard-view { padding: 2rem; max-width: 100vw; }
+        .dash-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .btn-back, .btn-refresh {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); 
+            border: 1px solid var(--border-light); border-radius: 0.5rem; font-weight: 600; cursor: pointer; color: var(--text-main);
+        }
+        .btn-back:hover, .btn-refresh:hover { background: var(--bg-body); }
+        .dash-title { font-size: 1.5rem; font-weight: 700; margin: 0; flex: 1; }
+        .btn-refresh.spinning svg { animation: spin 1s linear infinite; }
+
+        /* --- Table & Merged Headers Styling --- */
+        .table-wrapper {
+            background: var(--bg-card); border-radius: 0.75rem; border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: auto; max-height: calc(100vh - 140px);
+        }
+        
+        table { border-collapse: separate; border-spacing: 0; width: 100%; white-space: nowrap; }
+        th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); text-align: left; }
+        td { font-size: 0.95rem; font-weight: 500; }
+
+        /* 2-Tier Sticky Headers */
+        th { background: #f8fafc; position: sticky; z-index: 10; }
+        
+        /* Row 1: Merged Chapters */
+        .tr-chapter th { 
+            top: 0; height: 40px; text-align: center; font-size: 0.85rem; 
+            font-weight: 700; color: var(--text-main); border-bottom: 2px solid var(--border-light);
+            background: #e2e8f0; 
+        }
+        
+        /* Row 2: Exercises & Pages */
+        .tr-exercise th { top: 40px; border-bottom: 2px solid var(--border-light); }
+
+        /* Sticky Left Column (Names) */
+        td:first-child, .sticky-col {
+            position: sticky; left: 0; background: var(--bg-card); z-index: 11;
+            border-right: 2px solid var(--border-light); box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+        }
+        /* Top Left Corner (Student Name Header) */
+        .sticky-corner { z-index: 20 !important; background: #f8fafc !important; vertical-align: bottom; padding-bottom: 1rem; }
+
+        /* Custom Header Text (Exercise & Page) */
+        .head-ex { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 0.25rem; display: block; }
+        .head-pg { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; }
+
+        /* --- Badges --- */
+        .badge { 
+            padding: 0.4rem 0.8rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; 
+            display: inline-flex; align-items: center; justify-content: center; min-width: 80px; gap: 6px;
+        }
+        .badge-graded { background: var(--badge-green-bg); color: var(--badge-green-text); }
+        .badge-none { background: var(--badge-red-bg); color: var(--badge-red-text); }
+
+        /* --- Loader --- */
+        .loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; gap: 1rem; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border-light); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- Main Menu -->
+    <div id="menu-view" class="view active">
+        <div class="menu-header">
+            <h1 class="menu-title">Mr. Ghozi</h1>
+            <p style="color: var(--text-muted); margin-top: 5px;">Homework Progress Tracker</p>
+        </div>
+        <div class="class-grid">
+            <button class="btn-class" onclick="triggerPasswordModal('9A')">9A</button>
+            <button class="btn-class" onclick="triggerPasswordModal('9B')">9B</button>
+            <button class="btn-class" onclick="triggerPasswordModal('12A')">12A</button>
+            <button class="btn-class" onclick="triggerPasswordModal('12B')">12B</button>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title">Authentication Required</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Please enter the password to view class data.</p>
+            <input type="password" id="class-pwd" class="modal-input" placeholder="Enter password...">
+            <div id="pwd-error" class="modal-error">Incorrect password. Please try again.</div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-submit" onclick="verifyPassword()">Access Class</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view">
+        <div class="dash-header">
+            <button class="btn-back" onclick="openMenu()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Menu
+            </button>
+            <h2 id="dash-title" class="dash-title">Class Progress</h2>
+            <button id="btn-refresh" class="btn-refresh" onclick="refreshCurrentData()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Refresh
+            </button>
+        </div>
+        <div id="table-container" class="table-wrapper"></div>
+    </div>
+
+    <script>
+        const SHEET_ID = '13tpuLUyE980sRzBGBYI7kOj1EB8b2AQnfSkkj2iDydQ';
+        const CORRECT_PWD = 'sbbs';
+        let currentActiveClass = '';
+
+        /* --- Navigation & Password --- */
+        function switchView(showId, hideId) {
+            document.getElementById(hideId).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(hideId).style.display = 'none';
+                document.getElementById(showId).style.display = 'block';
+                setTimeout(() => document.getElementById(showId).classList.add('active'), 50);
+            }, 300);
+        }
+
+        function openMenu() { switchView('menu-view', 'dashboard-view'); }
+
+        function triggerPasswordModal(className) {
+            currentActiveClass = className;
+            const input = document.getElementById('class-pwd');
+            input.value = '';
+            document.getElementById('pwd-error').style.display = 'none';
+            document.getElementById('password-modal').classList.add('active');
+            input.focus();
+        }
+
+        function closeModal() { document.getElementById('password-modal').classList.remove('active'); }
+
+        function verifyPassword() {
+            if (document.getElementById('class-pwd').value === CORRECT_PWD) {
+                closeModal();
+                openClass(currentActiveClass);
+            } else {
+                document.getElementById('pwd-error').style.display = 'block';
+            }
+        }
+
+        document.getElementById('class-pwd').addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyPassword(); });
+
+        /* --- Fetching Live Data --- */
+        function refreshCurrentData() {
+            document.getElementById('btn-refresh').classList.add('spinning');
+            openClass(currentActiveClass, true);
+        }
+
+        function openClass(className, isRefresh = false) {
+            if (!isRefresh) switchView('dashboard-view', 'menu-view');
+            document.getElementById('dash-title').innerText = `Grade ${className}`;
+            
+            const container = document.getElementById('table-container');
+            container.innerHTML = `<div class="loader-container"><div class="spinner"></div><div class="loader-text">Loading Grade ${className} Data...</div></div>`;
+
+            const oldScript = document.getElementById('jsonp-script');
+            if (oldScript) oldScript.remove();
+
+            const timestamp = new Date().getTime();
+            const script = document.createElement('script');
+            script.id = 'jsonp-script';
+            script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:processSheetData&sheet=${encodeURIComponent(className)}&headers=0&_=${timestamp}`;
+            document.body.appendChild(script);
+        }
+
+        /* --- Processing Data & Rebuilding Merged Cells --- */
+        window.processSheetData = function(response) {
+            document.getElementById('btn-refresh').classList.remove('spinning');
+            const container = document.getElementById('table-container');
+            
+            try {
+                const rows = response.table.rows;
+                const colsLength = response.table.cols.length;
+
+                const IDX_CHAPTER = 0;   
+                const IDX_EXERCISE = 2;  
+                const IDX_PAGE = 3;      
+                const IDX_STUDENTS_START = 4; // Starts from row 5
+
+                // Robust cell text extractor (fixes Google API disappearing text bug)
+                const getCellText = (rIndex, cIndex) => {
+                    if (!rows[rIndex] || !rows[rIndex].c || !rows[rIndex].c[cIndex]) return "";
+                    const cell = rows[rIndex].c[cIndex];
+                    if (cell.f) return String(cell.f).trim(); // Formatted text
+                    if (cell.v !== null && cell.v !== undefined) return String(cell.v).trim(); // Raw value
+                    return "";
+                };
+
+                // Group Merged Chapters (Counts empty spaces behind merged cells)
+                let chapters = [];
+                let currentChapter = { name: getCellText(IDX_CHAPTER, 1) || 'Unknown Chapter', span: 1 };
+
+                for (let c = 2; c < colsLength; c++) {
+                    let cellVal = getCellText(IDX_CHAPTER, c);
+                    // If Google Sheets returns empty, it means this cell is hidden under a merge
+                    if (cellVal === "") {
+                        currentChapter.span++;
+                    } else {
+                        chapters.push(currentChapter);
+                        currentChapter = { name: cellVal, span: 1 };
+                    }
+                }
+                chapters.push(currentChapter);
+
+                // --- Build Table HTML ---
+                let html = `<table><thead>`;
+
+                // Header Row 1: Merged Chapters
+                html += `<tr class="tr-chapter">`;
+                html += `<th rowspan="2" class="sticky-col sticky-corner">Student Name</th>`; 
+                
+                chapters.forEach(chap => {
+                    html += `<th colspan="${chap.span}">${chap.name}</th>`;
+                });
+                html += `</tr>`;
+
+                // Header Row 2: Exercise & Page Split
+                html += `<tr class="tr-exercise">`;
+                for (let c = 1; c < colsLength; c++) {
+                    const exercise = getCellText(IDX_EXERCISE, c) || `Exercise`;
+                    const page = getCellText(IDX_PAGE, c) || '-';
+                    
+                    // Creates exactly what you requested:
+                    // Exercise 1.2
+                    // Page 5
+                    html += `
+                        <th>
+                            <span class="head-ex">${exercise}</span>
+                            <span class="head-pg">Page ${page}</span>
+                        </th>`;
+                }
+                html += `</tr></thead><tbody>`;
+
+                // Body Rows: Students (starting exactly from Row 5)
+                for (let r = IDX_STUDENTS_START; r < rows.length; r++) {
+                    const studentName = getCellText(r, 0);
+                    if (!studentName) continue; 
+
+                    html += `<tr><td>${studentName}</td>`;
+                    
+                    for (let c = 1; c < colsLength; c++) {
+                        const stringVal = getCellText(r, c);
+                        
+                        // Hidden Score Badge Logic
+                        if (stringVal === "" || stringVal.toLowerCase() === "none") {
+                            html += `<td><span class="badge badge-none">None</span></td>`;
+                        } else {
+                            html += `
+                                <td>
+                                    <span class="badge badge-graded" title="Score: ${stringVal}">
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Done
+                                    </span>
+                                </td>`;
+                        }
+                    }
+                    html += `</tr>`;
+                }
+
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div style="padding:3rem;text-align:center;color:red;">Format Error: Data layout mismatch.</div>`;
+            }
+        };
+    </script>
+</body>
+</html>
