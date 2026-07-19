@@ -77,7 +77,6 @@
         th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); text-align: left; }
         td { font-size: 0.95rem; font-weight: 500; }
 
-        /* 2-Tier Sticky Headers */
         th { background: #f8fafc; position: sticky; z-index: 10; }
         
         /* Row 1: Merged Chapters */
@@ -90,15 +89,12 @@
         /* Row 2: Exercises & Pages */
         .tr-exercise th { top: 40px; border-bottom: 2px solid var(--border-light); }
 
-        /* Sticky Left Column (Names) */
         td:first-child, .sticky-col {
             position: sticky; left: 0; background: var(--bg-card); z-index: 11;
             border-right: 2px solid var(--border-light); box-shadow: 2px 0 5px rgba(0,0,0,0.02);
         }
-        /* Top Left Corner (Student Name Header) */
         .sticky-corner { z-index: 20 !important; background: #f8fafc !important; vertical-align: bottom; padding-bottom: 1rem; }
 
-        /* Custom Header Text (Exercise & Page) */
         .head-ex { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 0.25rem; display: block; }
         .head-pg { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; }
 
@@ -136,7 +132,7 @@
     <div id="password-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 class="modal-title">Authentication Required</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Please enter the password to view class data.</p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Please enter the password to view <span id="pwd-class-name" style="font-weight: bold; color: var(--primary);"></span> data.</p>
             <input type="password" id="class-pwd" class="modal-input" placeholder="Enter password...">
             <div id="pwd-error" class="modal-error">Incorrect password. Please try again.</div>
             <div class="modal-actions">
@@ -165,7 +161,19 @@
     <script>
         const SHEET_ID = '13tpuLUyE980sRzBGBYI7kOj1EB8b2AQnfSkkj2iDydQ';
         const CORRECT_PWD = 'sbbs';
+        const VALID_CLASSES = ['9A', '9B', '12A', '12B'];
         let currentActiveClass = '';
+
+        /* --- Initialization & Permalinks --- */
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const classParam = urlParams.get('class');
+
+            // If a valid URL parameter exists, trigger password immediately
+            if (classParam && VALID_CLASSES.includes(classParam.toUpperCase())) {
+                triggerPasswordModal(classParam.toUpperCase());
+            }
+        };
 
         /* --- Navigation & Password --- */
         function switchView(showId, hideId) {
@@ -177,10 +185,15 @@
             }, 300);
         }
 
-        function openMenu() { switchView('menu-view', 'dashboard-view'); }
+        function openMenu() { 
+            switchView('menu-view', 'dashboard-view'); 
+            // Remove URL parameter visually without reloading
+            window.history.pushState({}, document.title, window.location.pathname);
+        }
 
         function triggerPasswordModal(className) {
             currentActiveClass = className;
+            document.getElementById('pwd-class-name').innerText = className;
             const input = document.getElementById('class-pwd');
             input.value = '';
             document.getElementById('pwd-error').style.display = 'none';
@@ -188,7 +201,11 @@
             input.focus();
         }
 
-        function closeModal() { document.getElementById('password-modal').classList.remove('active'); }
+        function closeModal() { 
+            document.getElementById('password-modal').classList.remove('active'); 
+            // If they cancel out of a permalink, clean the URL
+            window.history.pushState({}, document.title, window.location.pathname);
+        }
 
         function verifyPassword() {
             if (document.getElementById('class-pwd').value === CORRECT_PWD) {
@@ -208,7 +225,12 @@
         }
 
         function openClass(className, isRefresh = false) {
-            if (!isRefresh) switchView('dashboard-view', 'menu-view');
+            if (!isRefresh) {
+                switchView('dashboard-view', 'menu-view');
+                // Set Permalink automatically in the browser bar
+                window.history.pushState({ class: className }, '', '?class=' + className);
+            }
+            
             document.getElementById('dash-title').innerText = `Grade ${className}`;
             
             const container = document.getElementById('table-container');
@@ -238,22 +260,19 @@
                 const IDX_PAGE = 3;      
                 const IDX_STUDENTS_START = 4; // Starts from row 5
 
-                // Robust cell text extractor (fixes Google API disappearing text bug)
                 const getCellText = (rIndex, cIndex) => {
                     if (!rows[rIndex] || !rows[rIndex].c || !rows[rIndex].c[cIndex]) return "";
                     const cell = rows[rIndex].c[cIndex];
-                    if (cell.f) return String(cell.f).trim(); // Formatted text
-                    if (cell.v !== null && cell.v !== undefined) return String(cell.v).trim(); // Raw value
+                    if (cell.f) return String(cell.f).trim(); 
+                    if (cell.v !== null && cell.v !== undefined) return String(cell.v).trim();
                     return "";
                 };
 
-                // Group Merged Chapters (Counts empty spaces behind merged cells)
                 let chapters = [];
                 let currentChapter = { name: getCellText(IDX_CHAPTER, 1) || 'Unknown Chapter', span: 1 };
 
                 for (let c = 2; c < colsLength; c++) {
                     let cellVal = getCellText(IDX_CHAPTER, c);
-                    // If Google Sheets returns empty, it means this cell is hidden under a merge
                     if (cellVal === "") {
                         currentChapter.span++;
                     } else {
@@ -263,36 +282,21 @@
                 }
                 chapters.push(currentChapter);
 
-                // --- Build Table HTML ---
-                let html = `<table><thead>`;
-
-                // Header Row 1: Merged Chapters
-                html += `<tr class="tr-chapter">`;
+                let html = `<table><thead><tr class="tr-chapter">`;
                 html += `<th rowspan="2" class="sticky-col sticky-corner">Student Name</th>`; 
                 
                 chapters.forEach(chap => {
                     html += `<th colspan="${chap.span}">${chap.name}</th>`;
                 });
-                html += `</tr>`;
-
-                // Header Row 2: Exercise & Page Split
-                html += `<tr class="tr-exercise">`;
+                html += `</tr><tr class="tr-exercise">`;
+                
                 for (let c = 1; c < colsLength; c++) {
                     const exercise = getCellText(IDX_EXERCISE, c) || `Exercise`;
                     const page = getCellText(IDX_PAGE, c) || '-';
-                    
-                    // Creates exactly what you requested:
-                    // Exercise 1.2
-                    // Page 5
-                    html += `
-                        <th>
-                            <span class="head-ex">${exercise}</span>
-                            <span class="head-pg">Page ${page}</span>
-                        </th>`;
+                    html += `<th><span class="head-ex">${exercise}</span><span class="head-pg">Page ${page}</span></th>`;
                 }
                 html += `</tr></thead><tbody>`;
 
-                // Body Rows: Students (starting exactly from Row 5)
                 for (let r = IDX_STUDENTS_START; r < rows.length; r++) {
                     const studentName = getCellText(r, 0);
                     if (!studentName) continue; 
@@ -302,17 +306,13 @@
                     for (let c = 1; c < colsLength; c++) {
                         const stringVal = getCellText(r, c);
                         
-                        // Hidden Score Badge Logic
                         if (stringVal === "" || stringVal.toLowerCase() === "none") {
                             html += `<td><span class="badge badge-none">None</span></td>`;
                         } else {
                             html += `
                                 <td>
                                     <span class="badge badge-graded" title="Score: ${stringVal}">
-                                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Done
+                                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Done
                                     </span>
                                 </td>`;
                         }
@@ -325,7 +325,7 @@
 
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<div style="padding:3rem;text-align:center;color:red;">Format Error: Data layout mismatch.</div>`;
+                container.innerHTML = `<div style="padding:3rem;text-align:center;color:red;">Format Error: Data layout mismatch. Remember to set empty rows to "Plain Text" in Sheets.</div>`;
             }
         };
     </script>
