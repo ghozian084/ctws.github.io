@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/kit", "destination": "/kit/", "permanent": false }
+  ]
+}
