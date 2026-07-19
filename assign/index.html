@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mr. Ghozi | Pro Homework Dashboard</title>
+    <title>Mr. Ghozi | Homework Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,7 +20,6 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* --- SPA Navigation --- */
@@ -31,20 +30,12 @@
         #menu-view { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
         .menu-header { text-align: center; margin-bottom: 3rem; }
         .menu-title { font-size: 2.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.025em; }
-        
         .class-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 600px; width: 100%; }
-        .btn-class {
-            background: var(--bg-card); border: 2px solid transparent; padding: 2.5rem 1.5rem; border-radius: 1rem;
-            font-size: 1.75rem; font-weight: 700; color: var(--primary); cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .btn-class { background: var(--bg-card); border: 2px solid transparent; padding: 2.5rem 1.5rem; border-radius: 1rem; font-size: 1.75rem; font-weight: 700; color: var(--primary); cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s; }
         .btn-class:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2); }
 
         /* --- Password Modal --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; opacity: 0; transition: opacity 0.2s;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 50; opacity: 0; transition: opacity 0.2s; }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-content { background: white; padding: 2rem; border-radius: 1rem; width: 90%; max-width: 400px; transform: scale(0.95); transition: transform 0.2s; }
         .modal-overlay.active .modal-content { transform: scale(1); }
@@ -59,50 +50,28 @@
         /* --- Dashboard Header --- */
         #dashboard-view { padding: 2rem; max-width: 100vw; }
         .dash-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .btn-back, .btn-refresh {
-            display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); 
-            border: 1px solid var(--border-light); border-radius: 0.5rem; font-weight: 600; cursor: pointer; color: var(--text-main);
-        }
+        .btn-back, .btn-refresh { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 0.5rem; font-weight: 600; cursor: pointer; color: var(--text-main); }
         .btn-back:hover, .btn-refresh:hover { background: var(--bg-body); }
         .dash-title { font-size: 1.5rem; font-weight: 700; margin: 0; flex: 1; }
         .btn-refresh.spinning svg { animation: spin 1s linear infinite; }
 
-        /* --- Table & Merged Headers Styling --- */
-        .table-wrapper {
-            background: var(--bg-card); border-radius: 0.75rem; border: 1px solid var(--border-light);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: auto; max-height: calc(100vh - 140px);
-        }
-        
+        /* --- Table Styling --- */
+        .table-wrapper { background: var(--bg-card); border-radius: 0.75rem; border: 1px solid var(--border-light); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: auto; max-height: calc(100vh - 140px); }
         table { border-collapse: separate; border-spacing: 0; width: 100%; white-space: nowrap; }
         th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); text-align: left; }
         td { font-size: 0.95rem; font-weight: 500; }
 
         th { background: #f8fafc; position: sticky; z-index: 10; }
-        
-        /* Row 1: Merged Chapters */
-        .tr-chapter th { 
-            top: 0; height: 40px; text-align: center; font-size: 0.85rem; 
-            font-weight: 700; color: var(--text-main); border-bottom: 2px solid var(--border-light);
-            background: #e2e8f0; 
-        }
-        
-        /* Row 2: Exercises & Pages */
+        .tr-chapter th { top: 0; height: 40px; text-align: center; font-size: 0.85rem; font-weight: 700; color: var(--text-main); border-bottom: 2px solid var(--border-light); background: #e2e8f0; }
         .tr-exercise th { top: 40px; border-bottom: 2px solid var(--border-light); }
-
-        td:first-child, .sticky-col {
-            position: sticky; left: 0; background: var(--bg-card); z-index: 11;
-            border-right: 2px solid var(--border-light); box-shadow: 2px 0 5px rgba(0,0,0,0.02);
-        }
+        td:first-child, .sticky-col { position: sticky; left: 0; background: var(--bg-card); z-index: 11; border-right: 2px solid var(--border-light); box-shadow: 2px 0 5px rgba(0,0,0,0.02); }
         .sticky-corner { z-index: 20 !important; background: #f8fafc !important; vertical-align: bottom; padding-bottom: 1rem; }
 
         .head-ex { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 0.25rem; display: block; }
         .head-pg { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; }
 
         /* --- Badges --- */
-        .badge { 
-            padding: 0.4rem 0.8rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; 
-            display: inline-flex; align-items: center; justify-content: center; min-width: 80px; gap: 6px;
-        }
+        .badge { padding: 0.4rem 0.8rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; min-width: 80px; gap: 6px; }
         .badge-graded { background: var(--badge-green-bg); color: var(--badge-green-text); }
         .badge-none { background: var(--badge-red-bg); color: var(--badge-red-text); }
 
@@ -114,7 +83,6 @@
 </head>
 <body>
 
-    <!-- Main Menu -->
     <div id="menu-view" class="view active">
         <div class="menu-header">
             <h1 class="menu-title">Mr. Ghozi</h1>
@@ -128,11 +96,10 @@
         </div>
     </div>
 
-    <!-- Password Modal -->
     <div id="password-modal" class="modal-overlay">
         <div class="modal-content">
-            <h3 class="modal-title">Authentication Required</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Please enter the password to view <span id="pwd-class-name" style="font-weight: bold; color: var(--primary);"></span> data.</p>
+            <h3 class="modal-title">Teacher Authentication</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Please enter password to view <span id="pwd-class-name" style="font-weight: bold; color: var(--primary);"></span> data.</p>
             <input type="password" id="class-pwd" class="modal-input" placeholder="Enter password...">
             <div id="pwd-error" class="modal-error">Incorrect password. Please try again.</div>
             <div class="modal-actions">
@@ -142,7 +109,6 @@
         </div>
     </div>
 
-    <!-- Dashboard View -->
     <div id="dashboard-view" class="view">
         <div class="dash-header">
             <button class="btn-back" onclick="openMenu()">
@@ -161,17 +127,34 @@
     <script>
         const SHEET_ID = '13tpuLUyE980sRzBGBYI7kOj1EB8b2AQnfSkkj2iDydQ';
         const CORRECT_PWD = 'sbbs';
-        const VALID_CLASSES = ['9A', '9B', '12A', '12B'];
+        
+        // --- SECURE TOKENS FOR PERMALINKS ---
+        // Students cannot guess these. If they try ?ref=9A, it won't work.
+        const CLASS_TOKENS = {
+            '9A': 'x7k9p2m',
+            '9B': 'v4b8q1z',
+            '12A': 'n3c6w9d',
+            '12B': 't8j2f5h'
+        };
+
+        // Reverse map to find class name by token
+        const TOKEN_TO_CLASS = {
+            'x7k9p2m': '9A',
+            'v4b8q1z': '9B',
+            'n3c6w9d': '12A',
+            't8j2f5h': '12B'
+        };
+
         let currentActiveClass = '';
 
         /* --- Initialization & Permalinks --- */
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const classParam = urlParams.get('class');
+            const tokenParam = urlParams.get('ref'); // Look for ?ref=v4b8q1z
 
-            // If a valid URL parameter exists, trigger password immediately
-            if (classParam && VALID_CLASSES.includes(classParam.toUpperCase())) {
-                triggerPasswordModal(classParam.toUpperCase());
+            if (tokenParam && TOKEN_TO_CLASS[tokenParam]) {
+                // If a valid secret token exists, BYPASS password and open directly!
+                openClass(TOKEN_TO_CLASS[tokenParam]);
             }
         };
 
@@ -187,7 +170,7 @@
 
         function openMenu() { 
             switchView('menu-view', 'dashboard-view'); 
-            // Remove URL parameter visually without reloading
+            // Remove token from URL so they are back at the clean homepage
             window.history.pushState({}, document.title, window.location.pathname);
         }
 
@@ -201,11 +184,7 @@
             input.focus();
         }
 
-        function closeModal() { 
-            document.getElementById('password-modal').classList.remove('active'); 
-            // If they cancel out of a permalink, clean the URL
-            window.history.pushState({}, document.title, window.location.pathname);
-        }
+        function closeModal() { document.getElementById('password-modal').classList.remove('active'); }
 
         function verifyPassword() {
             if (document.getElementById('class-pwd').value === CORRECT_PWD) {
@@ -225,10 +204,12 @@
         }
 
         function openClass(className, isRefresh = false) {
+            currentActiveClass = className;
             if (!isRefresh) {
                 switchView('dashboard-view', 'menu-view');
-                // Set Permalink automatically in the browser bar
-                window.history.pushState({ class: className }, '', '?class=' + className);
+                // Set Secure Permalink automatically in the browser bar
+                const secretToken = CLASS_TOKENS[className];
+                window.history.pushState({ class: className }, '', '?ref=' + secretToken);
             }
             
             document.getElementById('dash-title').innerText = `Grade ${className}`;
