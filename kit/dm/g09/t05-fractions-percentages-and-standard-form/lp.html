@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Fractions, Percentages & Standard Form - SMP Semesta</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* Discovery Learning Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Fractions, Percentages & Standard Form</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 5 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 5. Fractions, percentages and standard form</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> Discovery Learning</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning, Hands-on, <span class="rme">Culturally STEM</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated, Collaboration</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C1.4, E1.4:</strong> Use the language and notation of proper/improper fractions and mixed numbers; Recognise equivalence and convert between forms.</li>
+        <li><strong>C1.6, E1.6:</strong> Use the four operations for calculations with fractions.</li>
+        <li><strong>C1.13, E1.13:</strong> Calculate a given percentage of a quantity; Express one quantity as a percentage of another; Calculate percentage increase/decrease.</li>
+        <li><strong>C1.8, E1.8:</strong> Use standard form $A \times 10^n$; Convert in and out of standard form; Calculate with values in standard form.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: Revisiting & Adding/Subtracting Fractions (Subtopics 5.1 & 5.2)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 1 & 2 | Stimulation & Problem Statement</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Interactive Hook<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Display a traditional recipe for <em>Klepon</em>. "To make a large batch for a school festival, we need $1 \frac{1}{2}$ cups of glutinous rice flour. We only have $\frac{3}{4}$ of a cup left in the pantry."</li>
+                    <li><span class="meaningful">Meaningful:</span> Ask: "How much MORE flour do we need to buy? Can we easily subtract $\frac{3}{4}$ from $1 \frac{1}{2}$?"</li>
+                </ul>
+                <h4>Problem Statement (5 min):</h4>
+                <ul>
+                    <li>How do we mathematically compare, add, and subtract pieces of a whole when the pieces are cut into different sizes (denominators)?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 3 | Data Collection (Hands-On)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Fraction Circles Activity (20 min):</h4>
+                <ul>
+                    <li>Distribute sets of plastic fraction circles (or printed cut-outs).</li>
+                    <li>Instruct groups to physically build $1 \frac{1}{2}$ using 'Halves'. Then try to take away $\frac{3}{4}$.</li>
+                    <li><span class="joyful">Joyful Discovery:</span> Students will physically realize they cannot take "quarters" out of "halves" until they swap the "halves" for "quarters" (finding equivalent fractions).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 4 & 5 | Data Processing & Verification</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Vocabulary: Proper, Improper, Mixed Numbers. Convert $1 \frac{1}{2}$ to $\frac{3}{2}$.</li>
+                    <li><strong>Slide 3:</strong> Rule Verification: To add/subtract, we MUST have a Common Denominator. (Show the LCM method from Chapter 1).</li>
+                    <li><strong>Slide 4:</strong> Teacher models mathematically what they just did physically: $\frac{6}{4} - \frac{3}{4} = \frac{3}{4}$.</li>
+                    <li><span class="mindful">Mindful Check:</span> "Do we add/subtract the denominators? Why not?" (The denominator is just the 'size' of the slice).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL learners draw boxes for numerators and denominators. SEN students continue using physical fraction bars alongside written work.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 6 | Generalization & Practice</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 5.1 & 5.2A (Addition/Subtraction & Conversions).</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Generalization / Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Write the general rule for adding fractions. Calculate: $\frac{2}{3} + \frac{1}{4}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Multiplying and Dividing Fractions (Subtopic 5.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 1 & 2 | Stimulation & Problem Statement</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Visual Hook<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show a map of a <em>Sawah</em> (rice paddy). "A farmer owns $\frac{3}{4}$ of a hectare of land. He wants to give exactly $\frac{1}{2}$ of his land to his son. How much of the total hectare does the son get?"</li>
+                    <li><span class="char-dev">Critical Thinking:</span> "Does 'of' mean add, subtract, multiply, or divide?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 3 & 4 | Data Collection & Processing (Paper Folding)</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Paper Folding Proof (25 min):</h4>
+                <ul>
+                    <li>Give each student a blank A4 paper (represents 1 hectare).</li>
+                    <li>Fold vertically to shade $\frac{3}{4}$ (the farmer's land).</li>
+                    <li>Now fold horizontally in half to find $\frac{1}{2}$ OF the $\frac{3}{4}$.</li>
+                    <li>Unfold. Count the double-shaded rectangles (3) out of the total rectangles formed (8). Answer: $\frac{3}{8}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 5 | Verification (Formalizing Rules)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Multiplication Rule: Top $\times$ Top, Bottom $\times$ Bottom. $\frac{1}{2} \times \frac{3}{4} = \frac{3}{8}$. (Verify this matches the paper folds!).</li>
+                    <li><strong>Slide 3:</strong> Division Rule: "Keep, Change, Flip" (Multiply by the Reciprocal). Explain *why* (dividing by half is the same as multiplying by 2).</li>
+                    <li><strong>Slide 4:</strong> Working with Mixed Numbers: MUST convert to improper fractions before multiplying/dividing!</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students prove why 'Keep Change Flip' works algebraically.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 6 | Generalization & Practice</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (10 min):</h4>
+                <ul>
+                    <li>Worksheet 5.2B. Includes multiplication and division word problems.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Calculate in simplest form: $\frac{4}{5} \div \frac{2}{3}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Percentages (Subtopic 5.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 1 & 2 | Stimulation & Problem Statement</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Real-World Scenario</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show a photo of a Batik shop in Semarang. "A Batik shirt costs Rp 250,000. There is a 'Diskon 20%' sign. At the cashier, there is a 10% tax added. Is the final price exactly Rp 250,000?"</li>
+                    <li>Students vote Yes or No. (Problem statement: Percentage changes are sequential, not additive!).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 3 & 4 | Data Collection & Processing</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Percentage Multiplier Discovery (25 min):</h4>
+                <ul>
+                    <li>Groups calculate 20% of 250,000 and subtract it (Method 1).</li>
+                    <li>Teacher asks: "Is there a faster way? If you lose 20%, what percentage do you KEEP?" (80%).</li>
+                    <li>Students calculate $0.80 \times 250,000$. Compare answers. They discover the **Multiplier Method**.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students realize calculating multipliers saves time.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 5 | Verification</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Calculating Multipliers. (15% increase = $1.15$, 30% decrease = $0.70$).</li>
+                    <li><strong>Slide 3:</strong> Percentage Change Formula: $\frac{\text{Difference}}{\text{Original}} \times 100\%$.</li>
+                    <li><strong>Slide 4:</strong> Expressing one quantity as a percentage of another. (e.g., 40 out of 50 students).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Provide low achievers a "Multiplier Translation Table" to help them map "Increase 5%" to "1.05".</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 6 | Generalization & Practice</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Worksheet 5.3 solving discount, tax, and population growth problems.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>A phone's battery drops from 80% to 60%. What is the percentage decrease? (Careful: it is $\frac{20}{80} \times 100 = 25\%$, not 20%!).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Standard Form (Subtopic 5.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 1 & 2 | Stimulation & Problem Statement</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Visual Hook<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li><span class="rme">Culturally STEM:</span> "The distance from Sabang to Merauke is roughly $5,245,000$ meters. A yeast cell in <em>Tempeh</em> is about $0.000004$ meters wide."</li>
+                    <li>Ask: "Write both numbers on your whiteboard. If you accidentally miss one zero, what happens?" (Catastrophic error in science/engineering).</li>
+                    <li>Problem: How do scientists write massive/microscopic numbers without writing zeros?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 3 & 4 | Data Collection & Processing</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Jumping Decimals (20 min):</h4>
+                <ul>
+                    <li>Students use powers of 10 from Chapter 1.</li>
+                    <li>Write $5 \times 10^3$. Calculate it manually ($5 \times 1000 = 5000$).</li>
+                    <li>Write $4 \times 10^{-6}$. Calculate manually ($4 \div 1000000 = 0.000004$).</li>
+                    <li><span class="mindful">Mindful Check:</span> Students discover that the exponent relates exactly to how many "jumps" the decimal point makes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 5 | Verification</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formal Definition: $A \times 10^n$, where $1 \le A < 10$.</li>
+                    <li><strong>Slide 3:</strong> Why is $34 \times 10^5$ mathematically WRONG in standard form? (Because 34 is larger than 10. Fix it: $3.4 \times 10^6$).</li>
+                    <li><strong>Slide 4:</strong> Multiplying/Dividing standard form. Add/Subtract indices!</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL teach "Scientific Notation" as a synonym. SEN students draw physical "frog jumps" under the zeroes.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 6 | Generalization & Practice</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Worksheet 5.4. Convert numbers into standard form and out as ordinary numbers.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Write $0.000782$ in standard form.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Chapter Review & Summative Evaluation</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 1-3 | Concept Review (Mini-Whiteboards)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Whole Class Activity</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Rapid Fire Review (20 min):</span></h4>
+                <ul>
+                    <li>Teacher flashes questions on the screen (Fractions, Multipliers, Standard Form).</li>
+                    <li>Students have 30 seconds to write the answer and hold up whiteboards.</li>
+                    <li>Teacher targets misconceptions immediately before the exam.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>Phase 4-6 | Summative Evaluation</span>
+            <span>[60 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 5 Test (50 min):</h4>
+                <ul>
+                    <li>Distribute the Chapter 5 Evaluation.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under strict exam conditions.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: "How has understanding Standard Form changed your view of very large numbers in science?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Challenge with compound percentage problems (e.g., compound interest, or repeated percentage depreciation). Provide standard form addition/subtraction problems (which require making indices match first).</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Provide fraction bars/circles to verify arithmetic. Give a "Percentage Multiplier Translation Sheet" (e.g., 20% discount $\rightarrow$ Multiply by 0.8).</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a bilingual glossary: <em>Numerator (Pembilang), Denominator (Penyebut), Proper Fraction (Pecahan Biasa), Mixed Number (Pecahan Campuran)</em>. Emphasize visual steps over word problems.</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Draw visual "loops" or "frog jumps" physically on paper when converting decimals to Standard Form. Highlight the target integer ($A$) in a bright color.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 5.1 & 5.2: Fractions</h3>
+        <p>1. Convert $3 \frac{2}{5}$ into an improper fraction.</p>
+        <p>2. Calculate the following in their simplest form:<br>
+           a) $\frac{3}{4} + \frac{1}{6}$<br>
+           b) $2 \frac{1}{2} - 1 \frac{2}{3}$<br>
+           c) $\frac{5}{8} \times \frac{4}{15}$<br>
+           d) $1 \frac{3}{4} \div \frac{7}{8}$
+        </p>
+        <p>3. A recipe requires $\frac{2}{3}$ cup of sugar. How much sugar is needed for $2 \frac{1}{2}$ batches of the recipe?</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 5.3: Percentages</h3>
+        <p>1. Express 45 as a percentage of 60.</p>
+        <p>2. A jacket costs Rp 300,000. It is on sale with a 15% discount. Calculate the sale price.</p>
+        <p>3. The population of a town increased from 40,000 to 46,000. Calculate the percentage increase.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 5.4: Standard Form</h3>
+        <p>1. Write the following numbers in standard form ($A \times 10^n$):<br>
+           a) $45,000,000$<br>
+           b) $0.0000072$
+        </p>
+        <p>2. Write the following as ordinary numbers:<br>
+           a) $3.1 \times 10^4$<br>
+           b) $8.5 \times 10^{-3}$
+        </p>
+        <p>3. Calculate $(2 \times 10^3) \times (4 \times 10^5)$ and leave your answer in standard form.</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 5 Evaluation (Used in Meeting 5)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Fractions must be fully simplified. Total: 35 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Fractions (12 Marks)</h3>
+        <p>1. Arrange the following fractions in ascending order (smallest to largest): $\frac{2}{3}, \frac{5}{8}, \frac{3}{4}$. Show your working (e.g., using a common denominator). (3 marks)</p>
+        <p>2. Calculate and write the answer as a mixed number: $3 \frac{1}{4} + 1 \frac{5}{6}$. (4 marks)</p>
+        <p>3. A carpenter has a plank of wood $4 \frac{1}{2}$ meters long. He cuts it into pieces that are each $\frac{3}{4}$ meter long. How many pieces can he cut? (5 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Percentages (11 Marks)</h3>
+        <p>4. Calculate 35% of 240. (2 marks)</p>
+        <p>5. A bicycle initially costs Rp 1,500,000. The price is increased by 12%.<br>
+           a) What is the multiplier for a 12% increase? (1 mark)<br>
+           b) Calculate the new price of the bicycle. (3 marks)</p>
+        <p>6. During a sale, a laptop's price drops from Rp 8,000,000 to Rp 6,400,000. Calculate the percentage discount. (5 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Standard Form (12 Marks)</h3>
+        <p>7. Write $156,000$ in standard form. (2 marks)</p>
+        <p>8. Write $4.02 \times 10^{-4}$ as an ordinary decimal number. (2 marks)</p>
+        <p>9. The mass of the Earth is approximately $5.97 \times 10^{24}$ kg. The mass of Mars is approximately $6.4 \times 10^{23}$ kg.<br>
+           a) Which planet is heavier? Give a reason. (2 marks)<br>
+           b) Calculate the combined mass of Earth and Mars. Give your answer in standard form. (6 marks)</p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

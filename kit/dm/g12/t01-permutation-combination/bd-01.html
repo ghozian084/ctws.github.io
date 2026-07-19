@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Slides - Permutations & Combinations</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --text-main: #2d3748;
+            --bg-color: #cbd5e0;
+            --badge-concept: #3182ce;
+            --badge-activity: #38a169;
+            --badge-question: #dd6b20;
+            --badge-exit: #805ad5;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden; color: var(--text-main);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            background-color: #2d3748; display: flex; align-items: center;
+            padding: 0 20px; box-sizing: border-box; z-index: 100; color: white; gap: 15px;
+        }
+        .tool-btn {
+            background-color: #4a5568; color: white; border: 2px solid transparent;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
+            transition: 0.2s;
+        }
+        .tool-btn:hover { background-color: #718096; }
+        .tool-btn.active { border-color: #63b3ed; background-color: #2b6cb0; }
+        .color-picker { width: 30px; height: 30px; border: none; cursor: pointer; padding: 0;}
+        .clear-btn { background-color: #e53e3e; margin-left: auto; }
+        .clear-btn:hover { background-color: #c53030; }
+
+        /* Slide Container */
+        #presentation-container {
+            width: 100%; height: calc(100% - 60px); margin-top: 60px;
+            display: flex; justify-content: center; align-items: center; position: relative;
+        }
+
+        .slide {
+            position: absolute; width: 92%; height: 88%; background: #fff;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 30px 40px; box-sizing: border-box;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out;
+            display: flex; flex-direction: column;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 10; }
+
+        /* Drawing Canvas */
+        .drawing-board {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; cursor: crosshair; touch-action: none; border-radius: 12px;
+        }
+
+        /* Content Layout */
+        .content-layer { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; pointer-events: none;}
+        
+        .header-title { color: var(--primary); font-size: 2em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-top: 0; }
+        
+        .two-column { display: flex; gap: 30px; height: 100%; margin-top: 10px; }
+        .col { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .col-write { 
+            flex: 1.2; 
+            background-color: #fafafa; 
+            border: 2px dashed #a0aec0; 
+            border-radius: 8px; 
+            position: relative;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: auto;
+        }
+        
+        .write-label { position: absolute; top: 10px; right: 10px; color: #718096; font-weight: bold; font-style: italic; font-size: 1.2em;}
+
+        /* Typography & Badges */
+        h3 { font-size: 1.4em; margin: 5px 0; display: flex; align-items: center; gap: 10px;}
+        p, li { font-size: 1.25em; line-height: 1.5; margin-top: 5px;}
+        ul { margin-top: 5px; padding-left: 25px;}
+        
+        .badge { color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; }
+        .bg-concept { background-color: var(--badge-concept); }
+        .bg-activity { background-color: var(--badge-activity); }
+        .bg-question { background-color: var(--badge-question); }
+        .bg-exit { background-color: var(--badge-exit); }
+
+        .content-box { background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; pointer-events: auto;}
+
+        /* Navigation */
+        .nav-panel {
+            position: absolute; bottom: 15px; width: 100%; display: flex;
+            justify-content: space-between; padding: 0 5%; box-sizing: border-box; z-index: 100; pointer-events: none;
+        }
+        .nav-btn {
+            background-color: var(--primary); color: #fff; border: none; padding: 10px 20px;
+            font-size: 1.2em; border-radius: 8px; cursor: pointer; pointer-events: auto;
+        }
+        .nav-btn:hover { background-color: var(--secondary); }
+        .nav-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+        .progress-indicator { font-size: 1.2em; font-weight: bold; color: #2d3748; align-self: center; pointer-events: auto;}
+
+        /* Title Slide */
+        .title-slide .content-layer { justify-content: center; align-items: center; text-align: center; }
+        .title-slide h1 { font-size: 3.5em; color: var(--primary); margin-bottom: 10px; }
+        .title-slide h2 { font-size: 2em; color: var(--text-main); border: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Teacher Drawing Toolbar -->
+    <div class="toolbar">
+        <span style="font-weight: bold; font-size: 1.2em; margin-right: 20px;">Teacher Tools:</span>
+        <button class="tool-btn active" id="penBtn" onclick="setMode('pen')">✏️ Pen</button>
+        <button class="tool-btn" id="eraserBtn" onclick="setMode('eraser')">🧽 Eraser</button>
+        <input type="color" id="colorPicker" class="color-picker" value="#000000" onchange="setColor(this.value)">
+        <button class="tool-btn clear-btn" onclick="clearCanvas()">🗑️ Clear Slide</button>
+    </div>
+
+    <div id="presentation-container">
+        
+        <!-- Slide 0: Title -->
+        <div class="slide active" id="slide-0">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h1>Permutations & Combinations</h1>
+                <h2>Grade 12 Mathematics (AS Level)</h2>
+                <p>Interactive Teaching Slides | <em>Use the pen tool to write anywhere!</em></p>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 1 ================= -->
+        <div class="slide" id="slide-1">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: The Factorial Function (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Factorials ($n!$)</h3>
+                        <ul>
+                            <li><strong>Definition:</strong> $n! = n \times (n-1) \times (n-2) \dots \times 1$</li>
+                            <li>Used to find the total number of ways to arrange $n$ distinct objects in a row.</li>
+                            <li><strong>Special Case:</strong> $0! = 1$</li>
+                            <li><strong>Property:</strong> $n! = n \times (n-1)!$</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Slot Method Discovery</h3>
+                        <p><strong>Hook:</strong> <em>"Imagine organizing an Indonesian Independence Day ceremony. You have 4 different flags to arrange in a row on stage. How many possible visual arrangements are there?"</em></p>
+                        <p><strong>Task:</strong> Draw 4 empty "slots". Fill in how many choices you have for the first slot, the second, etc. Multiply them together!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: The Factorial Function (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Evaluating Expressions</h3>
+                            <p>Evaluate the following without expanding every single number:</p>
+                            <ol>
+                                <li>$\frac{8!}{6!}$</li>
+                                <li>$\frac{10!}{8!2!}$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Simplify this algebraic expression completely: $\frac{n!}{(n-2)!}$</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 2 ================= -->
+        <div class="slide" id="slide-3">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Permutations (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Permutations ($^nP_r$)</h3>
+                        <ul>
+                            <li><strong>Rule:</strong> ORDER MATTERS! (Arrangements, passwords, positions).</li>
+                            <li><strong>Formula:</strong> ${}^nP_r = \frac{n!}{(n-r)!}$</li>
+                            <li>Choosing $r$ objects from $n$ distinct objects and arranging them in a line.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The OSIS Election</h3>
+                        <p><strong>Hook:</strong> <em>"From 10 top students, SMA Semesta needs to elect an OSIS President, Vice President, and Secretary."</em></p>
+                        <p><strong>Task:</strong> Is Andi as Pres and Budi as VP the same as Budi as Pres and Andi as VP? No! Use the slot method first ($10 \times 9 \times 8$), then try to derive the factorial formula from it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Permutations (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Evaluating $^nP_r$</h3>
+                            <p>In how many ways can 5 people be seated in a row of 7 chairs?</p>
+                            <p><em>Hint: Think of it as arranging 5 people out of 7 available positions.</em></p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>5 boys and 4 girls sit in a row. How many arrangements are there if all the girls MUST sit together? <em>(Treat the girls as one 'block')</em>.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 3 ================= -->
+        <div class="slide" id="slide-5">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Identical Objects & Restrictions (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Dividing out Duplicates</h3>
+                        <ul>
+                            <li>When objects are identical, swapping them doesn't create a new arrangement. We are overcounting!</li>
+                            <li><strong>Formula:</strong> $\frac{n!}{p!q!r!}$ where $p, q, r$ are the frequencies of the identical items.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Repeated Letter Problem</h3>
+                        <p><strong>Hook:</strong> <em>"BATIK has 5 different letters ($5!$ ways). What about the word SEMESTA?"</em></p>
+                        <p><strong>Task:</strong> Experiment with the word "MAM". Write out all actual visual arrangements. How does it compare to $3!$? Derive why we must divide by $2!$.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Identical Objects & Restrictions (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> PANCASILA</h3>
+                            <p>Find the total number of different arrangements of the letters in the word <strong>PANCASILA</strong>.</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Find the number of different arrangements of the letters in the word <strong>STATISTICS</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 4 ================= -->
+        <div class="slide" id="slide-7">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Combinations (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Combinations ($^nC_r$)</h3>
+                        <ul>
+                            <li><strong>Rule:</strong> ORDER DOES NOT MATTER! (Selecting teams, groups, committees).</li>
+                            <li><strong>Formula:</strong> ${}^nC_r = \binom{n}{r} = \frac{n!}{r!(n-r)!}$</li>
+                            <li><strong>Symmetry:</strong> ${}^{10}C_2 = {}^{10}C_8$. Choosing 2 to go is the same as choosing 8 to stay!</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Removing the Order</h3>
+                        <p><strong>Hook:</strong> <em>"We need a team of 3 for a National Debate in Jakarta. Is a team of Andi, Budi, Citra different from Budi, Citra, Andi?"</em></p>
+                        <p><strong>Task:</strong> Start with the permutation $\frac{10!}{7!}$. Since 3 people can be arranged in $3!$ ways amongst themselves, how do we remove these duplicates? (Divide by $3!$).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Combinations (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Selecting Teams</h3>
+                            <p>A committee of 5 is to be selected from a group of 7 men and 6 women.</p>
+                            <p>How many different committees can be formed in total?</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>A pizza parlor offers 8 toppings. How many different 3-topping pizzas can be ordered? Is this a Permutation or Combination?</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 5 ================= -->
+        <div class="slide" id="slide-9">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Problem Solving (AND/OR) (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Counting Principles</h3>
+                        <ul>
+                            <li>The word <strong>AND</strong> implies Multiplication ($\times$).</li>
+                            <li>The word <strong>OR</strong> implies Addition ($+$).</li>
+                            <li><strong>"At least 1" Shortcut:</strong> <br> (Total possible ways) $-$ (Ways with ZERO of that item).</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The AND/OR Dilemma</h3>
+                        <p><strong>Hook:</strong> <em>"An Indonesian cultural committee of 4 is to be chosen from 5 boys and 6 girls."</em></p>
+                        <p><strong>Task:</strong> Debate how to calculate:<br>
+                           1) Choose 2 boys AND 2 girls.<br>
+                           2) Choose 4 boys OR 4 girls.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Problem Solving (AND/OR) (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> At Least...</h3>
+                            <p>A committee of 5 is chosen from 7 men and 6 women. How many committees contain <strong>at least 1 woman</strong>?</p>
+                            <p><em>(Try using the Total - None shortcut!)</em></p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>A quiz team of 4 is chosen from 10 students. The team is then arranged in a line for a photo. How many different photos can be taken? <em>(Combines C and P!)</em></p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 6 ================= -->
+        <div class="slide" id="slide-11">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Chapter Review (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> The Decision Tree</h3>
+                        <ul>
+                            <li><strong>Does Order Matter?</strong><br>
+                                $\rightarrow$ YES: Permutation ($P$) or Slot Method.<br>
+                                $\rightarrow$ NO: Combination ($C$).
+                            </li>
+                            <li><strong>Are there identical items?</strong><br>
+                                $\rightarrow$ YES: Divide by $p!q!$
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Mind Mapping</h3>
+                        <p><strong>Hook:</strong> <em>"Exams mix P and C together. You must know how to choose the right weapon."</em></p>
+                        <p><strong>Task:</strong> In groups, draw a massive decision tree on A3 paper connecting P, C, Identical objects, AND/OR rules, and factorial notation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Evaluation (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Identify P or C</h3>
+                            <p>State whether the following require Permutation or Combination:</p>
+                            <ol>
+                                <li>A 4-digit PIN code.</li>
+                                <li>Picking 3 fruits from a bowl of 10.</li>
+                                <li>Seating 5 guests around a table.</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Self-Reflection: Which type of problem (Permutation with restriction or Combinations with 'at least') do you need more practice on?</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Workings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Panel -->
+    <div class="nav-panel">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">❮ Prev</button>
+        <div class="progress-indicator" id="progress">Slide 1 of 13</div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ❯</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateNav() {
+            progress.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) slide.classList.add('active');
+                else slide.classList.remove('active');
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            updateNav();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        updateNav();
+
+        // --- Canvas Drawing Logic ---
+        let currentMode = 'pen'; 
+        let strokeColor = '#000000';
+        let strokeWidth = 3;
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('penBtn').classList.remove('active');
+            document.getElementById('eraserBtn').classList.remove('active');
+            document.getElementById(mode + 'Btn').classList.add('active');
+        }
+
+        function setColor(color) {
+            strokeColor = color;
+            setMode('pen'); 
+        }
+
+        function clearCanvas() {
+            const canvas = slides[currentSlide].querySelector('canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function resizeCanvases() {
+            slides.forEach(slide => {
+                const canvas = slide.querySelector('canvas');
+                if (canvas) {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                }
+            });
+        }
+
+        slides.forEach(slide => {
+            const canvas = slide.querySelector('canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function startDraw(e) {
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault(); 
+                
+                const pos = getPos(e);
+                
+                if (currentMode === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = 20; 
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = strokeWidth;
+                }
+                
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+
+            function stopDraw() {
+                isDrawing = false;
+                ctx.closePath();
+            }
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseout', stopDraw);
+
+            canvas.addEventListener('touchstart', startDraw, {passive: false});
+            canvas.addEventListener('touchmove', draw, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+        });
+
+        window.onload = resizeCanvases;
+        window.onresize = resizeCanvases;
+
+    </script>
+</body>
+</html>

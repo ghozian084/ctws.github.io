@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Making Sense of Algebra - SMP Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* 5E Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            page-break-after: avoid;
+        }
+        .diff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        .diff-table th, .diff-table td {
+            border: 1px solid #cbd5e0;
+            padding: 10px 15px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .diff-table th {
+            background-color: #f8f9fa;
+            color: #2d3748;
+            font-weight: bold;
+        }
+        .diff-table td:first-child {
+            font-weight: bold;
+            color: #2c3e50;
+            width: 25%;
+        }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Making Sense of Algebra</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 9 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 2. Making sense of algebra</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> 5E, Math Modeling Task Design</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & <span class="rme">Culturally STEM</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated, Collaboration</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C2.1, E2.1:</strong> Know that letters can be used to represent generalised numbers. Substitute numbers into expressions and formulas.</li>
+        <li><strong>C2.2, E2.2:</strong> Simplify expressions by collecting like terms. Expand products of algebraic expressions.</li>
+        <li><strong>C1.7, E1.7:</strong> Understand and use indices (positive, zero, negative, and fractional).</li>
+        <li><strong>C2.4, E2.4:</strong> Understand and use the rules of indices.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: Introduction to Letters as Unknowns (Subtopic 2.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Conceptual Setup</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Display a picture of a traditional market (Pasar Bandeng Ungaran).</li>
+                    <li>Ask: "If I buy a closed box of Bandeng Presto, I don't know exactly how many fish are inside. If I buy 3 identical boxes, how can I mathematically write down what I have without opening them?"</li>
+                </ul>
+                <h4>Introduce Variable Concept (5 min):</h4>
+                <ul>
+                    <li>Hold up a physical blank box. Write an '$x$' on it. Say: "x represents an unknown quantity. If I hold 3 boxes, I have $3x$."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Math Modeling Intro</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Modeling Task 1 (20 min):</h4>
+                <ul>
+                    <li>Distribute physical envelopes (labeled '$y$') containing paper clips, and loose paper clips to groups.</li>
+                    <li>Groups must write an algebraic expression for different scenarios: "You have 2 envelopes and 4 loose clips" $\rightarrow 2y + 4$.</li>
+                    <li><span class="char-dev">Collaboration:</span> Students challenge other groups by building physical arrangements and making them write the expression.</li>
+                    <li><span class="joyful">Joyful Learning:</span> "Guess My Expression" game.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing Expressions</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Vocabulary: Variable, Coefficient, Term, Constant, Expression.</li>
+                    <li><strong>Slide 3:</strong> Rule of Algebra: We don't write the multiplication sign. $4 \times a = 4a$. Explain *why* (it looks like an $x$).</li>
+                    <li><strong>Slide 4:</strong> Word to Algebra translations. "5 more than $y$" $\rightarrow y + 5$.</li>
+                    <li><span class="mindful">Mindful Check:</span> "Is $x - 5$ the same as $5 - x$? Test it with real numbers on your whiteboard."</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Provide SEN students with an "Algebra Translation Dictionary" mapping phrases like 'less than' to the minus sign.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 ELABORATE | Contextual Translation</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>(Student-paced)</div>
+            <div class="phase-right">
+                <h4>Application Task (20 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 2.1 A. Translating English sentences about a local Angkot (public minivan) route into algebraic expressions (e.g., Let $p$ be passengers. At the first stop, 3 get off: $p - 3$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 EVALUATE | Exit Ticket</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual Task<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4><span class="exit-hl">🎟️ Exit Ticket — Slide 6 (10 min):</span></h4>
+                <ul>
+                    <li>Write an algebraic expression for: "Double a number $m$, then subtract 7."</li>
+                    <li>Hand to the teacher upon exiting.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Mathematical Modeling with Formulas (Subtopic 2.1)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Model Formulation</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Discussion<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Show an image of traditional <em>Joglo</em> houses. Ask: "If a builder wants to make a formula to calculate the cost of building $n$ houses, what variables (unknowns) do they need to consider?" (Wood, tiles, labor).</li>
+                </ul>
+                <h4>Math Modeling Step 1: Formulate (10 min):</h4>
+                <ul>
+                    <li>Brainstorm variables on the board. Let $W$ = cost of wood, $T$ = cost of tiles. Total Cost $C = W + T$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Creating Formulas</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Small Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Math Modeling Step 2: Develop the Model (25 min):</h4>
+                <ul>
+                    <li><strong>Task:</strong> "You are organizing a school trip to Lawang Sewu. The bus costs Rp 500,000 flat, and entry is Rp 10,000 per student. Create a mathematical model (formula) for the Total Cost ($C$) for $n$ students."</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Groups must identify the constant (bus) and the variable cost (tickets).</li>
+                    <li>Write models on large paper and stick to the walls.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Validating the Model</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Review the groups' models. Correct answer: $C = 500000 + 10000n$.</li>
+                    <li><strong>Slide 3:</strong> Math Modeling Step 3: Validate. <span class="meaningful">Meaningful connection:</span> Ask: "What if $n = -5$? Does our formula still work mathematically? Yes. Does it make sense in reality? No, you can't have negative students."</li>
+                    <li>Explain constraints in real-world mathematical modeling.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Guide EAL students to map the words "flat rate" to a Constant, and "per person" to a Coefficient.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Students create their own real-world scenario and write the corresponding algebraic formula.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>If a taxi charges Rp 15,000 to start and Rp 4,000 per km ($k$), write the formula for the cost ($C$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Substitution (Subtopic 2.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Contextual Hook</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Interactive Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>"In football, a 'substitution' means replacing one player with another. In algebra, it means exactly the same thing: replacing a letter with a number!"</li>
+                </ul>
+                <h4>Quick Check (5 min):</h4>
+                <ul>
+                    <li>If $x$ is 5, what is $x + 2$? (7). If $x$ is 5, what is $3x$? (Remind students $3x$ means $3 \times x$, not 35).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Testing the Model</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Pair Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Math Modeling Step 4: Solve/Use the Model (15 min):</h4>
+                <ul>
+                    <li>Return to the Lawang Sewu formula: $C = 500000 + 10000n$.</li>
+                    <li>Pairs must calculate the cost if 10, 25, and 40 students go on the trip by substituting $n$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | The Bracket Rule</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Substitution layout. Model writing the equation, replacing the variable using brackets: $3(5) + 4 = 19$.</li>
+                    <li><strong>Slide 3:</strong> <span class="mindful">Mindful Substitution:</span> What if we substitute negative numbers? Evaluate $x^2 + 2x$ when $x = -3$.</li>
+                    <li><strong>Slide 4:</strong> Show common error: $-3^2$ vs $(-3)^2$. Stress that brackets MUST be used when substituting negatives!</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students evaluate complex formulas like the Quadratic Formula or Kinematics $v = u + at$ with mixed signs.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Independent Practice & Exit</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 2.2 on Substitution.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Check answers using BODMAS rules explicitly.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>If $a = 4$ and $b = -2$, evaluate: $3a - b^2$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Simplifying Expressions (Collecting Like Terms) (Subtopic 2.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Visual Metaphor</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Debate<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show a recipe for Nasi Goreng: 3 eggs ($3e$) and 2 cups of rice ($2r$).</li>
+                    <li>Ask: "Can I add $3e + 2r$ and say I have 5 egg-rices ($5er$)?"</li>
+                    <li><span class="meaningful">Meaningful:</span> Establish that you can only combine items that are exactly the same (Like Terms).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Algebra Tiles</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Algebra Tiles Activity (20 min):</h4>
+                <ul>
+                    <li>Hand out Algebra Tiles (different shapes for $x^2$, $x$, and units $1$).</li>
+                    <li>Write an expression on the board: $2x^2 + 3x + 4 + x^2 - x - 2$.</li>
+                    <li>Groups physically group the identical shapes together and count the result.</li>
+                    <li><span class="joyful">Joyful:</span> "Speed sort" competition.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Rules of Like Terms</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Define "Like Terms" (Same letter, exactly the same power). $x$ and $x^2$ are NOT like terms.</li>
+                    <li><strong>Slide 3:</strong> The sign belongs to the term on its right. Use colored markers to circle terms WITH their signs: $(+4x)$ $(-2y)$ $(-x)$.</li>
+                    <li><strong>Slide 4:</strong> Model simplifying $5a - 2b + 3a + 5b$. Answer: $8a + 3b$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers use highlighters to color-code like terms before adding/subtracting them.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Practice & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 2.3. Students must simplify geometric perimeters (e.g., a triangle with sides $2x$, $x+3$, $3x-1$).</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Simplify: $4x^2 - 3x + 5 - x^2 + 7x$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Working with Single Brackets (Subtopic 2.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & The Area Model</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>"A farmer has a Sawah (rice paddy) with length 5m and width $x$. He buys an extra 3m of land. How do we find the new area?"</li>
+                </ul>
+                <h4>Explore — Area Model (20 min):</h4>
+                <ul>
+                    <li>Draw a rectangle split into two parts: one $5 \times x$, one $5 \times 3$.</li>
+                    <li>Students realize Total Area = $5x + 15$.</li>
+                    <li>Teacher shows this is the same as $5(x + 3)$. This is Expansion!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | The Distributive Law</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Define Expansion (multiplying the outside term by EVERYTHING inside).</li>
+                    <li><strong>Slide 3:</strong> Draw the "rainbow" arrows. Example: $-2(3x - 4)$.</li>
+                    <li><strong>Slide 4:</strong> <span class="mindful">Mindful Check:</span> Emphasize that multiplying a negative by a negative makes a positive! $-2 \times -4 = +8$.</li>
+                    <li><strong>Slide 5:</strong> Expanding and then collecting like terms: $3(x + 2) + 2(x - 1)$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL explicitly teach "Expand" = "Remove Brackets". SEN students keep drawing the Area Model boxes.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Worksheet 2.4A. Includes multiplying algebraic terms $x(x + 5) = x^2 + 5x$.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Expand and simplify: $4(y - 2) - 3(y + 1)$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 6
+    =========================================== -->
+    <h2>📅 Meeting 6: Expanding Double Brackets (Subtopic 2.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | 2D Expansion</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (25 min):</span></h4>
+                <ul>
+                    <li>"What happens if BOTH sides of the Sawah are unknown and expanded?" $(x + 3)(x + 2)$.</li>
+                    <li>Students draw a 2x2 grid (Box method) to find the 4 separate areas: $x^2$, $3x$, $2x$, $6$.</li>
+                    <li>Combine like terms to get the final trinomial.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | FOIL Method vs Box Method</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Formalize the Box Method.</li>
+                    <li><strong>Slide 2:</strong> Introduce FOIL (First, Outer, Inner, Last) as an alternative.</li>
+                    <li><strong>Slide 3:</strong> Watch out for $(x - 5)^2$. <span class="mindful">Mindful:</span> It is NOT $x^2 - 25$. It means $(x-5)(x-5)$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students expand triple brackets $(x+1)(x+2)(x+3)$. Low achievers stick exclusively to the visual Box method.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 2.4B on expanding binomials.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students verify their expansion by substituting $x=2$ into the original brackets and their final answer to see if they match.</li>
+                    <li><strong>Exit Ticket:</strong> Expand and simplify $(2x - 3)(x + 4)$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 7
+    =========================================== -->
+    <h2>📅 Meeting 7: Introduction to Indices (Positive, Zero, Negative, Fractional) (Subtopic 2.5)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Pattern Recognition</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Group Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Population growth of Java island can be modeled using powers of 10. $10^2 = 100$. But what does $10^0$ or $10^{-1}$ physically mean?</li>
+                </ul>
+                <h4>Explore the Pattern (20 min):</h4>
+                <ul>
+                    <li>Write on board: $2^3 = 8$, $2^2 = 4$, $2^1 = 2$.</li>
+                    <li>Ask groups to figure out the pattern (divide by 2 moving down).</li>
+                    <li>Students must confidently predict the value of $2^0$, $2^{-1}$, and $2^{-2}$ based ONLY on the division pattern.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Index Definitions</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Zero Index Rule: Anything to the power of $0 = 1$.</li>
+                    <li><strong>Slide 3:</strong> Negative Index Rule: $x^{-n} = 1 / x^n$. Emphasize it means "fraction", not a negative number!</li>
+                    <li><strong>Slide 4:</strong> Fractional Indices: $x^{1/2} = \sqrt{x}$. Explain the connection to areas and roots from Chapter 1.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Calculate exact values: $5^0$, $3^{-2}$, $16^{1/2}$.</li>
+                    <li><strong>Exit Ticket:</strong> Evaluate $4^{-2}$ and $25^{1/2}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 8
+    =========================================== -->
+    <h2>📅 Meeting 8: Rules of Indices (Subtopic 2.5)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Deriving the Laws</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Guided Discovery</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (25 min):</span></h4>
+                <ul>
+                    <li>"Sound waves of a Gamelan overlapping multiply frequencies."</li>
+                    <li>Write: $x^2 \times x^3 = (x \cdot x) \times (x \cdot x \cdot x)$.</li>
+                    <li>Ask students to count the x's. "So $x^2 \times x^3 = x^5$. What is the shortcut?" (Add the powers).</li>
+                    <li>Have students derive the division rule (subtract) and power-of-a-power rule (multiply) by expanding them out manually first.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing the 3 Laws</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Multiplication Law: $a^m \times a^n = a^{m+n}$.</li>
+                    <li><strong>Slide 2:</strong> Division Law: $a^m / a^n = a^{m-n}$.</li>
+                    <li><strong>Slide 3:</strong> Power Law: $(a^m)^n = a^{mn}$.</li>
+                    <li><strong>Slide 4:</strong> Combining coefficients and indices: $(3x^2)^3 = 27x^6$. <span class="mindful">Mindful:</span> Don't forget to apply the power to the big number too!</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students combine rules with fractional and negative indices $ \frac{x^3 \times x^{-5}}{x^{1/2}} $.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Mastery Practice</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 2.5 on Index Laws.</li>
+                    <li><strong>Exit Ticket:</strong> Simplify $\frac{4x^5 \times 3x^2}{6x^4}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 9
+    =========================================== -->
+    <h2>📅 Meeting 9: Chapter Review & Summative Evaluation</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Collaborative Review</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Student-led Review</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Concept Mapping (20 min):</span></h4>
+                <ul>
+                    <li>Groups are given A3 paper and asked to draw a mind-map connecting: Substitution, Expansion, Like Terms, and Indices.</li>
+                    <li>Teacher circulates to clear up any final misconceptions before the test.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Chapter Evaluation & Closure</span>
+            <span>[60 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 2 Test (50 min):</h4>
+                <ul>
+                    <li>Remove visual aids. Distribute the Chapter 2 Evaluation.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under strict exam conditions.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: On the back of the test, write one algebraic rule you still find confusing, and one you are an expert at.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Provide complex geometric proofs requiring expansion of binomials (e.g., proving area of composite shapes). Use fractional and negative indices in algebraic fractions. Challenge them to evaluate complex substitution formulas like kinematics ($v = u + at$) with mixed signs.</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Provide "Algebra Tiles" and physical manipulatives for visual representation of collecting like terms. Give a step-by-step checklist card for FOIL expansion and the Box Method. Guide step-by-step for the first 3 questions of every worksheet.</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a bilingual glossary of terms: <em>Variable (Variabel), Coefficient (Koefisien), Expand (Jabarkan), Substitute (Substitusi)</em>. Encourage visual mapping and use color-coding to link terms with their signs.</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Use physical manipulatives (envelopes and clips) to represent unknowns. Reduce cognitive load by keeping expressions to single variables initially. Use high-contrast printouts and increase spacing between questions on worksheets.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 2.1 & 2.2: Math Modeling & Substitution</h3>
+        <p>1. Write an expression for: "Multiply $x$ by 4, then subtract 9."</p>
+        <p>2. A taxi costs Rp 10,000 base fare plus Rp 5,000 per kilometer ($k$). Write a formula for Cost ($C$).</p>
+        <p>3. If $a = 3$, $b = -2$, and $c = 5$, evaluate:<br>
+           i) $4a - b$<br>
+           ii) $b^2 + 2c$<br>
+           iii) $\frac{a + c}{b}$
+        </p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 2.3 & 2.4: Simplifying & Brackets</h3>
+        <p>1. Simplify by collecting like terms: $5x^2 - 3x + 2 + 2x^2 + 7x - 4$.</p>
+        <p>2. Expand and simplify: $3(2x - 5) - 2(x + 4)$.</p>
+        <p>3. Expand and simplify the double brackets: $(x + 5)(x - 3)$.</p>
+        <p>4. Expand and simplify: $(2x - 1)^2$.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 2.5: Rules of Indices</h3>
+        <p>1. Evaluate the exact values: a) $7^0$ &nbsp;&nbsp; b) $5^{-2}$ &nbsp;&nbsp; c) $64^{1/2}$ &nbsp;&nbsp; d) $8^{1/3}$</p>
+        <p>2. Simplify using index laws:<br>
+           i) $y^4 \times y^6$<br>
+           ii) $\frac{m^8}{m^3}$<br>
+           iii) $(p^3)^4$<br>
+           iv) $2x^3 \times 4x^5$
+        </p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 2 Evaluation (Used in Meeting 9)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Total: 35 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Modeling & Substitution (10 Marks)</h3>
+        <p>1. Write an algebraic expression for "the sum of $x$ and $y$, divided by 3". (2 marks)</p>
+        <p>2. The formula for converting Celsius to Fahrenheit is $F = \frac{9}{5}C + 32$. Find $F$ when $C = 20$. (3 marks)</p>
+        <p>3. Given $p = -4$ and $q = 3$, calculate the value of $p^2 - 2q$. (5 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Algebra Operations (15 Marks)</h3>
+        <p>4. Simplify fully: $4xy - 2x^2 + 3yx + 5x^2$. (3 marks)</p>
+        <p>5. Expand and simplify: $5(3a - 2b) - 2(a - 4b)$. (5 marks)</p>
+        <p>6. Expand and simplify: $(3x + 2)(x - 5)$. (4 marks)</p>
+        <p>7. The length of a rectangle is $(x+4)$ and its width is $(x-1)$. Find an expression for its Area, expanded and simplified. (3 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Indices (10 Marks)</h3>
+        <p>8. Find the exact numerical value of $36^{1/2} + 2^{-3}$. (4 marks)</p>
+        <p>9. Simplify fully: $\frac{12a^6b^3}{4a^2b^5}$. Write your answer using positive indices. (3 marks)</p>
+        <p>10. Simplify fully: $(2x^4)^3$. (3 marks)</p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

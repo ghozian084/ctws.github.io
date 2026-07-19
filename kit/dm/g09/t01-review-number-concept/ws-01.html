@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guided Worksheets - Number Concepts</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --guide: #f6e05e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; }
+        @media print {
+            body { padding: 0; font-size: 11pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+
+        /* Worksheet Header */
+        .ws-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ws-title { font-size: 1.4em; font-weight: bold; color: var(--primary); }
+        .student-info { display: flex; flex-direction: column; gap: 8px; width: 300px;}
+        .student-info div { display: flex; justify-content: space-between; border-bottom: 1px dotted #718096; }
+
+        /* Guided Scaffolding Box */
+        .guide-box {
+            background-color: #fffff0;
+            border-left: 5px solid #ecc94b;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .guide-title { font-weight: bold; color: #b7791f; margin-bottom: 5px; display: block;}
+
+        /* Questions Layout */
+        .question-block { margin-bottom: 25px; }
+        .q-number { font-weight: bold; margin-right: 5px; }
+        
+        .fill-blank {
+            display: inline-block;
+            min-width: 40px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+        .work-box {
+            border: 1px dashed #cbd5e0;
+            min-height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            color: #a0aec0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        /* Tables */
+        table.grid-table {
+            width: 100%; border-collapse: collapse; margin-top: 10px;
+        }
+        table.grid-table th, table.grid-table td {
+            border: 1px solid #cbd5e0; padding: 10px; text-align: center;
+        }
+        table.grid-table th { background-color: var(--accent); }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Worksheets</button>
+
+    <!-- WORKSHEET 1 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 1: Types of Numbers<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Classification</span>
+            <p><strong>Natural:</strong> 1, 2, 3... | <strong>Integer:</strong> ..., -2, -1, 0, 1, 2... <br>
+            <strong>Rational:</strong> Fractions ($a/b$), stopping/repeating decimals. | <strong>Irrational:</strong> Non-stopping, non-repeating (like $\pi$, $\sqrt{2}$).</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> Place a checkmark (✓) in all the categories that apply to each number.
+            <table class="grid-table">
+                <tr>
+                    <th>Number</th><th>Natural</th><th>Integer</th><th>Rational</th><th>Irrational</th>
+                </tr>
+                <tr><td>$-15$</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>$\pi$</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>$\frac{3}{4}$</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>$\sqrt{16}$ (Hint: simplify first)</td><td></td><td></td><td></td><td></td></tr>
+            </table>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> <strong>Culturally STEM Context:</strong> You are mapping the design of a traditional Batik fabric. Classify the following measurements:
+            <br><br>
+            a) The length of the fabric is $2.5$ meters. <br>
+            <strong>Answer:</strong> This is a <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> number because it can be written as the fraction $\frac{5}{2}$.
+            <br><br>
+            b) The number of Batik motifs on the fabric is exactly 150.<br>
+            <strong>Answer:</strong> This is a <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> number because it is used for counting objects.
+            <br><br>
+            c) The diagonal of a $1m \times 1m$ square pattern block is $\sqrt{2}$ meters.<br>
+            <strong>Answer:</strong> This is an <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> number.
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 2 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 2: Multiples & Factors<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: The Rainbow Method & Lists</span>
+            <p><strong>Factors:</strong> Numbers that multiply to make the target. (Pairs: $1 \times 24$, $2 \times 12$, etc.)<br>
+            <strong>Multiples:</strong> Times tables. ($6 \rightarrow 6, 12, 18, 24\dots$)</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> List the <strong>Multiples</strong> to find the Lowest Common Multiple (LCM).
+            <p>Multiples of 6: 6, 12, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span></p>
+            <p>Multiples of 8: 8, 16, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span></p>
+            <p>The smallest matching number (LCM) is: <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="question-block no-break">
+            <span class="q-number">2.</span> <strong>Culturally STEM Context:</strong> You are preparing snack boxes for an Indonesian Independence Day event. You have <strong>24 Kue Lemper</strong> and <strong>36 Kue Pastel</strong>. You want to divide them into identical boxes with no food left over. What is the greatest number of boxes you can make? (Find the HCF).
+            <br><br>
+            <strong>Step 1:</strong> List factors of 24: 1, 2, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, 4, 6, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, 12, 24<br>
+            <strong>Step 2:</strong> List factors of 36: 1, 2, 3, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, 6, 9, <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>, 18, 36<br>
+            <strong>Step 3:</strong> Circle the highest matching number.<br>
+            <p><strong>Final Answer:</strong> You can make <span class="fill-blank">&nbsp;&nbsp;&nbsp;</span> identical boxes.</p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 3 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 3: Primes & Factorization<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Factor Trees & Venn Diagrams</span>
+            <p>Divide by prime numbers ($2, 3, 5, 7\dots$) until you can't divide anymore. <br>
+            In a Venn Diagram: Middle = HCF. Multiply EVERYTHING = LCM.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> <strong>Borobudur Stupas:</strong> Break down the number <strong>72</strong> into its prime factors using a factor tree.
+            <div style="margin-left: 20px; font-family: monospace; font-size: 1.2em;">
+                &nbsp;&nbsp;&nbsp;&nbsp;72<br>
+                &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;\<br>
+                &nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;36<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;\<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;<span class="fill-blank">&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;\<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;<span class="fill-blank">&nbsp;&nbsp;&nbsp;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;\<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<span class="fill-blank">&nbsp;&nbsp;&nbsp;</span>
+            </div>
+            <br>
+            Write 72 in index form: $72 = 2^{\dots} \times 3^{\dots}$
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Use a Venn Diagram to find the HCF and LCM of <strong>120</strong> and <strong>84</strong>.
+            <p>$120 = 2 \times 2 \times 2 \times 3 \times 5$</p>
+            <p>$84 = 2 \times 2 \times 3 \times 7$</p>
+            <div class="work-box">
+                <em>Draw your two intersecting circles here. Put shared numbers in the middle.</em>
+                <br><br><br><br><br>
+            </div>
+            <p><strong>HCF</strong> (multiply middle numbers) = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p><strong>LCM</strong> (multiply all numbers in circles) = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 4 & 5 (Combined for space, representing M4 & M5) -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 4 & 5: Powers & Roots<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Powers and Negative Bases</span>
+            <p>$3^4 = 3 \times 3 \times 3 \times 3$ <br>
+            Negative Base + EVEN power = Positive. Negative Base + ODD power = Negative.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> Expand and calculate the following:
+            <p>a) $5^3 = 5 \times \dots \times \dots = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>b) $(-2)^4 = (-2) \times (-2) \times (-2) \times (-2) = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <em>(Is it positive or negative?)</em></p>
+            <p>c) $(-3)^3 = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="guide-box" style="margin-top:30px;">
+            <span class="guide-title">Guided Step: Roots (Un-building Squares)</span>
+            <p>Roots are the opposite of powers. To find $\sqrt{144}$, ask: "What number multiplied by itself equals 144?"</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> A square garden in a traditional palace has an area of $225 \text{ m}^2$. Find the length of one side.
+            <p>Area = side $\times$ side. So, side = $\sqrt{225}$.</p>
+            <p>Side length = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> meters.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> Simplify the expression: $2^4 + \sqrt{64} - 3^2$.
+            <div class="work-box">
+                <em>Step 1: Calculate $2^4$ = _____<br>
+                Step 2: Calculate $\sqrt{64}$ = _____<br>
+                Step 3: Calculate $3^2$ = _____<br>
+                Step 4: Combine them: _____ + _____ - _____ = _____</em>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 6 & 7 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 6 & 7: Directed Numbers<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Double Signs & Multiplication Rules</span>
+            <p>$5 - (-3) \rightarrow$ Subtracting a negative makes it POSITIVE $\rightarrow 5 + 3$<br>
+            Multiplying/Dividing: Same signs = $+$, Different signs = $-$</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> <strong>Puncak Jaya Wijaya Context:</strong> The temperature is $-5^\circ\text{C}$. The sun comes up and the temperature rises by $12^\circ\text{C}$. What is the new temperature?
+            <p>Equation: $-5 + 12 = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> $^\circ\text{C}$</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Solve the double sign problems:
+            <p>a) $-4 - (-12) \rightarrow -4 + \dots = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>b) $8 + (-3) \rightarrow 8 - \dots = $ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> Multiply and Divide (Remember your sign rules!):
+            <table class="grid-table" style="width:80%;">
+                <tr>
+                    <td>$-6 \times -4 =$ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                    <td>$-15 \div 3 =$ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                </tr>
+                <tr>
+                    <td>$8 \times -2 =$ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                    <td>$\frac{-24}{-8} =$ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 8 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 8: Order of Operations (BODMAS)<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: BODMAS Checklist</span>
+            <p>1. <strong>B</strong>rackets first.<br>
+               2. <strong>O</strong>rders (Powers and Roots).<br>
+               3. <strong>D</strong>ivide and <strong>M</strong>ultiply (Left to right).<br>
+               4. <strong>A</strong>dd and <strong>S</strong>ubtract (Left to right).</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> Evaluate: $50 - 2 \times 15 + 10$
+            <div class="work-box" style="color:#333; font-style:normal;">
+                Step 1 (Multiply): $50 -$ <span class="fill-blank" style="width:30px;"></span> $+ 10$<br><br>
+                Step 2 (Subtract, L to R): <span class="fill-blank" style="width:30px;"></span> $+ 10$<br><br>
+                Step 3 (Add): <span class="fill-blank" style="width:30px;"></span>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Evaluate: $15 - 3 \times (8 \div 2)$
+            <div class="work-box" style="color:#333; font-style:normal;">
+                Step 1 (Brackets): $15 - 3 \times$ <span class="fill-blank" style="width:30px;"></span><br><br>
+                Step 2 (Multiply): $15 -$ <span class="fill-blank" style="width:30px;"></span><br><br>
+                Step 3 (Subtract): <span class="fill-blank" style="width:30px;"></span>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> Insert brackets to make this statement true: 
+            <p style="font-size: 1.5em; text-align:center;">$5 + 2 \times 4 - 1 = 21$</p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 9 (Rounding / Test Prep) -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 9: Rounding Numbers<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Math Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Rounding Rules</span>
+            <p>1. Draw a line after the place value you want.<br>
+               2. Look at the neighbor to the right.<br>
+               3. If it's <strong>5 or more</strong>, round UP. If it's <strong>4 or less</strong>, stay the same.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> Round $3.14159$ to <strong>2 decimal places (d.p.)</strong>.
+            <p>Line goes after the 4: $3.14 | 159$. The neighbor is 1.</p>
+            <p>Answer: <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Round $0.04562$ to <strong>2 significant figures (s.f.)</strong>.
+            <p>Remember, leading zeros do NOT count! The first s.f. is 4. The second is 5. Neighbor is 6.</p>
+            <p>Answer: <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> <strong>Flight Plan Context:</strong> The distance from Sabang to Merauke is exactly $5245.83$ km.
+            <br><br>
+            a) Round this distance to the nearest whole number (0 d.p.).<br>
+            <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> km
+            <br><br>
+            b) Round this distance to 1 significant figure.<br>
+            <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> km
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Data Handling - SMP Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* PBL/PjBL Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Collecting, Organising and Displaying Data</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 5 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 4. Data Handling</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> Problem-Based (PBL) & Project-Based Learning (PjBL)</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & Hands-on Activity</p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated, Collaboration</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C9.1, E9.1:</strong> Classify and tabulate statistical data (Primary/Secondary, Qualitative/Quantitative, Discrete/Continuous).</li>
+        <li><strong>C9.4, E9.4:</strong> Draw and interpret statistical charts and diagrams.</li>
+        <li><strong>C9.4, E9.4:</strong> Draw and interpret bar charts, pie charts, pictograms, stem-and-leaf diagrams, simple frequency distributions.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1 (PBL)
+    =========================================== -->
+    <h2>📅 Meeting 1: Collecting & Classifying Data (Subtopic 4.1) [PBL Approach]</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 1 | Orienting Students to the Problem</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Discussion<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Display a picture of overflowing trash bins in the school cafeteria filled with untouched vegetables.</li>
+                    <li>"Our cafeteria is wasting money and food because they don't know what students actually like to eat. How can we solve this mathematically?"</li>
+                </ul>
+                <h4>Problem Introduction (10 min):</h4>
+                <ul>
+                    <li><span class="meaningful">Meaningful:</span> Explain that to solve real-world problems, we need Data. </li>
+                    <li>Discuss Primary vs Secondary data. "If we ask students directly, is that primary or secondary?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 2 | Organizing for Study (Concepts)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Data Types. Qualitative (Words) vs Quantitative (Numbers).</li>
+                    <li><strong>Slide 3:</strong> Quantitative breakdown: Discrete (counted, exact) vs Continuous (measured, can be decimals).</li>
+                    <li><strong>Slide 4:</strong> Quick Fire Check: "Shoe size?" (Discrete). "Height?" (Continuous). "Favorite Color?" (Qualitative).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Provide EAL students with a visual chart showing "Discrete = Counting objects" and "Continuous = Measuring tape/Scale".</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 3 | Independent/Group Investigation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Data Collection Mission (30 min):</h4>
+                <ul>
+                    <li>In groups of 3, students design a 3-question survey for the cafeteria problem. Must include 1 Qualitative and 1 Discrete Quantitative question.</li>
+                    <li><span class="joyful">Joyful Learning:</span> Students move around the classroom collecting raw data from exactly 15 classmates using clipboards.</li>
+                    <li><span class="char-dev">Collaboration:</span> One asks, one tallies, one records.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 4 & 5 | Evaluate the Process</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual Task<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Review & <span class="exit-hl">🎟️ Exit Ticket (15 min):</span></h4>
+                <ul>
+                    <li>Bring class back. "Was collecting data messy? Next meeting, we organize it!"</li>
+                    <li><strong>Exit Ticket:</strong> Classify the following data type: "The weight of a watermelon" (Answer: Quantitative, Continuous).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2 (PBL)
+    =========================================== -->
+    <h2>📅 Meeting 2: Organising Data - Frequency & Stem-and-Leaf (Subtopic 4.2) [PBL Approach]</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 1 & 2 | The Messy Data Problem</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Show a massive, messy spreadsheet of unorganized numbers. "We have the data, but it's useless right now. How do we make it readable?"</li>
+                </ul>
+                <h4>Organizing for Study (10 min):</h4>
+                <ul>
+                    <li>Review Tally Marks and Frequency Tables. Explain Grouped Frequency Tables for continuous data (e.g., $150 \le h < 160$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 3 | Developing Artifacts (Stem-and-Leaf)</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction &<br>Hands-On</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-3 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Introduce Stem-and-Leaf diagrams. Explain that it organizes data *without losing the original numbers*.</li>
+                    <li><strong>Slide 3:</strong> <span class="mindful">Mindful Check:</span> "Always include a Key! What does $4 | 2$ mean? Is it 42 or 4.2?"</li>
+                </ul>
+                <h4>Physical Sorting Activity (15 min):</h4>
+                <ul>
+                    <li>Distribute envelopes with 20 two-digit number cards.</li>
+                    <li>Groups physically arrange the cards on their desk into a stem-and-leaf shape.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers only work with single-digit stems (10s, 20s). Extension students use decimal values for stems.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PBL Phase 4 & 5 | Presenting & Evaluating Solutions</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice</div>
+            <div class="phase-right">
+                <h4>Worksheet Task (25 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 4.2: Converting their raw cafeteria data from Meeting 1 into a neat Tally & Frequency Table.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Check that the total frequency adds up to the total number of people asked.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Draw a quick Stem-and-Leaf diagram for these test scores: $12, 15, 22, 25, 28, 31$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3 (PjBL)
+    =========================================== -->
+    <h2>📅 Meeting 3: Intro to PjBL - Bar Charts & Pictograms (Subtopic 4.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 1 & 2 | Essential Question & Design Plan</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led Intro &<br>Group Brainstorm</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Essential Question (10 min):</span></h4>
+                <ul>
+                    <li>Show a news clipping with a highly misleading bar chart (e.g., y-axis starts at 50 to exaggerate a tiny difference).</li>
+                    <li>"How can we visually communicate data accurately and honestly? Welcome to your project: The Semesta Data Dashboard!"</li>
+                </ul>
+                <h4>Design Plan (10 min):</h4>
+                <ul>
+                    <li>Groups of 3 choose a research topic (e.g., Screentime hours, Sleep hours, Transport to school).</li>
+                    <li>Plan out what charts they will need to display their data.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 3 | Skill Building (Bar Charts & Pictograms)</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-3 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Rules of a Bar Chart: Equal gaps between bars, equal bar width, labeled axes, uniform scale.</li>
+                    <li><strong>Slide 2:</strong> Composite/Multiple Bar charts for comparing two groups (e.g., Boys vs Girls).</li>
+                    <li><strong>Slide 3:</strong> Pictograms. Must have a key! (e.g., 1 smiley face = 4 students. How to draw 2 students? Half a face).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: SEN students are provided with graph paper that has pre-drawn, scaled y-axes.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 4 | Monitor & Create</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Project Work</div>
+            <div class="phase-right">
+                <h4>Drafting Project Artifacts (25 min):</h4>
+                <ul>
+                    <li>Groups use sample data (or their M1 data) to draft one precise Bar Chart and one Pictogram on A3 paper using rulers and markers.</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Choosing an appropriate scale for the y-axis so the graph isn't too tiny or too huge.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>In a pictogram, if one Car icon represents 10 cars, how many icons do you draw to represent 25 cars? (Answer: 2.5 icons).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4 (PjBL)
+    =========================================== -->
+    <h2>📅 Meeting 4: Pie Charts & Project Execution (Subtopic 4.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 3 (Continued) | Skill Building (Pie Charts)</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Guided Practice</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Show an image of a pizza sliced completely unequally. "If 4 people share this, is it fair? Pie charts represent fractions of a whole 360° circle."</li>
+                </ul>
+                <h4>Direct Instruction — Slides 2-3 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formula: $\text{Angle} = \left(\frac{\text{Frequency}}{\text{Total Frequency}}\right) \times 360^\circ$.</li>
+                    <li><strong>Slide 3:</strong> Teacher demonstrates under a document camera how to use a protractor to draw the first angle, then rotate the protractor for the next slice.</li>
+                    <li><span class="mindful">Mindful Check:</span> "Always check that your calculated angles add up to 360° before you start drawing!"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 4 | Monitor Students & Project Progress</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Project Work</div>
+            <div class="phase-right">
+                <h4>Creating the Final Dashboard (40 min):</h4>
+                <ul>
+                    <li>Groups finalize their "Semesta Data Dashboard" poster.</li>
+                    <li>Must include: 1 Frequency Table, 1 Bar Chart/Pictogram, and 1 Pie Chart.</li>
+                    <li>Teacher circulates, checking protractor usage and scale accuracy.</li>
+                    <li><span class="char-dev">Collaboration:</span> Divide tasks (one calculates angles, one draws the circle, one writes labels).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students must compare two pie charts of different sample sizes, explaining why the radius might be drawn differently to represent total volume.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 4 | Formative Check</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual Task</div>
+            <div class="phase-right">
+                <h4><span class="exit-hl">🎟️ Exit Ticket (15 min):</span></h4>
+                <ul>
+                    <li>A survey of 40 people showed 10 like apples. Calculate the angle for the "Apple" sector in a pie chart.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5 (PjBL)
+    =========================================== -->
+    <h2>📅 Meeting 5: Project Presentation & Chapter Evaluation</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 5 | Assess the Outcome (Presentation)</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Student-led Gallery Walk</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Gallery Walk (25 min):</span></h4>
+                <ul>
+                    <li>Posters are displayed around the room.</li>
+                    <li>Students walk around and evaluate peers' graphs based on 3 criteria: Title/Labels present? Scale accurate? Data correctly represented?</li>
+                    <li>Teacher assesses communication and presentation artifacts.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>PjBL Phase 5 | Evaluate the Experience (Summative)</span>
+            <span>[55 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 4 Test (45 min):</h4>
+                <ul>
+                    <li>Remove visual aids. Distribute the Chapter 4 Evaluation.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under exam conditions.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: "What was the hardest part of creating your Data Dashboard: Calculating, Drawing, or Organizing? How did you overcome it?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Introduce dual/composite bar charts and back-to-back stem-and-leaf diagrams for comparing two datasets. Ask them to explain why pie charts are limited when comparing total population sizes.</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Provide pre-drawn axes for bar charts. Give protractors with clearly marked inner/outer circles and a step-by-step checklist for finding Pie Chart angles ($ \text{Fraction} \times 360 $).</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a visual glossary: <em>Discrete (Diskrit - bisa dihitung), Continuous (Kontinu - bisa diukur), Frequency (Frekuensi), Stem (Batang), Leaf (Daun)</em>.</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Use physical objects (blocks, stickers) to construct pictograms before drawing them. Reduce the dataset size (e.g., $n=10$ instead of $n=40$) to minimize arithmetic fatigue during angle calculations.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 4.1 & 4.2: Collecting & Organising Data</h3>
+        <p>1. Classify the following data as Qualitative, Quantitative Discrete, or Quantitative Continuous:<br>
+           a) The height of students in Grade 9.<br>
+           b) The number of cars in a parking lot.<br>
+           c) The color of backpacks in the classroom.
+        </p>
+        <p>2. Organize the following test scores into a grouped frequency table using classes 10-19, 20-29, 30-39:<br>
+           $15, 22, 18, 35, 29, 21, 14, 33, 27, 20, 19, 38$
+        </p>
+        <p>3. Create a Stem-and-Leaf diagram for the data in question 2. Remember to include a Key!</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 4.3: Drawing Charts</h3>
+        <p>1. A survey of 30 students asked about their transport to school: Bus (12), Car (8), Walk (6), Bicycle (4).<br>
+           a) Draw a Bar Chart for this data. Ensure axes are labeled correctly.<br>
+           b) Draw a Pictogram for this data where 1 icon represents 2 students.
+        </p>
+        <p>2. Calculate the angles needed to draw a pie chart for the transport data above. Show your calculations for each category.</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 4 Evaluation (Used in Meeting 5)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Total: 30 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Data Classification & Tables (10 Marks)</h3>
+        <p>1. Which of the following is an example of continuous data? (1 mark)<br>
+           A) Number of siblings &nbsp;&nbsp; B) Eye color &nbsp;&nbsp; C) Time taken to run 100m &nbsp;&nbsp; D) Shoe size
+        </p>
+        <p>2. A teacher records the marks of 15 students out of 50:<br>
+           $42, 35, 48, 29, 31, 45, 33, 40, 36, 41, 28, 39, 44, 37, 49$<br>
+           Draw an ordered Stem-and-Leaf diagram for these marks. You MUST include a Key. (4 marks)
+        </p>
+        <p>3. Based on your Stem-and-Leaf diagram, how many students scored 40 or above? (2 marks)</p>
+        <p>4. Give one advantage of using a Stem-and-Leaf diagram instead of a grouped frequency table. (3 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Chart Construction & Interpretation (20 Marks)</h3>
+        <p>5. The table below shows the favorite sports of 60 students.</p>
+        <table style="width: 50%; margin-bottom: 10px;">
+            <tr><th>Sport</th><th>Football</th><th>Basketball</th><th>Badminton</th><th>Swimming</th></tr>
+            <tr><td>Frequency</td><td>25</td><td>15</td><td>10</td><td>10</td></tr>
+        </table>
+        <p>a) Calculate the sector angle for "Football" in a pie chart. Show your working. (3 marks)</p>
+        <p>b) Calculate the sector angle for "Basketball". (2 marks)</p>
+        <p>c) Draw an accurate Pie Chart to display this data. Label each sector clearly. (5 marks)</p>
+        
+        <p>6. Look at the data from question 5.<br>
+           a) Draw a Bar Chart representing this data. Pay attention to your axis scale and gaps between bars. (6 marks)<br>
+           b) A student wants to draw a pictogram for this data using a "Ball" symbol. If one "Ball" represents 5 students, how many symbols are drawn for Badminton? (2 marks)
+        </p>
+        <p>7. <strong>Interpretation:</strong> Looking at your completed charts, write one conclusive sentence about the students' sport preferences that a school principal could use to make a decision about buying equipment. (2 marks)</p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

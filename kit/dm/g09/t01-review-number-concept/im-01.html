@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Number Sorting - SMP Semesta</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --bg: #f7fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg);
+            color: #2d3748;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 { margin: 0; color: var(--primary); }
+        .header p { margin: 5px 0; color: #4a5568; font-style: italic; }
+
+        .main-container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Card Pool Area */
+        .card-pool-container {
+            flex: 1;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .card-pool-container h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px;}
+
+        .card-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            overflow-y: auto;
+            min-height: 150px;
+            padding-bottom: 10px;
+        }
+
+        /* Individual Cards */
+        .card {
+            background-color: #fff;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .card:active { cursor: grabbing; transform: scale(1.05); }
+        .card.dragging { opacity: 0.5; }
+        
+        /* Prevent MathJax elements from interfering with drag events */
+        .card mjx-container { pointer-events: none; }
+
+        /* Sorting Zones */
+        .sorting-area {
+            flex: 2;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        .drop-zone {
+            background: white;
+            border: 3px dashed #a0aec0;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .drop-zone h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+            pointer-events: none;
+        }
+
+        .drop-zone.drag-over {
+            background-color: #ebf8ff;
+            border-color: var(--secondary);
+        }
+
+        .drop-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex: 1;
+        }
+
+        /* Write/Notes Area */
+        .scratchpad {
+            flex: 0.8;
+            background: #fff;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .scratchpad h3 { margin-top: 0; color: var(--primary); }
+        .scratchpad textarea {
+            flex: 1;
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1.1em;
+            font-family: monospace;
+            resize: none;
+            box-sizing: border-box;
+            background-image: linear-gradient(transparent, transparent 29px, #e2e8f0 30px);
+            background-size: 100% 30px;
+            line-height: 30px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover { background-color: var(--primary); }
+        #resetBtn { background-color: #e53e3e; }
+        #resetBtn:hover { background-color: #c53030; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Interactive Number Sorting</h1>
+        <p>Drag and drop the cards into the correct mathematical categories. Use the scratchpad to evaluate numbers like $\sqrt{16}$ or $2^3$!</p>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- Card Pool -->
+        <div class="card-pool-container">
+            <h3>Number Pool</h3>
+            <div class="card-pool" id="pool">
+                <!-- Cards will be generated here -->
+            </div>
+            <div class="controls">
+                <button id="resetBtn" onclick="resetCards()">Reset Activity</button>
+            </div>
+        </div>
+
+        <!-- Drop Zones -->
+        <div class="sorting-area">
+            <div class="drop-zone" id="natural">
+                <h4>Natural Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="integer">
+                <h4>Integers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="rational">
+                <h4>Rational Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="irrational">
+                <h4>Irrational Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="prime">
+                <h4>Prime Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="square">
+                <h4>Square Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+            <div class="drop-zone" id="cube">
+                <h4>Cube Numbers</h4>
+                <div class="drop-content"></div>
+            </div>
+        </div>
+
+        <!-- Student Scratchpad -->
+        <div class="scratchpad">
+            <h3>Student Scratchpad ✏️</h3>
+            <textarea placeholder="Write your notes, evaluations, or calculations here...&#10;e.g., &#10;sqrt(16) = 4, so it is an integer!&#10;2^3 = 8, so it is a cube!"></textarea>
+        </div>
+
+    </div>
+
+    <script>
+        // Array of number values containing MathJax code
+        const numbers = [
+            '$-4$', '$7$', '$16$', '$0$', '$25$', '$31$', '$-15$', '$\\frac{3}{4}$', 
+            '$\\pi$', '$\\sqrt{2}$', '$0.333\\dots$', '$8$', '$27$', '$1$', '$100$', 
+            '$\\sqrt{16}$', '$0.25$', '$-\\frac{1}{2}$', '$\\sqrt{5}$', '$2^3$', 
+            '$3^2$', '$1.414\\dots$', '$2$', '$-100$'
+        ];
+
+        const pool = document.getElementById('pool');
+        let draggedCard = null;
+
+        // Initialize Cards
+        function createCards() {
+            pool.innerHTML = ''; // Clear pool
+            numbers.forEach((num, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.setAttribute('draggable', 'true');
+                card.id = 'card-' + index;
+                card.innerHTML = num;
+                
+                // Drag Events
+                card.addEventListener('dragstart', () => {
+                    draggedCard = card;
+                    setTimeout(() => card.classList.add('dragging'), 0);
+                });
+
+                card.addEventListener('dragend', () => {
+                    draggedCard.classList.remove('dragging');
+                    draggedCard = null;
+                });
+
+                pool.appendChild(card);
+            });
+            // Re-render MathJax for newly created cards
+            if (window.MathJax) {
+                MathJax.typesetPromise([pool]);
+            }
+        }
+
+        // Setup Drop Zones
+        const dropZones = document.querySelectorAll('.drop-zone, .card-pool-container');
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Allows dropping
+                if(zone.classList.contains('drop-zone')) {
+                    zone.classList.add('drag-over');
+                }
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                
+                if (draggedCard) {
+                    if (zone.id === 'pool' || zone.classList.contains('card-pool-container')) {
+                        document.getElementById('pool').appendChild(draggedCard);
+                    } else {
+                        // Append to the drop-content div inside the drop-zone
+                        zone.querySelector('.drop-content').appendChild(draggedCard);
+                    }
+                }
+            });
+        });
+
+        // Reset Function
+        function resetCards() {
+            createCards();
+            // Clear all drop contents
+            document.querySelectorAll('.drop-content').forEach(content => {
+                content.innerHTML = '';
+            });
+            // Clear textarea
+            document.querySelector('textarea').value = '';
+        }
+
+        // Initialize on load
+        window.onload = createCards;
+
+    </script>
+</body>
+</html>

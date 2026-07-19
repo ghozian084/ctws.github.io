@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Number Concepts - SMP Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); }
+
+        /* 5E Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Review of Number Concepts</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 9 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 1. Review of number concepts</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> 5E (Engage, Explore, Explain, Elaborate, Evaluate)</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & <span class="rme">Culturally STEM</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C1.1, E1.1:</strong> Identify and use: natural numbers, integers, prime, square, cube numbers, common factors, common multiples, rational/irrational numbers, reciprocals.</li>
+        <li><strong>C1.3:</strong> Calculate with squares, square roots, cubes, cube roots, other powers and roots.</li>
+        <li><strong>C1.6, E1.6:</strong> Use four operations for calculations with integers, fractions and decimals, including negative numbers and correct ordering of operations.</li>
+        <li><strong>C1.9, E1.9:</strong> Round values to a specified degree of accuracy.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: Different Types of Numbers (Subtopic 1.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Prior Knowledge</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook — Slide 1 (4 min):</h4>
+                <ul>
+                    <li>Display image of a traditional Indonesian market (Pasar). Ask: "If you buy 3 apples, pay with a Rp 50,000 note, and get change, what kind of numbers are you using? Are they natural? Integers?"</li>
+                    <li>Students hold up mini whiteboards with their initial guesses.</li>
+                </ul>
+                <h4>Concept Introduction — Slide 2 (6 min):</h4>
+                <ul>
+                    <li>Screen shows a chaotic cloud of numbers: \( -5, 0, \pi, \frac{3}{4}, \sqrt{2} \).</li>
+                    <li>Ask: "Can we organize these into a system? What makes a number 'natural' versus 'unnatural'?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Collaborative Categorization</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Card Sorting Activity (15 min):</h4>
+                <ul>
+                    <li>Distribute physical 'Number Card Set 1.1' to groups of 4.</li>
+                    <li>Instruct groups to sort the cards into categories based on their own logic (no right or wrong yet).</li>
+                    <li><span class="char-dev">Collaboration:</span> Students must agree on category names and write them on sticky notes.</li>
+                </ul>
+                <h4>Gallery Walk (5 min):</h4>
+                <ul>
+                    <li><span class="joyful">Joyful Learning:</span> Groups rotate to view one other group's desk. Ask: "Did they group \( \pi \) differently than you? Why?"</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: SEN students receive Card Set 1.1A (fewer cards, visually distinct colors for negatives/fractions).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Concept Consolidation</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher-Facilitated Class Discussion (5 min):</h4>
+                <ul>
+                    <li>Invite 2 groups to share their logic. Scribe findings on the board.</li>
+                    <li>Bridge observation to concept: "The way you organized these matches how mathematicians classify the number system."</li>
+                </ul>
+                <h4>Direct Instruction — Slides 3–6 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 3:</strong> Natural vs Integers. Show Venn diagram (Natural inside Integers).</li>
+                    <li><strong>Slide 4:</strong> Rational Numbers. Define as \( a/b \). Ask: "Can 5 be written as a fraction? Show me on your whiteboards." (\( 5/1 \))</li>
+                    <li><strong>Slide 5:</strong> Irrational Numbers. Define as non-repeating, non-terminating. Examples: \( \pi, \sqrt{2}, \sqrt{3} \).</li>
+                    <li><strong>Slide 6:</strong> <span class="mindful">Mindful Check:</span> "True or False: Every integer is a rational number, but not every rational number is an integer." Discuss with elbow partner.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Refer to Slide 6B (Bilingual) for EAL students clarifying 'Terminating' vs 'Berhenti'.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 ELABORATE | Culturally STEM Application</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>(Student-paced)</div>
+            <div class="phase-right">
+                <h4>Context Setting — Slide 7 (5 min):</h4>
+                <ul>
+                    <li>Show dimensions of traditional Batik fabrics. Explain that weavers use precise rational measurements, but diagonal cuts often create irrational numbers.</li>
+                </ul>
+                <h4>Worksheet 1.1 Task (15 min):</h4>
+                <ul>
+                    <li>Students independently classify real-world measurements:
+                        1) Length \( 2.5 \)m (Rational/Irrational?), 2) Motif count of \( 150 \) (Natural/Integer?).</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students use the classroom wall chart to self-correct their logic before submitting.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: High achievers (Extension) must geometrically prove why the diagonal of a 1x1 Batik square is irrational (\( \sqrt{2} \)).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 EVALUATE | Formative Assessment</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual Task<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Exit Ticket — Slide 8 (10 min):</h4>
+                <ul>
+                    <li>Hand out specific colored sticky notes.</li>
+                    <li>Instruction: "Write one Rational number and one Irrational number. Place it on the door chart under the correct heading as you leave."</li>
+                    <li>Teacher stands by door to instantly check for misconceptions.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Multiples and Factors (Subtopic 1.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Physical Modeling</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Whole Class Activity<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook — Slide 1 (4 min):</h4>
+                <ul>
+                    <li>Play audio clip of a Javanese Gamelan. Ask: "The Gong strikes every 8 beats. The Kenong strikes every 6 beats. When do they strike together?"</li>
+                </ul>
+                <h4>Physical Simulation (6 min):</h4>
+                <ul>
+                    <li>Half the class claps every 3 seconds. The other half taps desks every 4 seconds.</li>
+                    <li>Ask: "At what second did we make a sound together? (12). This is a Common Multiple."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Visualizing Multiples</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Pair Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Number Grid Investigation (20 min):</h4>
+                <ul>
+                    <li>Distribute 100-number grid printouts to pairs.</li>
+                    <li>Instruct students to shade multiples of 6 in Yellow, and multiples of 8 in Blue.</li>
+                    <li>Ask: "What numbers turn Green (overlap)? What is the smallest Green number? Write it down."</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Ask pairs to define what the Green numbers represent without using the word "Multiple".</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: SEN/Low students use a 1-50 grid to avoid cognitive overload.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | HCF and LCM Definitions</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Define LCM (Lowest Common Multiple) using the grid data from E2.</li>
+                    <li><strong>Slide 3:</strong> Shift to Factors. Define as "numbers that fit perfectly into another."</li>
+                    <li><strong>Slide 4:</strong> Demonstrate listing factors systematically (Rainbow method) for 24 and 36.</li>
+                    <li><strong>Slide 5:</strong> Show the intersection of factors. Define HCF (Highest Common Factor).</li>
+                    <li><span class="mindful">Mindful Check:</span> "Why do we look for the *Lowest* common multiple but the *Highest* common factor? Discuss."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 ELABORATE | Contextual Problem Solving</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>(Student-paced)</div>
+            <div class="phase-right">
+                <h4>Application Task — Slide 6 (25 min):</h4>
+                <ul>
+                    <li><strong>Scenario:</strong> "You are preparing snack boxes for an Indonesian Independence Day event. You have 24 Kue Lemper and 36 Kue Pastel."</li>
+                    <li>Students answer in books: 1) List all factors. 2) Find HCF. 3) What does the HCF mean here? (Maximum identical boxes).</li>
+                    <li>Students complete Worksheet 1.2.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students receive a 3-variable problem (24 Lemper, 36 Pastel, 60 Risoles).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 EVALUATE | Exit Ticket</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Concept Check — Slide 7 (10 min):</h4>
+                <ul>
+                    <li>True or False: "The HCF of two numbers is always smaller than or equal to the LCM."</li>
+                    <li>Students must write their answer and a 1-sentence mathematical justification on their exit slip.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Prime Numbers & Prime Factorization (Subtopic 1.3)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Defining Primes</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Interactive Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook — Slide 1 (5 min):</h4>
+                <ul>
+                    <li>Display Borobudur Temple. "There are exactly 72 stupas. Let's break 72 down into its absolute smallest building blocks: Prime Numbers."</li>
+                </ul>
+                <h4>Whiteboard Check — Slide 2 (5 min):</h4>
+                <ul>
+                    <li>Show numbers: 1, 2, 9, 15, 23. Ask students to write the prime numbers on mini whiteboards and hold them up.</li>
+                    <li><span class="meaningful">Meaningful:</span> Pause to address '1'. Ask: "Why is 1 NOT prime based on the exact definition of having exactly TWO distinct factors?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Factor Trees</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Pair Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Factor Tree Activity (20 min):</h4>
+                <ul>
+                    <li>Teacher models a Factor Tree for 60 on the board. Circle prime branches in Red.</li>
+                    <li>Distribute A3 poster paper. Pairs construct factor trees for 72 and 100.</li>
+                    <li><span class="joyful">Joyful:</span> Race to see which pair can find the prime factorization of 210 the fastest.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Provide SEN students with a "Prime Number Bank" (2, 3, 5, 7, 11) printed at the top of their page.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Venn Diagram Method</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 3–6 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 3:</strong> Writing primes in Index Notation (e.g., \( 2^3 \times 3^2 \)).</li>
+                    <li><strong>Slide 4:</strong> Why use Prime Factorization? (To find HCF/LCM of massive numbers easily).</li>
+                    <li><strong>Slide 5:</strong> The Venn Diagram Method. Walk through placing prime factors of 120 and 84 into intersecting circles.</li>
+                    <li><strong>Slide 6:</strong> Rule: "Intersection = HCF. Multiply ALL numbers in circles = LCM."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 ELABORATE | Calculation Practice</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>(Student-paced)</div>
+            <div class="phase-right">
+                <h4>Worksheet Task (20 min):</h4>
+                <ul>
+                    <li>Write 150 as a product of prime factors in index form.</li>
+                    <li>Use the Venn diagram method to find HCF and LCM of 45 and 60.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students must check their LCM by doing standard listing if they finish early to prove the method works.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 EVALUATE | Exit Slip</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual Assessment</div>
+            <div class="phase-right">
+                <h4>Quick Calculation — Slide 7 (10 min):</h4>
+                <ul>
+                    <li>"Write down the prime factorization of 24 in index form."</li>
+                    <li>Collect at the door.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Powers (Squares, Cubes, and Indices) (Subtopic 1.4)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Misconception Check</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook — Slide 1 (5 min):</h4>
+                <ul>
+                    <li>Tell The Legend of Roro Jonggrang. "If Bandung Bondowoso started with 1 jin, and it doubled every hour (1, 2, 4, 8...), how do we write this quickly? Exponents!"</li>
+                </ul>
+                <h4>Misconception Check (5 min):</h4>
+                <ul>
+                    <li>Ask: "Is \( 3^2 \) the same as \( 3 \times 2 \)?" Show fingers (1 for Yes, 2 for No).</li>
+                    <li>Demonstrate on board: Draw a 3x3 grid (9) vs 3 groups of 2 (6).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Physical Modeling</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Cube Building Activity (20 min):</h4>
+                <ul>
+                    <li>Hand out physical linking cubes to groups.</li>
+                    <li>Instruct students to build physical representations of \( 2^2 \) (a square) and \( 2^3 \) (a cube).</li>
+                    <li><span class="char-dev">Creativity:</span> Ask groups to sketch what they think \( 2^4 \) looks like, realizing it moves beyond 3D space into abstract multiplication.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Index Notation Rules</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Vocabulary: Base vs Index/Power.</li>
+                    <li><strong>Slide 3:</strong> Calculate \( 5^3 \) step-by-step (\( 5 \times 5 \times 5 = 125 \)).</li>
+                    <li><strong>Slide 4:</strong> Negative Bases. Show \( (-2)^2 = 4 \), but \( (-2)^3 = -8 \).</li>
+                    <li><strong>Slide 5:</strong> Rule generation: Ask class, "What happens if the power is even vs odd on a negative base?"</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL refer to Slide 5B for terms 'Even/Genap' and 'Odd/Ganjil'.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 ELABORATE & E5 EVALUATE | Practice & Exit</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Assessment</div>
+            <div class="phase-right">
+                <h4>Application Task (20 min):</h4>
+                <ul>
+                    <li>Calculate \( (-3)^4 \) and explain why it is positive.</li>
+                    <li>Context: "A square rice plot has a side length of 15m. Find the area using powers."</li>
+                </ul>
+                <h4>Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Calculate \( (-5)^2 + 2^3 \). Show workings.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Roots (Square Roots, Cube Roots) (Subtopic 1.4)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & Inverse Exploration</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4>Hook & Explore — Slides 1-2 (25 min):</h4>
+                <ul>
+                    <li>"Yesterday we built squares. Today we are archaeologists. We found a square Kraton floor with 400 tiles. How many tiles on one side? We must 'un-build' it."</li>
+                    <li>Write \( \sqrt{36} \) and \( \sqrt[3]{27} \) on the board. Pairs discuss trial-and-error methods to solve.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Root Calculation Methods</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 3-6 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 3:</strong> Roots as the inverse of powers (Visual: Tree growing vs Roots).</li>
+                    <li><strong>Slide 4:</strong> Demonstrate using Prime Factorization to find exact roots of large numbers (e.g., \( \sqrt{144} \)).</li>
+                    <li><strong>Slide 5:</strong> Rational roots vs Surds (\( \sqrt{20} \)).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers use their pre-made Prime Factor trees from M3 to find the roots.</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Calculate \( \sqrt[3]{-64} \). (Class discussion: Can cube roots be negative? Yes).</li>
+                    <li>Context: A water tank is a perfect cube with volume 1000 \( m^3 \). Find edge length.</li>
+                    <li><strong>Exit Ticket:</strong> Which is larger: \( \sqrt{81} \) or \( \sqrt[3]{125} \)?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 6
+    =========================================== -->
+    <h2>📅 Meeting 6: Directed Numbers - Addition & Subtraction (Subtopic 1.5)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Physical Number Line</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Active Learning<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook & Action — Slide 1 (10 min):</h4>
+                <ul>
+                    <li>Display thermometer showing Puncak Jaya Wijaya at \( -5^\circ\text{C} \).</li>
+                    <li>Ask students to stand up. "Take two steps forward (+2). Now take 5 steps backward (-5). Where are you relative to the start?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Counter Sliding</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Individual<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Number Line Task (15 min):</h4>
+                <ul>
+                    <li>Write \( 3 - 8 \) and \( -4 - 5 \) on the board.</li>
+                    <li>Students use physical number lines on their desks, sliding a counter left and right to find the answers visually.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Double Sign Rules</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Explain rule for double signs: \( 5 - (-3) = 5 + 3 \).</li>
+                    <li><strong>Slide 3:</strong> Metaphor: "Taking away a cold breeze makes the room warmer."</li>
+                    <li><strong>Slide 4:</strong> Guide 3 examples on the board, asking students to shout out the direction to move on the number line.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Exit</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Calculate: \( -12 + 7 \) ; \( 8 - 15 \) ; \( -6 - (-9) \).</li>
+                    <li><strong>Exit Ticket:</strong> A scuba diver is at \( -15 \)m. They ascend \( 6 \)m. What is their new depth?</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Let SEN students continue using the physical sliding counter for the worksheet.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 7
+    =========================================== -->
+    <h2>📅 Meeting 7: Directed Numbers - Mul/Div (Subtopics 1.5)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & Pattern Discovery</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4>Hook & Explore — Slides 1-2 (25 min):</h4>
+                <ul>
+                    <li>"If you have a debt (-10,000) and the bank 'forgives' (takes away) 3 debts, what happens? Let's decode multiplying negatives!"</li>
+                    <li>Show pattern: \( 3 \times -2 = -6 \), \( 2 \times -2 = -4 \), \( 1 \times -2 = -2 \), \( 0 \times -2 = 0 \).</li>
+                    <li>Pairs complete the pattern: What is \( -1 \times -2 = ? \) (Must be +2 based on pattern).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing Rules</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 3-5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 3:</strong> Formalize the rules: Same signs multiply/divide to positive. Different signs = negative.</li>
+                    <li><strong>Slide 4:</strong> Demonstrate calculating \( -5 \times (3 - 8) \) combining yesterday's skill with today's.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Display a "Sign Rules Grid" permanently on the screen during practice.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Calculate: \( -6 \times -4 \) ; \( \frac{-24}{3} \) ; \( -4 \times 5 + 12 \).</li>
+                    <li><strong>Exit Ticket:</strong> Calculate \( \frac{-18}{-6} - 5 \).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 8
+    =========================================== -->
+    <h2>📅 Meeting 8: Order of Operations (Subtopic 1.6)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | The Vault Code</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Debate<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Teacher Hook — Slide 1 (10 min):</h4>
+                <ul>
+                    <li>Write \( 50 - 2 \times 15 + 10 \) on the board WITHOUT brackets.</li>
+                    <li>Ask half the class to calculate left-to-right, and the other half to use BODMAS. Compare the drastically different results (730 vs 30). "BODMAS is our safecracking manual."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Target 24</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Index Card Activity (20 min):</h4>
+                <ul>
+                    <li>Hand out index cards with numbers and operation signs.</li>
+                    <li>Students arrange them to create an expression that equals exactly 24, using at least one bracket.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Complex Step-by-Step</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Complex expression: \( \frac{3 \times (12 - 4)^2}{2} \).</li>
+                    <li><strong>Slide 3:</strong> Model step-by-step resolution. Highlight the part being evaluated in each step with a different color ink.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students must insert brackets into \( 4 + 3 \times 2 - 1 = 13 \) to make it true.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Spot the Error</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Evaluate: \( 15 - 3 \times (8 \div 2) \) ; \( 2^3 + \frac{20 - 5}{3} \).</li>
+                    <li><strong>Exit Ticket:</strong> Spot the Error. Provide a solved BODMAS equation with one deliberate mistake. Students circle the error and correct it.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 9
+    =========================================== -->
+    <h2>📅 Meeting 9: Rounding & Chapter Evaluation (Subtopic 1.7)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Engage & Explain Rounding</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Hook & Explain — Slides 1-3 (25 min):</h4>
+                <ul>
+                    <li>"Sabang to Merauke is approx 5,245.83 km. Do we need exact decimal meters when planning a flight budget?"</li>
+                    <li>Demonstrate rounding to Decimal Places (d.p.). "Look at the right neighbor. If it's 5 or more, round up!"</li>
+                    <li>Explain Significant Figures (s.f.), emphasizing that leading zeros do not count.</li>
+                    <li>Guided practice: Round \( 3.14159 \) to 2 d.p. and \( 0.0456 \) to 2 s.f.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Chapter Evaluation & Closure</span>
+            <span>[55 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 1 Test (45 min):</h4>
+                <ul>
+                    <li>Remove visual aids. Distribute the Chapter 1 Evaluation covering all objectives.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under exam conditions.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: On a slip of paper, rate confidence for Chapter 1 on a scale of 1-5, and write one specific skill mastered.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 1: Number Types, Factors & Primes</h3>
+        <p>1. Categorize the following numbers into Integers, Primes, and Squares: \( -4, 7, 16, 0, 25, 31 \)</p>
+        <p>2. Find the Highest Common Factor (HCF) and Lowest Common Multiple (LCM) of 36 and 48 using prime factorization.</p>
+        <p>3. Write down the reciprocal of \( \frac{3}{5} \) and the reciprocal of \( 7 \).</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 2: Powers and Roots</h3>
+        <p>1. Evaluate the following: a) \( 4^3 \) &nbsp; b) \( (-3)^2 \) &nbsp; c) \( \sqrt{121} \) &nbsp; d) \( \sqrt[3]{-27} \)</p>
+        <p>2. A square garden has an area of \( 225 \text{ m}^2 \). Find the length of one side.</p>
+        <p>3. Simplify the following expression: \( 2^4 + \sqrt{64} - 3^2 \).</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3: Directed Numbers & Order of Operations</h3>
+        <p>1. Calculate the following: a) \( -8 + 15 \) &nbsp; b) \( -4 - (-12) \) &nbsp; c) \( -6 \times -4 \)</p>
+        <p>2. Use the correct order of operations (BODMAS) to solve: \( \frac{24}{2^3} + (5 - 8)^2 \)</p>
+        <p>3. Insert brackets to make the following statement true: \( 5 + 2 \times 4 - 1 = 21 \)</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 1 Evaluation (Used in Meeting 9)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Total: 30 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Knowledge & Understanding (10 Marks)</h3>
+        <p>1. Which of the following is an irrational number? (1 mark)<br>A) \( 0.333... \) &nbsp;&nbsp; B) \( \sqrt{16} \) &nbsp;&nbsp; C) \( \pi \) &nbsp;&nbsp; D) \( -5 \)</p>
+        <p>2. Round the number \( 0.05682 \) to: a) 2 decimal places (2 marks) b) 2 significant figures (2 marks)</p>
+        <p>3. State whether True or False. If false, correct it. "The HCF of 12 and 18 is 36." (3 marks)</p>
+        <p>4. Write the reciprocal of \( -4 \). (2 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Application & Calculation (20 Marks)</h3>
+        <p>5. Calculate the exact value of: \( \sqrt[3]{125} \times 2^3 - \sqrt{81} \) (5 marks)</p>
+        <p>6. Evaluate using correct order of operations: \( \frac{3 \times (12 - -4)}{-2^2} \) (5 marks)</p>
+        <p>7. <strong>STEM Context:</strong> A marine biologist is tracking a submarine. It starts at sea level (\( 0 \text{ m} \)), dives down \( 450 \text{ m} \), then rises \( 120 \text{ m} \), and finally dives another \( 300 \text{ m} \).<br>
+        a) Write a mathematical expression using directed numbers to represent this journey. (3 marks)<br>
+        b) What is the final depth of the submarine? (2 marks)</p>
+        <p>8. A box holds a maximum of 14 kg. You have metal blocks that weigh \( 3^2 \) kg and \( 2^2 \) kg. Can you fit one of each into the box? Show your mathematical reasoning. (5 marks)</p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

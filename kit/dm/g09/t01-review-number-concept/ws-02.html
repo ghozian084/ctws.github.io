@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hands-On Worksheet - HCF & LCM</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --guide: #f6e05e;
+            --action: #38a169;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.2;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; }
+        @media print {
+            body { padding: 0; font-size: 11pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+
+        /* Worksheet Header */
+        .ws-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ws-title { font-size: 1.4em; font-weight: bold; color: var(--primary); }
+        .student-info { display: flex; flex-direction: column; gap: 8px; width: 300px;}
+        .student-info div { display: flex; justify-content: space-between; border-bottom: 1px dotted #718096; }
+
+        /* Guide & Action Boxes */
+        .guide-box {
+            background-color: #fffff0;
+            border-left: 5px solid #ecc94b;
+            padding: 2px;
+            margin-bottom: 2px;
+            border-radius: 4px;
+        }
+        .action-box {
+            background-color: #f0fff4;
+            border-left: 5px solid var(--action);
+            padding: 2px;
+            margin-bottom: 2px;
+            border-radius: 4px;
+        }
+        .guide-title { font-weight: bold; color: #b7791f; margin-bottom: 5px; display: block;}
+        .action-title { font-weight: bold; color: #276749; margin-bottom: 5px; display: block;}
+
+        /* Questions Layout */
+        .question-block { margin-bottom: 5px; }
+        .q-number { font-weight: bold; margin-right: 5px; }
+        
+        .fill-blank {
+            display: inline-block;
+            min-width: 40px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+        .work-box {
+            border: 1px dashed #cbd5e0;
+            min-height: 50px;
+            margin-top: 10px;
+            padding: 10px;
+            color: #a0aec0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        /* Number Line Graphic */
+        .number-line {
+            display: flex;
+            justify-content: space-between;
+            border-top: 2px solid #333;
+            margin: 30px 0;
+            padding-top: 10px;
+            position: relative;
+        }
+        .tick {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tick::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            width: 2px;
+            height: 10px;
+            background-color: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Worksheet</button>
+
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Hands-On Worksheet: Multiples & Factors<br><span style="font-size: 0.6em; color: #718096;">Grade 9 - Number Concepts</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Group:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <!-- ACTIVITY 1: HCF -->
+        <h2 style="color: var(--primary); border-bottom: 1px solid #ccc;">Part 1: The Candy Bag Factory (HCF)</h2>
+        
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action: Factory Packing</span>
+            <p>You are a factory worker. Your goal is to make <strong>identical</strong> snack packs using the candies provided. <br>
+            <strong>Rules:</strong> Every cup must have the exact same number of Red candies and Green candies. There must be ZERO candies left over.</p>
+        </div>
+
+        <div class="question-block">
+            <p><strong>Your Inventory:</strong> 24 Red Candies and 36 Green Candies.</p>
+            <span class="q-number">1.</span> Experiment with your cups and candies. Try to divide them equally into 2 cups. <br>
+            Does it work? (Yes / No). If yes, each cup gets <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span> Red and <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span> Green.
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Now, keep adding cups. Physically rearrange the candies to find the <strong>MAXIMUM</strong> number of identical cups you can make without any leftovers.
+            <p>The maximum number of identical cups we made is: <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> cups.</p>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">🧠 Mindful Math Connection</span>
+            <p>What you just did physically is called finding the <strong>Highest Common Factor (HCF)</strong>. The "cups" represent the factors (numbers that divide exactly into your total). You found the <em>highest</em> number that fits into both 24 and 36!</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> Let's prove it mathematically. List all the factors (cups you could possibly use) for each candy color:
+            <p>Factors of 24 (Red): 1, 2, 3, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, 6, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, 12, 24</p>
+            <p>Factors of 36 (Green): 1, 2, 3, 4, 6, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, 12, 18, 36</p>
+            <p>Circle the biggest matching number in both lists. Does it match the number of cups you physically made? <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <br>
+
+        <!-- ACTIVITY 2: LCM -->
+        <h2 style="color: var(--primary); border-bottom: 1px solid #ccc;">Part 2: The Stepping Stone Jump (LCM)</h2>
+
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action: Frog vs Kangaroo</span>
+            <p>Look at the number line on the floor. <br>
+            <strong>Student A (Frog):</strong> Jump forward 3 tiles at a time. Leave a coin where you land.<br>
+            <strong>Student B (Kangaroo):</strong> Jump forward 4 tiles at a time. Leave a candy where you land.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">4.</span> Let's track the jumps on paper. Write down the numbers where you landed (this is called listing <strong>Multiples</strong>).
+            <p>Frog's Landing Spots (Multiples of 3): 3, 6, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, 18</p>
+            <p>Kangaroo's Landing Spots (Multiples of 4): 4, 8, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>, 20, 24</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">5.</span> Walk down your floor number line. What is the number on the <strong>first tile</strong> that has BOTH a coin and a candy on it?
+            <p>The first overlapping tile is number: <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">🧠 Mindful Math Connection</span>
+            <p>When you jump repeatedly, you are creating <strong>Multiples</strong>. The first tile where you both landed together is the <strong>Lowest Common Multiple (LCM)</strong>. It is the smallest number that is a multiple of both 3 and 4.</p>
+        </div>
+
+        <br>
+
+        <!-- Generalization -->
+        <h2 style="color: var(--primary); border-bottom: 1px solid #ccc;">Part 3: Generalization (No Props Needed)</h2>
+
+        <div class="question-block no-break">
+            <span class="q-number">6.</span> Now apply what you learned without the candies or the jumping! 
+            <p><strong>a)</strong> Find the <strong>HCF</strong> of 16 and 40. (Think: What is the maximum number of identical cups I could make?)</p>
+            <div class="work-box">
+                List factors of 16:<br><br>
+                List factors of 40:<br><br>
+                HCF =
+            </div>
+            
+            <p><strong>b)</strong> Find the <strong>LCM</strong> of 5 and 7. (Think: If I jump by 5s and 7s, where do I meet?)</p>
+            <div class="work-box">
+                List multiples of 5:<br><br>
+                List multiples of 7:<br><br>
+                LCM = 
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

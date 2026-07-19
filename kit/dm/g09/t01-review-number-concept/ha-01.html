@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Media - Number Concepts</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; margin-bottom: 20mm;}
+        @media print {
+            body { padding: 0; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            .instructions { display: none; }
+            
+            #print-footer {
+                display: block !important;
+                position: fixed; bottom: 0; left: 0; width: 100%;
+                text-align: center; font-size: 9pt; font-style: italic; color: #555;
+            }
+        }
+        #print-footer { display: none; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 { color: var(--primary); margin: 0; font-size: 1.8em; }
+        .header p { margin: 5px 0; font-size: 1.1em; color: #4a5568; }
+        
+        .instructions {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Card Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Individual Card Design */
+        .card {
+            border: 2px dashed #718096;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2em;
+            font-weight: bold;
+            position: relative;
+            background-color: #fff;
+            page-break-inside: avoid;
+        }
+        
+        .card .scissors {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            font-size: 0.5em;
+            color: #718096;
+            background: white;
+        }
+
+        .card.op-card {
+            background-color: #f7fafc;
+            color: var(--primary);
+            font-size: 2.5em;
+        }
+
+        /* Set Titles */
+        h2 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-top: 30px;
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Cards</button>
+
+    <div class="header">
+        <h1>Printable Media & Cut-Outs</h1>
+        <p>Grade 9: Review of Number Concepts | SMP Semesta</p>
+    </div>
+
+    <div class="instructions">
+        <strong>Teacher Instructions:</strong> Print these pages on A4 paper (preferably cardstock). Cut along the dashed lines. Keep sets in labeled envelopes for group activities.
+    </div>
+
+    <!-- SET 1: Number Sorting Cards (Meeting 1) -->
+    <h2>✂️ Set 1: Number Sorting Cards (Use in Meeting 1)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>Objective: Students sort into Natural, Integer, Rational, Irrational, Primes, Squares, and Cubes.</em></p>
+    
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> $-4$</div>
+        <div class="card"><span class="scissors">✂️</span> $7$</div>
+        <div class="card"><span class="scissors">✂️</span> $16$</div>
+        <div class="card"><span class="scissors">✂️</span> $0$</div>
+        
+        <div class="card"><span class="scissors">✂️</span> $25$</div>
+        <div class="card"><span class="scissors">✂️</span> $31$</div>
+        <div class="card"><span class="scissors">✂️</span> $-15$</div>
+        <div class="card"><span class="scissors">✂️</span> $\frac{3}{4}$</div>
+        
+        <div class="card"><span class="scissors">✂️</span> $\pi$</div>
+        <div class="card"><span class="scissors">✂️</span> $\sqrt{2}$</div>
+        <div class="card"><span class="scissors">✂️</span> $0.333\dots$</div>
+        <div class="card"><span class="scissors">✂️</span> $8$</div>
+        
+        <div class="card"><span class="scissors">✂️</span> $27$</div>
+        <div class="card"><span class="scissors">✂️</span> $1$</div>
+        <div class="card"><span class="scissors">✂️</span> $100$</div>
+        <div class="card"><span class="scissors">✂️</span> $\sqrt{16}$</div>
+        
+        <div class="card"><span class="scissors">✂️</span> $0.25$</div>
+        <div class="card"><span class="scissors">✂️</span> $-\frac{1}{2}$</div>
+        <div class="card"><span class="scissors">✂️</span> $\sqrt{5}$</div>
+        <div class="card"><span class="scissors">✂️</span> $2^3$</div>
+        
+        <div class="card"><span class="scissors">✂️</span> $3^2$</div>
+        <div class="card"><span class="scissors">✂️</span> $1.414\dots$</div>
+        <div class="card"><span class="scissors">✂️</span> $2$</div>
+        <div class="card"><span class="scissors">✂️</span> $-100$</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SET 2: Target 24 Game Cards (Meeting 8) -->
+    <h2>✂️ Set 2: "Target 24" BODMAS Cards (Use in Meeting 8)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>Objective: Groups use numbers and operators to create an expression equaling 24.</em></p>
+
+    <!-- Number Cards -->
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> $2$</div>
+        <div class="card"><span class="scissors">✂️</span> $3$</div>
+        <div class="card"><span class="scissors">✂️</span> $4$</div>
+        <div class="card"><span class="scissors">✂️</span> $5$</div>
+
+        <div class="card"><span class="scissors">✂️</span> $6$</div>
+        <div class="card"><span class="scissors">✂️</span> $8$</div>
+        <div class="card"><span class="scissors">✂️</span> $10$</div>
+        <div class="card"><span class="scissors">✂️</span> $12$</div>
+
+        <div class="card"><span class="scissors">✂️</span> $15$</div>
+        <div class="card"><span class="scissors">✂️</span> $18$</div>
+        <div class="card"><span class="scissors">✂️</span> $20$</div>
+        <div class="card"><span class="scissors">✂️</span> $1$</div>
+    </div>
+
+    <!-- Operator Cards -->
+    <div class="card-grid">
+        <div class="card op-card"><span class="scissors">✂️</span> $+$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $+$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $-$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $-$</div>
+
+        <div class="card op-card"><span class="scissors">✂️</span> $\times$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $\times$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $\div$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $\div$</div>
+
+        <div class="card op-card"><span class="scissors">✂️</span> $($</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $)$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $($</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $)$</div>
+        
+        <div class="card op-card"><span class="scissors">✂️</span> $=$</div>
+        <div class="card op-card" style="background-color: #fefcbf; border-color: #d69e2e;"><span class="scissors">✂️</span> $24$</div>
+        <div class="card op-card" style="background-color: #fefcbf; border-color: #d69e2e;"><span class="scissors">✂️</span> $24$</div>
+        <div class="card op-card"><span class="scissors">✂️</span> $=$</div>
+    </div>
+
+    <div id="print-footer">
+        Made with ❤️ by Mr Ghozi
+    </div>
+
+</body>
+</html>

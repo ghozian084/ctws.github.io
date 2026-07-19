@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Lines, Angles & Shapes - SMP Semesta</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* 5E Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Lines, Angles and Shapes</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 6 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 3. Lines, angles and shapes</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> 5E, Hands-on Activity</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & <span class="rme">Culturally STEM</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated, Collaboration</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C4.6, E4.6:</strong> Calculate unknown angles using geometrical properties. Angle sum of triangle = 180°. Angle sum of quadrilateral = 360°. Know and use properties of regular polygons.</li>
+        <li><strong>C4.1, E4.1:</strong> Use and interpret geometrical terms like line, parallel, perpendicular. Interpret vocabulary of triangles, special quadrilaterals, polygons, and circles.</li>
+        <li><strong>C4.7, E4.7:</strong> Calculate unknown angles using circle theorems.</li>
+        <li><strong>C4.2, E4.2:</strong> Measure and draw lines and angles; Construct a triangle given the lengths of all sides.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: Lines, Angles, and Transversals (Subtopic 3.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Contextual Hook</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Display a piece of traditional Indonesian *Kain Tenun Lurik*. Ask: "What geometric patterns do you notice here?" (Straight lines running parallel and perpendicular).</li>
+                    <li><span class="meaningful">Meaningful:</span> Explain that weavers use a loom to keep threads perfectly parallel. What happens if a thread crosses them diagonally? (A transversal is formed).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Hands-On Activity</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Washi Tape Desks (25 min):</h4>
+                <ul>
+                    <li>Distribute washi/masking tape and protractors to groups of 3.</li>
+                    <li>Instruct students to tape two parallel lines across their desk, and one transversal line cutting through them.</li>
+                    <li>Students must measure all 8 angles created.</li>
+                    <li><span class="joyful">Joyful & Mindful:</span> Ask groups to color-code angles that are equal. They will discover the relationships visually.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing Geometric Rules</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Introduce vocabulary: Parallel, Perpendicular, Transversal.</li>
+                    <li><strong>Slide 3:</strong> Formalize the patterns from the tape activity: Corresponding Angles (F shape).</li>
+                    <li><strong>Slide 4:</strong> Alternate Interior Angles (Z shape).</li>
+                    <li><strong>Slide 5:</strong> Co-interior Angles (C shape) summing to 180°.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Use tracing paper for SEN/Low students. Have them trace an angle and slide it down the transversal to prove Corresponding angles match.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Practice & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 3.1 solving unknown angles involving parallel lines.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Draw two parallel lines and a transversal. If one acute angle is 40°, find the alternate interior angle and state its value.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: The Magic of Triangles (Subtopic 3.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Architecture Hook</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Interactive Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show images of *Rumah Gadang* (Minangkabau) roofs. "Why are roofs built as triangles? Why not squares?" (Triangles are rigid and strong).</li>
+                    <li>Discuss structural stability. Introduce triangle classification by sides (Equilateral, Isosceles, Scalene).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Hands-On Proof</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Paper Tearing Proof (20 min):</h4>
+                <ul>
+                    <li>Distribute colored paper and scissors. Students cut out a random large triangle (scalene).</li>
+                    <li>Instruct them to tear off all three corners (vertices).</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Ask: "Can you arrange these three corners to form a straight line?"</li>
+                    <li>Students tape the corners onto a straight line in their notebooks, physically proving that the interior angles sum to 180°.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Angles and Vocabulary</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formalize the formula: Sum of interior angles = 180°.</li>
+                    <li><strong>Slide 3:</strong> Isosceles properties (base angles are equal) & Equilateral properties (all angles 60°).</li>
+                    <li><strong>Slide 4:</strong> Exterior angle theorem: Exterior angle = sum of two opposite interior angles.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL students map visual symbols (tick marks on sides, arcs on angles) to the English vocabulary words.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Worksheet 3.2. Includes finding missing angles in isosceles triangles combined with parallel lines.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>In an isosceles triangle, the top angle is 50°. What are the sizes of the two base angles?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Special Quadrilaterals (Subtopic 3.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Cultural Craft</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Discussion<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show a traditional Indonesian *Layang-layang* (Kite). "How do we ensure the kite flies perfectly straight?"</li>
+                    <li>Discuss symmetry. Introduce the mathematical definition of a Kite (two pairs of adjacent equal sides).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Straw Construction</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Building Quadrilaterals (20 min):</h4>
+                <ul>
+                    <li>Distribute plastic straws (cut to various lengths) and string/pipe cleaners.</li>
+                    <li>Ask groups to build: 1) A square, 2) A rectangle.</li>
+                    <li><span class="joyful">Joyful & Mindful:</span> Ask them to "squash" their square. What shape does it become? (Rhombus). Squash the rectangle? (Parallelogram).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Quadrilateral Hierarchy</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–5 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Properties of Parallelograms (opposite sides parallel/equal, opposite angles equal, diagonals bisect).</li>
+                    <li><strong>Slide 3:</strong> Properties of Rhombuses, Trapeziums, and Kites.</li>
+                    <li><strong>Slide 4:</strong> Why do the interior angles of ANY quadrilateral sum to 360°? (Show drawing a diagonal splits it into two 180° triangles).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Provide a 'Properties Checklist' matrix where students tick off features (e.g., Diagonals cross at 90°) for each shape.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Practice & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 3.3. Students solve for missing angles using properties of parallelograms and kites.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Name a quadrilateral that has diagonals intersecting at 90°, but is NOT a square. (Rhombus or Kite).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Polygons (Subtopic 3.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Real-World Geometry</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Visual Hook<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Show images of hexagonal paving blocks from Ungaran square, and honeycomb patterns.</li>
+                    <li>Ask: "Why do bees and engineers love hexagons? Why not pentagons?" (Hexagons tessellate perfectly because their angles fit around a point).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Deriving the Formula</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Triangle Splitting (20 min):</h4>
+                <ul>
+                    <li>Give groups drawings of a Pentagon, Hexagon, and Heptagon.</li>
+                    <li>Instruct them to pick ONE vertex and draw diagonals to split the shape into triangles.</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Fill in a table: Sides vs Triangles formed. Deduce the pattern: Number of triangles = $n - 2$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Interior & Exterior Angles</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formalize the Interior Angle Sum formula: $(n - 2) \times 180^\circ$.</li>
+                    <li><strong>Slide 3:</strong> Define "Regular Polygon" (all sides/angles equal). How to find ONE interior angle.</li>
+                    <li><strong>Slide 4:</strong> Exterior Angles. Show the "walking around the polygon" animation to prove Exterior Angles ALWAYS sum to 360°.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students reverse engineer the formula (e.g., "A regular polygon has an interior angle of 144°. How many sides?").</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Exit</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 3.4 computing interior/exterior angles of various regular polygons.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>What is the size of one exterior angle of a regular octagon (8 sides)?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Circles & Basic Circle Theorems (Subtopic 3.5)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & Thales' Discovery</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Hands-On</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook (5 min):</span></h4>
+                <ul>
+                    <li>Show an image of a Gamelan Gong. Discuss the anatomy (center point, outer rim). Introduce vocabulary: Radius, Diameter, Chord, Arc, Sector, Tangent.</li>
+                </ul>
+                <h4>Explore — Thales's Theorem (20 min):</h4>
+                <ul>
+                    <li>Distribute circular cut-outs. Students fold them exactly in half to find the diameter crease.</li>
+                    <li><span class="joyful">Joyful Discovery:</span> Pick any point on the curve, draw lines to the ends of the diameter. Measure the angle. It will ALWAYS be 90°!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Introductory Circle Theorems</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Recap vocabulary and Angle in a Semicircle = 90°.</li>
+                    <li><strong>Slide 2:</strong> Angle at the center is TWICE the angle at the circumference (subtended by the same arc).</li>
+                    <li><strong>Slide 3:</strong> Angles subtended by the same arc at the circumference are equal ("Bowtie" shape).</li>
+                    <li><strong>Slide 4:</strong> Cyclic Quadrilaterals (opposite angles sum to 180°).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers focus only on the Semicircle=90° and Bowtie rules. Give color-coded diagrams where arcs are highlighted.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 3.5. Finding missing angles using the three basic circle theorems.</li>
+                    <li><strong>Exit Ticket:</strong> Draw a cyclic quadrilateral. If one angle is 100°, what is the angle directly opposite to it?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MEETING 6
+    =========================================== -->
+    <h2>📅 Meeting 6: Constructions & Chapter Evaluation (Subtopic 3.6)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Engineering Blueprints</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Hands-On Tool Use</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (20 min):</span></h4>
+                <ul>
+                    <li>"Before CAD software, architects used a compass and straightedge to ensure perfect proportions."</li>
+                    <li>Teacher demonstrates how to construct a triangle given 3 side lengths (SSS) using a compass.</li>
+                    <li>Students practice constructing a triangle with sides 5cm, 6cm, and 8cm in their books.</li>
+                    <li><span class="mindful">Mindful:</span> Emphasize NOT erasing construction arcs—they are proof of the method!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Summative Chapter Evaluation</span>
+            <span>[60 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 3 Test (50 min):</h4>
+                <ul>
+                    <li>Distribute the Chapter 3 Evaluation covering lines, angles, polygons, and circle theorems.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students manage their time across the sections.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: "Which topic (Lines, Polygons, or Circles) did you find most challenging? How will you review it?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Introduce algebraic expressions into geometry problems (e.g., angles in a triangle given as $2x$, $x+10$, and $3x-40$. Solve for $x$). Provide complex multi-step circle theorem puzzles requiring justification for each step.</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Provide tracing paper for angle translation on parallel lines. Supply a visual "cheat sheet" containing all polygon formulas and circle theorem diagrams. Guide step-by-step for construction tasks.</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a highly visual, bilingual glossary: <em>Parallel (Sejajar), Perpendicular (Tegak lurus), Isosceles (Sama kaki), Equilateral (Sama sisi), Chord (Tali busur)</em>. Emphasize matching the English word to the visual symbol (like arrows for parallel).</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Use physical manipulatives continuously (washi tape, paper tearing, plastic straws) to ground abstract geometrical concepts in tactile reality. Use large, uncluttered diagrams on worksheets.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3.1 & 3.2: Lines and Triangles</h3>
+        <p>1. Two parallel lines are intersected by a transversal. If one angle is 110°, find the value of its corresponding angle and its alternate interior angle.</p>
+        <p>2. A triangle has angles $50^\circ$, $x$, and $2x$. Calculate the value of $x$.</p>
+        <p>3. An isosceles triangle has a vertex angle of $40^\circ$. What is the measure of the base angles?</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3.3 & 3.4: Quadrilaterals & Polygons</h3>
+        <p>1. In a parallelogram ABCD, angle A = 75°. State the size of angle B and angle C.</p>
+        <p>2. Calculate the sum of the interior angles of a Decagon (10 sides).</p>
+        <p>3. A regular polygon has an exterior angle of 24°. How many sides does the polygon have?</p>
+        <p>4. What is the size of ONE interior angle of a regular hexagon?</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3.5: Circle Theorems</h3>
+        <p>1. A triangle is drawn inside a circle where one side is the diameter. What is the angle opposite the diameter?</p>
+        <p>2. The angle subtended by an arc at the center of a circle is 130°. What is the angle subtended by the same arc at the circumference?</p>
+        <p>3. ABCD is a cyclic quadrilateral. If angle A is 85°, calculate angle C (the opposite angle).</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 3 Evaluation (Used in Meeting 6)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps. You must state the geometric reason for your calculations where asked. Total: 35 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Vocabulary & Basic Angles (10 Marks)</h3>
+        <p>1. Which of the following quadrilaterals has exactly ONE pair of parallel sides? (1 mark)<br>
+           A) Parallelogram &nbsp;&nbsp; B) Rhombus &nbsp;&nbsp; C) Trapezium &nbsp;&nbsp; D) Kite</p>
+        <p>2. Find the unknown angle $x$ in a triangle with angles $45^\circ$, $82^\circ$, and $x^\circ$. (2 marks)</p>
+        <p>3. Two parallel lines are cut by a transversal. Angle $a = 65^\circ$. What is the size of the co-interior angle next to it? (2 marks)</p>
+        <p>4. State the definition of an Isosceles Triangle regarding sides and angles. (3 marks)</p>
+        <p>5. Draw a circle. Label the following: Center, Radius, Chord, and Tangent. (2 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Polygons & Quadrilaterals (12 Marks)</h3>
+        <p>6. Calculate the sum of the interior angles of a Nonagon (9 sides). (3 marks)</p>
+        <p>7. A regular polygon has 12 sides.<br>
+           a) Calculate the size of ONE exterior angle. (2 marks)<br>
+           b) Calculate the size of ONE interior angle. (2 marks)</p>
+        <p>8. The angles of a quadrilateral are $x$, $2x$, $3x$, and $4x$. Calculate the value of $x$ and find the largest angle. (5 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Circle Theorems & Construction (13 Marks)</h3>
+        <p>9. Points A, B, and C lie on the circumference of a circle with center O. Angle AOB (at the center) is 140°. Find the size of angle ACB (at the circumference). (3 marks)</p>
+        <p>10. ABCD is a cyclic quadrilateral. Angle $DAB = 110^\circ$ and Angle $ABC = 75^\circ$.<br>
+           a) Find angle $BCD$. (2 marks)<br>
+           b) Find angle $CDA$. (2 marks)</p>
+        <p>11. <strong>Construction:</strong> Using ONLY a compass, ruler, and pencil, construct a triangle with sides measuring 6 cm, 7 cm, and 9 cm. Leave your construction arcs visible! (6 marks)</p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

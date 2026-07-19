@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Equations, Factors and Formulae - SMP Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* 5E Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMP Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Equations, Factors and Formulae</h1>
+            <p><strong>School:</strong> SMP Semesta 2026/2025 | <strong>Grade:</strong> 9</p>
+            <p><strong>Time Allocation:</strong> 5 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 6. Equations, factors and formulae</p>
+            <p><strong>Reference:</strong> Cambridge IGCSE® Math Core & Extended</p>
+            <p><strong>Method:</strong> 5E & Mathematics Modelling</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & <span class="rme">Culturally STEM</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Critical Thinking, Creativity, Self-Regulated, Collaboration</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>C2.5, E2.5:</strong> Solve linear equations in one unknown.</li>
+        <li><strong>C2.2, E2.2:</strong> Factorise by extracting common factors.</li>
+        <li><strong>C2.5, E2.5:</strong> Change the subject of simple formulas.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: Solving Linear Equations (Subtopic 6.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Hook & Physical Modelling</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Display a picture of a traditional Indonesian market scale (<em>Timbangan Pasar</em>).</li>
+                    <li>Ask: "If the scale is perfectly balanced, what happens if I take 1 kg off the left side? How do I make it balance again?"</li>
+                </ul>
+                <h4>Math Modeling Step 1 & 2: Formulate (10 min):</h4>
+                <ul>
+                    <li><span class="meaningful">Meaningful:</span> Let a mysterious box of apples be $x$. If 2 boxes plus 1 kg equals 7 kg, we write $2x + 1 = 7$.</li>
+                    <li>Teacher draws the balance scale on the board mapping to the equation.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Balance Method</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Math Modeling Step 3: Solve (20 min):</h4>
+                <ul>
+                    <li>Distribute Algebra Tiles or physical counter tokens.</li>
+                    <li>Groups physically build the equation $3x + 2 = 11$.</li>
+                    <li>Instruct them to maintain the balance. "Take away 2 from BOTH sides." "Now divide the remaining equally among the 3 $x$ boxes."</li>
+                    <li><span class="joyful">Joyful Learning:</span> Groups race to solve physical equations.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing the Algebra</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Translating the physical balance to written algebra using Inverse Operations (SAMDOB - reverse BODMAS).</li>
+                    <li><strong>Slide 3:</strong> Example: $4x - 5 = 15 \rightarrow 4x = 20 \rightarrow x = 5$.</li>
+                    <li><strong>Slide 4:</strong> Equations with unknowns on BOTH sides: $5x + 2 = 3x + 10$. Strategy: "Move the smallest $x$ first!"</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: SEN students draw a vertical line down the '=' sign to separate LHS and RHS. Require them to write the inverse operation (e.g., "-2") on both sides.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 6.1 (Part 1).</li>
+                    <li><span class="mindful">Mindful Check:</span> "Math Modeling Step 4: Validate. Substitute your answer back into the original equation to check if LHS = RHS!"</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Solve for $x$: $6x - 4 = 20$. Show all steps.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Complex Equations (Brackets and Fractions) (Subtopic 6.1)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & Math Modeling Group Task</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Small Group Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li><span class="rme">Culturally STEM:</span> "You are booking a cultural trip to Borobudur for 3 families. Each family has $x$ adults and 2 children. If the total number of people going is 15, how many adults per family?"</li>
+                </ul>
+                <h4>Math Modeling Step 1 & 2 (20 min):</h4>
+                <ul>
+                    <li>Groups formulate the equation: $3(x + 2) = 15$.</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Groups must find TWO different mathematical ways to solve it (Method 1: Expand brackets first. Method 2: Divide by 3 first).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Equations with Brackets and Fractions</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Review expanding brackets. Model solving $2(3x - 1) = 4x + 8$.</li>
+                    <li><strong>Slide 3:</strong> Equations with fractional coefficients: $\frac{x}{4} + 3 = 8$. Rule: Multiply to destroy the fraction!</li>
+                    <li><strong>Slide 4:</strong> Equations where the whole expression is a fraction: $\frac{2x - 5}{3} = 5$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students solve equations where the unknown is in the denominator (e.g., $\frac{12}{x} = 4$).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Worksheet 6.1 (Part 2). Students solve multi-step equations involving brackets and fractions.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students verify their own answers using substitution before handing in the worksheet.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Solve for $y$: $5(y - 2) = 3y + 12$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Factorising Algebraic Expressions (Subtopic 6.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Contextual Hook</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Visual Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (15 min):</span></h4>
+                <ul>
+                    <li>Show an image of traditional <em>Tegel Kunci</em> (Javanese floor tiles).</li>
+                    <li>"We have a rectangular tiled floor with an area of $3x + 12$. If the width is a whole number, what is the maximum width it could be?"</li>
+                    <li><span class="meaningful">Meaningful:</span> Lead students to realize they need to find the Highest Common Factor (HCF) of 3 and 12. This is reverse expansion!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | The Reverse Area Model</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Pair Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Area Model Backwards (20 min):</h4>
+                <ul>
+                    <li>Draw a rectangle split into two. Inside the boxes, write $4x$ and $20$.</li>
+                    <li>Ask pairs: "What number goes on the outside (the width) that fits perfectly into BOTH $4x$ and $20$?"</li>
+                    <li>Pairs try different combinations (e.g., pulling out a 2 vs pulling out a 4). They discover that pulling out the HCF is the most efficient (fully factorised).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Extracting Common Factors</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Define "Factorising" as putting the expression back into brackets. It is the exact opposite of Expanding.</li>
+                    <li><strong>Slide 3:</strong> Step 1: Find HCF of the numbers. Step 2: Find HCF of the letters. Step 3: Open bracket and divide.</li>
+                    <li><strong>Slide 4:</strong> Model factorising $6x^2 + 9x \rightarrow 3x(2x + 3)$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers explicitly write out the factors of each term underneath the expression before deciding on the HCF.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Independent Practice & Exit</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 6.2 on single-bracket factorisation.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Factorise fully: $15y^2 - 10y$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Rearrangement of a Formula (Subtopic 6.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Hook & Conceptual Shift</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Class Debate</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>"To make a traditional <em>Rendang</em>, a chef uses an oven set in Fahrenheit. The formula is $F = \frac{9}{5}C + 32$."</li>
+                    <li>"What if we know the Fahrenheit temperature and want to find Celsius? Do we have to guess and check every time? No, we change the subject of the formula!"</li>
+                </ul>
+                <h4>Explore (10 min):</h4>
+                <ul>
+                    <li>Write $A = L \times W$. Ask: "How do we get $L$ by itself?" (Divide both sides by $W \rightarrow L = \frac{A}{W}$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Changing the Subject</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (25 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Define "Subject of a formula" (the variable sitting alone on one side of the equals sign).</li>
+                    <li><strong>Slide 3:</strong> Rule: Changing the subject uses the EXACT SAME inverse operations as solving equations, but the answer will be an algebraic expression, not a number.</li>
+                    <li><strong>Slide 4:</strong> Model changing subject: $y = 3x - 4$. Make $x$ the subject. $\rightarrow x = \frac{y + 4}{3}$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL students highlight the "Target Subject" variable in bright yellow so they remember which letter needs to be isolated.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Worksheet 6.3. Students rearrange common STEM formulas (e.g., $v = u + at$ make $t$ the subject; $P = 2L + 2W$ make $W$ the subject).</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students must verify by substituting arbitrary numbers into both the original and rearranged formulas.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Make $m$ the subject of the formula: $T = 4m + k$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Complex Rearrangement & Chapter Evaluation (Subtopic 6.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Advanced Rearrangement (Roots and Powers)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Guided Practice</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li><span class="rme">Culturally STEM:</span> Show the formula for the area of a circular gong: $A = \pi r^2$. "How do we find the radius if we only know the Area?"</li>
+                    <li>Ask students what the inverse of a square is. (Square root).</li>
+                </ul>
+                <h4>Explain (10 min):</h4>
+                <ul>
+                    <li>Model rearranging formulas involving powers and roots: $r = \sqrt{\frac{A}{\pi}}$.</li>
+                    <li><span class="mindful">Mindful:</span> Emphasize that the square root covers the ENTIRE fraction.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Chapter Evaluation & Closure</span>
+            <span>[60 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 6 Test (50 min):</h4>
+                <ul>
+                    <li>Distribute the Chapter 6 Evaluation covering Solving Equations, Factorising, and Rearranging Formulas.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under strict exam conditions.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: "Which is more difficult for you: Solving an equation for a number, or rearranging a formula for a letter? Why?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Challenge with equations where the unknown is in the denominator. Provide rearrangement formulas where the subject appears *twice* (requiring factorisation to isolate it, e.g., $y = \frac{x+1}{x-2}$ make $x$ the subject).</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Provide physical Algebra Tiles for equation solving. Give a visual flow-chart mapping "SAMDOB" (reverse BODMAS) to help them decide which operation to undo first when rearranging formulas.</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a bilingual glossary: <em>Subject (Subjek/Fokus), Formula (Rumus), Factorise (Faktorkan), Equation (Persamaan)</em>. Ensure they understand "Change the subject to x" means "Make it x = ...".</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Use high-contrast printouts. Require drawing a vertical line down the '=' sign to separate LHS and RHS to maintain visual structure. Highlight the target variable in a bright color.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 6.1: Solving Linear Equations</h3>
+        <p>1. Solve the following equations:<br>
+           a) $4x + 7 = 23$<br>
+           b) $\frac{y}{3} - 4 = 6$<br>
+           c) $5m - 3 = 2m + 12$
+        </p>
+        <p>2. <strong>Math Modeling:</strong> A rectangular garden has length $(2x + 5)$ and width $x$. The perimeter is 40 meters.<br>
+           a) Formulate an equation for the perimeter.<br>
+           b) Solve the equation to find $x$.
+        </p>
+        <p>3. Solve for $p$: $3(p - 4) = 2(p + 5)$.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 6.2: Factorising Expressions</h3>
+        <p>1. Find the Highest Common Factor (HCF) for the following pairs of terms:<br>
+           a) $12x$ and $18$ &nbsp;&nbsp; b) $5y^2$ and $15y$
+        </p>
+        <p>2. Factorise the following expressions completely:<br>
+           a) $8a + 12$<br>
+           b) $14m - 21n$<br>
+           c) $6x^2 + 10x$<br>
+           d) $15x^2y - 20xy^2$
+        </p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 6.3: Rearrangement of a Formula</h3>
+        <p>1. Make $x$ the subject of the formula: $y = 4x + 5$.</p>
+        <p>2. The formula for the perimeter of a rectangle is $P = 2L + 2W$. Rearrange the formula to make $W$ the subject.</p>
+        <p>3. Make $v$ the subject of the kinematic formula: $E = \frac{1}{2}mv^2$.</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 6 Evaluation (Used in Meeting 5)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Total: 30 Marks.</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Solving Equations (12 Marks)</h3>
+        <p>1. Solve for $x$: $7x - 9 = 26$. (2 marks)</p>
+        <p>2. Solve for $y$: $\frac{3y + 4}{2} = 11$. (3 marks)</p>
+        <p>3. Solve for $m$: $6m - 5 = 4m + 9$. (3 marks)</p>
+        <p>4. Solve for $k$: $4(2k - 1) = 3(k + 7)$. (4 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Factorising (8 Marks)</h3>
+        <p>5. Factorise completely:<br>
+           a) $18x + 24$ (2 marks)<br>
+           b) $9y^2 - 12y$ (3 marks)<br>
+           c) $14a^2b + 21ab^2$ (3 marks)
+        </p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Formulae & Modeling (10 Marks)</h3>
+        <p>6. Make $h$ the subject of the formula: $A = \frac{b \times h}{2}$. (2 marks)</p>
+        <p>7. The formula connecting velocity ($v$), initial velocity ($u$), acceleration ($a$), and time ($t$) is $v = u + at$. Rearrange to make $a$ the subject. (3 marks)</p>
+        <p>8. <strong>STEM Context Problem:</strong> The volume of a cylinder (like a traditional Indonesian drum) is given by $V = \pi r^2 h$.<br>
+           a) Make $r$ the subject of the formula. (3 marks)<br>
+           b) If the Volume is $314 \text{ cm}^3$ and the height ($h$) is $4 \text{ cm}$, calculate the radius $r$. (Use $\pi \approx 3.14$). (2 marks)
+        </p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Imas Walijah, S.Pd., M.Ed</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

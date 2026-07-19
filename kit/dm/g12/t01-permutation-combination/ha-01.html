@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Media - Permutations & Combinations</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; margin-bottom: 20mm;}
+        @media print {
+            body { padding: 0; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            .instructions { display: none; }
+            
+            #print-footer {
+                display: block !important;
+                position: fixed; bottom: 0; left: 0; width: 100%;
+                text-align: center; font-size: 9pt; font-style: italic; color: #555;
+            }
+        }
+        #print-footer { display: none; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 { color: var(--primary); margin: 0; font-size: 1.8em; }
+        .header p { margin: 5px 0; font-size: 1.1em; color: #4a5568; }
+        
+        .instructions {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Card Grid Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Individual Card Design */
+        .card {
+            border: 2px dashed #718096;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            position: relative;
+            background-color: #fff;
+            color: var(--primary);
+            page-break-inside: avoid;
+        }
+        
+        .card .scissors {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 0.35em;
+            color: #718096;
+            background: white;
+            padding: 2px;
+        }
+
+        /* Subscripts to prove identical objects are treated differently at first */
+        .subscript {
+            font-size: 0.3em;
+            vertical-align: sub;
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+
+        /* Set Titles */
+        h2 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-top: 30px;
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Cards</button>
+
+    <div class="header">
+        <h1>Printable Media: Letter Cards</h1>
+        <p>Grade 12: Permutations & Combinations | SMA Semesta</p>
+    </div>
+
+    <div class="instructions">
+        <strong>Teacher Instructions:</strong> Print these pages on A4 paper or cardstock. Cut along the dashed lines. Give these sets to students during <em>Meeting 3 (Identical Objects)</em> so they can physically swap identical letters and discover overcounting.
+    </div>
+
+    <!-- SET 1: BATIK (No repeating letters) -->
+    <h2>✂️ Set 1: Control Word (No Identical Objects)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>Use this first to show standard permutations ($5!$).</em></p>
+    
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> B</div>
+        <div class="card"><span class="scissors">✂️</span> A</div>
+        <div class="card"><span class="scissors">✂️</span> T</div>
+        <div class="card"><span class="scissors">✂️</span> I</div>
+        <div class="card"><span class="scissors">✂️</span> K</div>
+    </div>
+
+    <!-- SET 2: SEMESTA (Repeating S and E) -->
+    <h2>✂️ Set 2: "SEMESTA" (Motoric Action 3)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>Have students swap $S_1$ with $S_2$ to physically prove the arrangement looks exactly the same, hence we divide by $2!2!$.</em></p>
+
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> S<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> E<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> M</div>
+        <div class="card"><span class="scissors">✂️</span> E<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> S<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> T</div>
+        <div class="card"><span class="scissors">✂️</span> A</div>
+    </div>
+
+    <!-- SET 3: PANCASILA -->
+    <h2>✂️ Set 3: "PANCASILA" (Sample Question)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>9 letters, with 3 identical 'A's. Divide by $3!$.</em></p>
+
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> P</div>
+        <div class="card"><span class="scissors">✂️</span> A<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> N</div>
+        <div class="card"><span class="scissors">✂️</span> C</div>
+        <div class="card"><span class="scissors">✂️</span> A<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> S</div>
+        <div class="card"><span class="scissors">✂️</span> I</div>
+        <div class="card"><span class="scissors">✂️</span> L</div>
+        <div class="card"><span class="scissors">✂️</span> A<span class="subscript">3</span></div>
+    </div>
+
+    <!-- SET 4: STATISTICS -->
+    <h2>✂️ Set 4: "STATISTICS" (Exit Ticket / Challenge)</h2>
+    <p style="font-size: 0.9em; color: #4a5568; margin-bottom: 15px;"><em>10 letters total. 3 'S's, 3 'T's, 2 'I's. Divide by $3! 3! 2!$.</em></p>
+
+    <div class="card-grid">
+        <div class="card"><span class="scissors">✂️</span> S<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> T<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> A</div>
+        <div class="card"><span class="scissors">✂️</span> T<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> I<span class="subscript">1</span></div>
+        <div class="card"><span class="scissors">✂️</span> S<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> T<span class="subscript">3</span></div>
+        <div class="card"><span class="scissors">✂️</span> I<span class="subscript">2</span></div>
+        <div class="card"><span class="scissors">✂️</span> C</div>
+        <div class="card"><span class="scissors">✂️</span> S<span class="subscript">3</span></div>
+    </div>
+
+    <div id="print-footer">
+        Made with ❤️ by Mr Ghozi
+    </div>
+
+</body>
+</html>
