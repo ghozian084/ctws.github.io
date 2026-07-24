@@ -129,33 +129,16 @@
         const CORRECT_PWD = 'sbbs';
         
         // --- SECURE TOKENS FOR PERMALINKS ---
-        // Students cannot guess these. If they try ?ref=9A, it won't work.
-        const CLASS_TOKENS = {
-            '9A': 'x7k9p2m',
-            '9B': 'v4b8q1z',
-            '12A': 'n3c6w9d',
-            '12B': 't8j2f5h'
-        };
-
-        // Reverse map to find class name by token
-        const TOKEN_TO_CLASS = {
-            'x7k9p2m': '9A',
-            'v4b8q1z': '9B',
-            'n3c6w9d': '12A',
-            't8j2f5h': '12B'
-        };
+        const CLASS_TOKENS = { '9A': 'x7k9p2m', '9B': 'v4b8q1z', '12A': 'n3c6w9d', '12B': 't8j2f5h' };
+        const TOKEN_TO_CLASS = { 'x7k9p2m': '9A', 'v4b8q1z': '9B', 'n3c6w9d': '12A', 't8j2f5h': '12B' };
 
         let currentActiveClass = '';
 
         /* --- Initialization & Permalinks --- */
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const tokenParam = urlParams.get('ref'); // Look for ?ref=v4b8q1z
-
-            if (tokenParam && TOKEN_TO_CLASS[tokenParam]) {
-                // If a valid secret token exists, BYPASS password and open directly!
-                openClass(TOKEN_TO_CLASS[tokenParam]);
-            }
+            const tokenParam = urlParams.get('ref'); 
+            if (tokenParam && TOKEN_TO_CLASS[tokenParam]) openClass(TOKEN_TO_CLASS[tokenParam]);
         };
 
         /* --- Navigation & Password --- */
@@ -170,7 +153,6 @@
 
         function openMenu() { 
             switchView('menu-view', 'dashboard-view'); 
-            // Remove token from URL so they are back at the clean homepage
             window.history.pushState({}, document.title, window.location.pathname);
         }
 
@@ -207,7 +189,6 @@
             currentActiveClass = className;
             if (!isRefresh) {
                 switchView('dashboard-view', 'menu-view');
-                // Set Secure Permalink automatically in the browser bar
                 const secretToken = CLASS_TOKENS[className];
                 window.history.pushState({ class: className }, '', '?ref=' + secretToken);
             }
@@ -227,7 +208,7 @@
             document.body.appendChild(script);
         }
 
-        /* --- Processing Data & Rebuilding Merged Cells --- */
+        /* --- Processing Data --- */
         window.processSheetData = function(response) {
             document.getElementById('btn-refresh').classList.remove('spinning');
             const container = document.getElementById('table-container');
@@ -239,7 +220,7 @@
                 const IDX_CHAPTER = 0;   
                 const IDX_EXERCISE = 2;  
                 const IDX_PAGE = 3;      
-                const IDX_STUDENTS_START = 4; // Starts from row 5
+                const IDX_STUDENTS_START = 4;
 
                 const getCellText = (rIndex, cIndex) => {
                     if (!rows[rIndex] || !rows[rIndex].c || !rows[rIndex].c[cIndex]) return "";
@@ -249,8 +230,14 @@
                     return "";
                 };
 
+                // Advanced Fallback: Search the row to find the true Chapter Name if Google deleted the first one
+                let safeChapterName = 'Chapter';
+                for(let i = 1; i < colsLength; i++) {
+                    if(getCellText(IDX_CHAPTER, i)) { safeChapterName = getCellText(IDX_CHAPTER, i); break; }
+                }
+
                 let chapters = [];
-                let currentChapter = { name: getCellText(IDX_CHAPTER, 1) || 'Unknown Chapter', span: 1 };
+                let currentChapter = { name: getCellText(IDX_CHAPTER, 1) || safeChapterName, span: 1 };
 
                 for (let c = 2; c < colsLength; c++) {
                     let cellVal = getCellText(IDX_CHAPTER, c);
@@ -306,7 +293,11 @@
 
             } catch (err) {
                 console.error(err);
-                container.innerHTML = `<div style="padding:3rem;text-align:center;color:red;">Format Error: Data layout mismatch. Remember to set empty rows to "Plain Text" in Sheets.</div>`;
+                container.innerHTML = `
+                    <div style="padding:3rem;text-align:center;color:red;font-weight:bold;">
+                        Data formatting error!<br><br>
+                        <span style="font-weight:normal;color:#64748b;">Please go to Google Sheets, highlight the entire sheet (Ctrl+A), and click <b>Format > Number > Plain text</b>. Then click Refresh.</span>
+                    </div>`;
             }
         };
     </script>
