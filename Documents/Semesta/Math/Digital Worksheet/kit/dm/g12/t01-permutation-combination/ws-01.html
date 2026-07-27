@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hands-On Guided Worksheets - Permutations & Combinations</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --guide: #f6e05e;
+            --action: #38a169;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; }
+        @media print {
+            body { padding: 0; font-size: 11pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+
+        /* Worksheet Header */
+        .ws-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ws-title { font-size: 1.4em; font-weight: bold; color: var(--primary); }
+        .student-info { display: flex; flex-direction: column; gap: 8px; width: 300px;}
+        .student-info div { display: flex; justify-content: space-between; border-bottom: 1px dotted #718096; }
+
+        /* Guide & Action Boxes */
+        .guide-box {
+            background-color: #fffff0;
+            border-left: 5px solid #ecc94b;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .action-box {
+            background-color: #f0fff4;
+            border-left: 5px solid var(--action);
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .guide-title { font-weight: bold; color: #b7791f; margin-bottom: 5px; display: block;}
+        .action-title { font-weight: bold; color: #276749; margin-bottom: 5px; display: block;}
+
+        /* Questions Layout */
+        .question-block { margin-bottom: 20px; }
+        .q-number { font-weight: bold; margin-right: 5px; }
+        
+        .fill-blank {
+            display: inline-block;
+            min-width: 40px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+        .work-box {
+            border: 1px dashed #cbd5e0;
+            min-height: 80px;
+            margin-top: 10px;
+            padding: 10px;
+            color: #a0aec0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Worksheets</button>
+
+    <!-- WORKSHEET 1 & 2 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Hands-On Worksheet 1 & 2: Factorials and Permutations<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Probability & Statistics 1</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Group:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action 1: The Library Setup</span>
+            <p><strong>Materials:</strong> 4 different books from your bag/desk.<br>
+            <strong>Action:</strong> Place the 4 books in a row on your desk. Now, physically rearrange them into as many different orders as you can. Keep track of how many you make!</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">1.</span> Let's use the <strong>Slot Method</strong> to mathematically prove how many arrangements you could make.
+            <p>Slot 1 (Choices for 1st book): <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>Slot 2 (Choices for 2nd book): <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>Slot 3 (Choices for 3rd book): <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>Slot 4 (Choices for 4th book): <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>Multiply them together: $4 \times 3 \times 2 \times 1 =$ <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+            <p>We write this as $4!$ (Four Factorial).</p>
+        </div>
+
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action 2: Musical Chairs (Permutations)</span>
+            <p><strong>Materials:</strong> 3 empty chairs at the front of the room. 5 students from your group.<br>
+            <strong>Action:</strong> Have 5 students stand. Teacher says "GO!" 3 students must run and sit in the 3 chairs. Notice that <em>who</em> sits in chair 1, 2, and 3 matters! (Order matters).</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">2.</span> Let's model this mathematically. We are choosing 3 people from 5 and arranging them. This is a <strong>Permutation</strong> ($^nP_r$).
+            <p>Using the formula: $^5P_3 = \frac{5!}{(5-3)!} = \frac{5!}{2!}$</p>
+            <div class="work-box">
+                <em>Expand the top and bottom factorials and cancel them out:</em><br><br>
+                $\frac{5 \times 4 \times 3 \times 2 \times 1}{2 \times 1} =$ 
+            </div>
+            <p>Total possible seating arrangements = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 3 & 4 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Hands-On Worksheet 3 & 4: Restrictions & Combinations<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Probability & Statistics 1</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Group:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action 3: The Identical Twins</span>
+            <p><strong>Materials:</strong> The printed Letter Cards for "S E M E S T A".<br>
+            <strong>Action:</strong> Place the cards on your desk to spell SEMESTA. Now, physically pick up the first 'S' and the second 'S' and swap their places. Does the word look any different? No! You just proved <strong>overcounting</strong>.</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">3.</span> To fix overcounting, we must DIVIDE by the factorial of the repeated letters.
+            <p>Total letters in SEMESTA = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span> (This is the top: $7!$)</p>
+            <p>How many 'S's are there? = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span> (Divide by $2!$)</p>
+            <p>How many 'E's are there? = <span class="fill-blank">&nbsp;&nbsp;&nbsp;&nbsp;</span> (Divide by $2!$)</p>
+            <div class="work-box">
+                <em>Write the full fraction and solve:</em><br><br>
+                $\frac{7!}{2!2!} =$ 
+            </div>
+        </div>
+
+        <div class="action-box">
+            <span class="action-title">🏃 Motoric Action 4: Group Hugs (Combinations)</span>
+            <p><strong>Action:</strong> Call 4 students to the front. We need to select a "Team" of 2. <br>
+            If Andi and Budi are selected, have them form a circle/hug. Is "Andi & Budi" different from "Budi & Andi" in a circle? No! <strong>Order DOES NOT matter.</strong></p>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">🧠 Mindful Math Connection</span>
+            <p>Since order doesn't matter, we have fewer options than a Permutation. We use <strong>Combinations</strong> ($^nC_r$). The formula divides out the extra arrangements: $^nC_r = \frac{n!}{r!(n-r)!}$</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">4.</span> A school debate team of 3 members is to be selected from a class of 10 students. Calculate the total number of possible teams.
+            <div class="work-box">
+                <em>Write the combination formula for $n=10, r=3$:</em><br><br>
+                $^{10}C_3 = \frac{10!}{3!(10-3)!} = \frac{10!}{3!7!} = $
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- WORKSHEET 5 -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet 5: Problem Solving (AND / OR)<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Probability & Statistics 1</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Group:</span> <span></span></div>
+                <div><span>Date:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <span class="guide-title">Guided Step: Counting Principles</span>
+            <p>If you see the word <strong>AND</strong>, you multiply ($\times$).<br>
+            If you see the word <strong>OR</strong>, you add ($+$).</p>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">5.</span> A committee of 4 people is to be chosen from 5 men and 6 women.
+            <br><br>
+            <strong>a)</strong> Find the number of ways to choose exactly 2 men <strong>AND</strong> 2 women.
+            <div class="work-box" style="color:#333; font-style:normal;">
+                Choose 2 men from 5: $^5C_2$ = <span class="fill-blank" style="width:50px;"></span><br>
+                Choose 2 women from 6: $^6C_2$ = <span class="fill-blank" style="width:50px;"></span><br>
+                Because it is AND, we MULTIPLY them: <span class="fill-blank" style="width:50px;"></span> $\times$ <span class="fill-blank" style="width:50px;"></span> = <span class="fill-blank" style="width:50px;"></span>
+            </div>
+            
+            <br>
+            <strong>b)</strong> Find the number of ways to choose a committee that contains <strong>at least 3 women</strong>.
+            <div class="work-box" style="color:#333; font-style:normal;">
+                <em>"At least 3 women" means: (3 women AND 1 man) <strong>OR</strong> (4 women AND 0 men).</em><br><br>
+                Scenario 1 (3W, 1M): $^6C_3 \times ^5C_1$ = <span class="fill-blank" style="width:80px;"></span><br>
+                Scenario 2 (4W, 0M): $^6C_4 \times ^5C_0$ = <span class="fill-blank" style="width:80px;"></span><br>
+                Because it is OR, we ADD them: <span class="fill-blank" style="width:50px;"></span> $+$ <span class="fill-blank" style="width:50px;"></span> = <span class="fill-blank" style="width:50px;"></span>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <span class="q-number">6.</span> <strong>Mixed Problem:</strong> A quiz team of 4 students is chosen from 10 students. The team is then arranged in a line for a photograph. How many different photographs can be taken?
+            <div class="work-box">
+                <em>Step 1: Choose the team (Combination):</em> <br><br>
+                <em>Step 2: Arrange the 4 chosen people in a line (Factorial/Permutation):</em> <br><br>
+                <em>Step 3: Multiply them together!</em>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

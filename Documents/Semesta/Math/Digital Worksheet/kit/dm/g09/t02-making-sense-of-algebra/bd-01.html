@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Slides - Making Sense of Algebra</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --text-main: #2d3748;
+            --bg-color: #cbd5e0;
+            --badge-concept: #3182ce;
+            --badge-activity: #38a169;
+            --badge-question: #dd6b20;
+            --badge-exit: #805ad5;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden; color: var(--text-main);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            background-color: #2d3748; display: flex; align-items: center;
+            padding: 0 20px; box-sizing: border-box; z-index: 100; color: white; gap: 15px;
+        }
+        .tool-btn {
+            background-color: #4a5568; color: white; border: 2px solid transparent;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
+            transition: 0.2s;
+        }
+        .tool-btn:hover { background-color: #718096; }
+        .tool-btn.active { border-color: #63b3ed; background-color: #2b6cb0; }
+        .color-picker { width: 30px; height: 30px; border: none; cursor: pointer; padding: 0;}
+        .clear-btn { background-color: #e53e3e; margin-left: auto; }
+        .clear-btn:hover { background-color: #c53030; }
+
+        /* Slide Container */
+        #presentation-container {
+            width: 100%; height: calc(100% - 60px); margin-top: 60px;
+            display: flex; justify-content: center; align-items: center; position: relative;
+        }
+
+        .slide {
+            position: absolute; width: 92%; height: 88%; background: #fff;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 30px 40px; box-sizing: border-box;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out;
+            display: flex; flex-direction: column;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 10; }
+
+        /* Drawing Canvas */
+        .drawing-board {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; cursor: crosshair; touch-action: none; border-radius: 12px;
+        }
+
+        /* Content Layout */
+        .content-layer { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; pointer-events: none;}
+        
+        .header-title { color: var(--primary); font-size: 2em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-top: 0; }
+        
+        .two-column { display: flex; gap: 30px; height: 100%; margin-top: 10px; }
+        .col { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .col-write { 
+            flex: 1.2; 
+            background-color: #fafafa; 
+            border: 2px dashed #a0aec0; 
+            border-radius: 8px; 
+            position: relative;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: auto;
+        }
+        
+        .write-label { position: absolute; top: 10px; right: 10px; color: #718096; font-weight: bold; font-style: italic; font-size: 1.2em;}
+
+        /* Typography & Badges */
+        h3 { font-size: 1.4em; margin: 5px 0; display: flex; align-items: center; gap: 10px;}
+        p, li { font-size: 1.25em; line-height: 1.5; margin-top: 5px;}
+        ul { margin-top: 5px; padding-left: 25px;}
+        
+        .badge { color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; }
+        .bg-concept { background-color: var(--badge-concept); }
+        .bg-activity { background-color: var(--badge-activity); }
+        .bg-question { background-color: var(--badge-question); }
+        .bg-exit { background-color: var(--badge-exit); }
+
+        .content-box { background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; pointer-events: auto;}
+
+        /* Navigation */
+        .nav-panel {
+            position: absolute; bottom: 15px; width: 100%; display: flex;
+            justify-content: space-between; padding: 0 5%; box-sizing: border-box; z-index: 100; pointer-events: none;
+        }
+        .nav-btn {
+            background-color: var(--primary); color: #fff; border: none; padding: 10px 20px;
+            font-size: 1.2em; border-radius: 8px; cursor: pointer; pointer-events: auto;
+        }
+        .nav-btn:hover { background-color: var(--secondary); }
+        .nav-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+        .progress-indicator { font-size: 1.2em; font-weight: bold; color: #2d3748; align-self: center; pointer-events: auto;}
+
+        /* Title Slide */
+        .title-slide .content-layer { justify-content: center; align-items: center; text-align: center; }
+        .title-slide h1 { font-size: 3.5em; color: var(--primary); margin-bottom: 10px; }
+        .title-slide h2 { font-size: 2em; color: var(--text-main); border: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Teacher Drawing Toolbar -->
+    <div class="toolbar">
+        <span style="font-weight: bold; font-size: 1.2em; margin-right: 20px;">Teacher Tools:</span>
+        <button class="tool-btn active" id="penBtn" onclick="setMode('pen')">✏️ Pen</button>
+        <button class="tool-btn" id="eraserBtn" onclick="setMode('eraser')">🧽 Eraser</button>
+        <input type="color" id="colorPicker" class="color-picker" value="#000000" onchange="setColor(this.value)">
+        <button class="tool-btn clear-btn" onclick="clearCanvas()">🗑️ Clear Slide</button>
+    </div>
+
+    <div id="presentation-container">
+        
+        <!-- Slide 0: Title -->
+        <div class="slide active" id="slide-0">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h1>Making Sense of Algebra</h1>
+                <h2>Grade 9 Mathematics</h2>
+                <p>Interactive Teaching Slides | <em>Use the pen tool to write anywhere!</em></p>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 1 ================= -->
+        <div class="slide" id="slide-1">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: Intro to Variables (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Letters as Unknowns</h3>
+                        <ul>
+                            <li><strong>Variable:</strong> A letter ($x, y, a$) representing an unknown value.</li>
+                            <li><strong>Coefficient:</strong> The number in front. ($4x$ means $4 \times x$).</li>
+                            <li><strong>Constant:</strong> A number on its own (like $+ 5$).</li>
+                            <li><strong>Expression:</strong> A mix of terms without an equals sign ($3x + 5$).</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Modeling Unknowns</h3>
+                        <p><strong>Hook:</strong> <em>"If I buy 3 closed boxes of Bandeng Presto, I don't know how many fish are inside. How do we write this?"</em></p>
+                        <p><strong>Task:</strong> Use the envelope labeled '$y$' and loose paper clips. Model the phrase: "2 envelopes and 4 loose clips" $\rightarrow 2y + 4$.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: Intro to Variables (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Translation</h3>
+                            <p>Translate these English sentences into algebra:</p>
+                            <ol>
+                                <li>"5 more than $y$"</li>
+                                <li>"Half of $x$"</li>
+                                <li>"An Angkot has $p$ passengers. 3 get off."</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Write an algebraic expression for: "Double a number $m$, then subtract 7."</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 2 ================= -->
+        <div class="slide" id="slide-3">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Math Modeling with Formulas (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Formulating Models</h3>
+                        <ul>
+                            <li>A <strong>Formula</strong> links two or more variables with an equals sign.</li>
+                            <li><strong>Step 1:</strong> Identify constants (things that don't change) and variables (things that depend on quantity).</li>
+                            <li><strong>Example:</strong> Joglo cost. $C = W + T$ (Total = Wood + Tiles).</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Lawang Sewu Trip</h3>
+                        <p><strong>Hook:</strong> <em>"How do event organizers calculate total budgets instantly?"</em></p>
+                        <p><strong>Task:</strong> A bus costs Rp 500,000 flat. Entry to Lawang Sewu is Rp 10,000 per student. Create a formula for Total Cost ($C$) for $n$ students.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Math Modeling with Formulas (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Building Formulas</h3>
+                            <p>A plumber charges a call-out fee of $40, plus $25 for every hour he works.</p>
+                            <p>Write a formula for his total charge ($C$) if he works for $h$ hours.</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>If a taxi charges Rp 15,000 to start and Rp 4,000 per km ($k$), write the formula for the cost ($C$).</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 3 ================= -->
+        <div class="slide" id="slide-5">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Substitution (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Replacing Letters</h3>
+                        <ul>
+                            <li><strong>Substitution</strong> means replacing a letter with a specific number.</li>
+                            <li>Always use <strong>brackets</strong> when substituting, especially with negative numbers!</li>
+                            <li>Example: If $x = 5$, then $3x \rightarrow 3(5) = 15$.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Testing the Model</h3>
+                        <p><strong>Hook:</strong> <em>"In football, a sub replaces a player. In algebra, numbers replace letters!"</em></p>
+                        <p><strong>Task:</strong> Use your formula $C = 500000 + 10000n$. Calculate the cost if 10, 25, and 40 students go on the trip.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Substitution (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Mindful Substitution</h3>
+                            <p>Evaluate $x^2 + 2x$ when $x = -3$.</p>
+                            <p><em>Watch out: Is $-3^2$ the same as $(-3)^2$?</em></p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>If $a = 4$ and $b = -2$, evaluate: $3a - b^2$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 4 ================= -->
+        <div class="slide" id="slide-7">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Simplifying / Like Terms (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Collecting Like Terms</h3>
+                        <ul>
+                            <li><strong>Like Terms:</strong> Same letter, exact same power. ($x$ and $x^2$ are NOT like terms).</li>
+                            <li>You can only add or subtract like terms.</li>
+                            <li>The $+$ or $-$ sign belongs to the term on its <strong>right</strong>.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Algebra Tiles Sort</h3>
+                        <p><strong>Hook:</strong> <em>"Nasi Goreng recipe: 3 eggs ($3e$) + 2 rice ($2r$). Do you have 5 egg-rices ($5er$)? No!"</em></p>
+                        <p><strong>Task:</strong> Use the shapes to group identical items from: $2x^2 + 3x + 4 + x^2 - x - 2$.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Simplifying / Like Terms (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Perimeters</h3>
+                            <p>Find the perimeter of a triangle with sides measuring $2x$, $x+3$, and $3x-1$.</p>
+                            <p><em>(Hint: Add them all up and collect like terms!)</em></p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Simplify fully: $4x^2 - 3x + 5 - x^2 + 7x$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 5 ================= -->
+        <div class="slide" id="slide-9">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Single Brackets (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Expanding / Distributive Law</h3>
+                        <ul>
+                            <li><strong>Expanding:</strong> Multiply the term outside by EVERYTHING inside the bracket.</li>
+                            <li>$a(b + c) = ab + ac$</li>
+                            <li>Draw the "rainbow arrows" to remember!</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Area Model</h3>
+                        <p><strong>Hook:</strong> <em>"A farmer has a Sawah $5m \times x$. He buys 3m extra width. New area?"</em></p>
+                        <p><strong>Task:</strong> Draw a rectangle split into two. Area 1 = $5x$. Area 2 = $15$. Total = $5x + 15$. This is expansion!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Single Brackets (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Expand & Simplify</h3>
+                            <p>Expand: $-2(3x - 4)$</p>
+                            <p>Expand and simplify: $3(x + 2) + 2(x - 1)$</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Expand and simplify: $4(y - 2) - 3(y + 1)$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 6 ================= -->
+        <div class="slide" id="slide-11">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Double Brackets (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Expanding Binomials</h3>
+                        <ul>
+                            <li><strong>FOIL Method:</strong> First, Outer, Inner, Last.</li>
+                            <li><strong>Box Method:</strong> Draw a 2x2 grid to find all 4 areas, then collect like terms.</li>
+                            <li>Watch out: $(x-5)^2$ means $(x-5)(x-5)$.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> 2D Sawah Expansion</h3>
+                        <p><strong>Hook:</strong> <em>"What if BOTH sides of the Sawah are unknown?" $(x + 3)(x + 2)$</em></p>
+                        <p><strong>Task:</strong> Draw the 2x2 grid. Find the 4 areas: $x^2, 3x, 2x, 6$. Combine to get $x^2 + 5x + 6$.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Double Brackets (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Expanding</h3>
+                            <p>Expand and simplify:</p>
+                            <ol>
+                                <li>$(x - 4)(x + 7)$</li>
+                                <li>$(2x + 1)^2$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Expand and simplify: $(2x - 3)(x + 4)$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 7 ================= -->
+        <div class="slide" id="slide-13">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 7: Intro to Indices (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Zero, Negative & Fractional</h3>
+                        <ul>
+                            <li><strong>Zero Index:</strong> $x^0 = 1$</li>
+                            <li><strong>Negative Index:</strong> $x^{-n} = \frac{1}{x^n}$ (It creates fractions, not negative numbers!)</li>
+                            <li><strong>Fractional Index:</strong> $x^{1/2} = \sqrt{x}$</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Division Pattern</h3>
+                        <p><strong>Hook:</strong> <em>"Java's population uses $10^2=100$. But what is $10^0$ or $10^{-1}$?"</em></p>
+                        <p><strong>Task:</strong> Follow the pattern: $2^3=8$, $2^2=4$, $2^1=2$. If we keep dividing by 2, what must $2^0$ and $2^{-1}$ be?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-14">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 7: Intro to Indices (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Evaluating Indices</h3>
+                            <p>Find the exact numerical value of:</p>
+                            <ol>
+                                <li>$5^0$</li>
+                                <li>$3^{-2}$</li>
+                                <li>$16^{1/2}$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Evaluate exactly: $4^{-2}$ and $25^{1/2}$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 8 ================= -->
+        <div class="slide" id="slide-15">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 8: Rules of Indices (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> The 3 Laws</h3>
+                        <ul>
+                            <li><strong>Multiply:</strong> $a^m \times a^n = a^{m+n}$</li>
+                            <li><strong>Divide:</strong> $\frac{a^m}{a^n} = a^{m-n}$</li>
+                            <li><strong>Power:</strong> $(a^m)^n = a^{mn}$</li>
+                            <li><em>Watch out:</em> $(3x^2)^3 = 27x^6$ (Cube the big number too!)</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Deriving the Laws</h3>
+                        <p><strong>Hook:</strong> <em>"Gamelan soundwaves overlapping: $x^2 \times x^3$"</em></p>
+                        <p><strong>Task:</strong> Expand $x^2 \times x^3 \rightarrow (x \cdot x) \times (x \cdot x \cdot x)$. Count the x's. Discover the shortcut rule!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-16">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 8: Rules of Indices (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Apply the Laws</h3>
+                            <p>Simplify fully:</p>
+                            <ol>
+                                <li>$y^4 \times y^6$</li>
+                                <li>$(p^3)^4$</li>
+                                <li>$2x^3 \times 4x^5$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Simplify: $\frac{4x^5 \times 3x^2}{6x^4}$</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 9 ================= -->
+        <div class="slide" id="slide-17">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 9: Chapter Review (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Synthesis</h3>
+                        <ul>
+                            <li>Algebra requires precision.</li>
+                            <li>Know the difference between evaluating, expanding, simplifying, and applying index rules.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Concept Mapping</h3>
+                        <p><strong>Hook:</strong> <em>"How are Substitution, Expansion, Like Terms, and Indices connected?"</em></p>
+                        <p><strong>Task:</strong> In groups, draw a massive mind map on A3 paper connecting all concepts before we take the Chapter Test.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-18">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 9: Evaluation (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Chapter Test Prep</h3>
+                            <p>A quick review before the exam starts.</p>
+                            <p>Expand and simplify: $5(3a - 2b) - 2(a - 4b)$.</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>On the back of your test, write one algebraic rule you still find confusing, and one you are an expert at.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Panel -->
+    <div class="nav-panel">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">❮ Prev</button>
+        <div class="progress-indicator" id="progress">Slide 1 of 19</div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ❯</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateNav() {
+            progress.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) slide.classList.add('active');
+                else slide.classList.remove('active');
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            updateNav();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        updateNav();
+
+        // --- Canvas Drawing Logic ---
+        let currentMode = 'pen'; 
+        let strokeColor = '#000000';
+        let strokeWidth = 3;
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('penBtn').classList.remove('active');
+            document.getElementById('eraserBtn').classList.remove('active');
+            document.getElementById(mode + 'Btn').classList.add('active');
+        }
+
+        function setColor(color) {
+            strokeColor = color;
+            setMode('pen'); 
+        }
+
+        function clearCanvas() {
+            const canvas = slides[currentSlide].querySelector('canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function resizeCanvases() {
+            slides.forEach(slide => {
+                const canvas = slide.querySelector('canvas');
+                if (canvas) {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                }
+            });
+        }
+
+        slides.forEach(slide => {
+            const canvas = slide.querySelector('canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function startDraw(e) {
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault(); 
+                
+                const pos = getPos(e);
+                
+                if (currentMode === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = 20; 
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = strokeWidth;
+                }
+                
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+
+            function stopDraw() {
+                isDrawing = false;
+                ctx.closePath();
+            }
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseout', stopDraw);
+
+            canvas.addEventListener('touchstart', startDraw, {passive: false});
+            canvas.addEventListener('touchmove', draw, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+        });
+
+        window.onload = resizeCanvases;
+        window.onresize = resizeCanvases;
+
+    </script>
+</body>
+</html>

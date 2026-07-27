@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="assets/icon.png" />
+<title>Mr. Ghozi Learning Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Toggle menu">☰</button>
+    <div class="brand">
+      <span class="brand-mark"><img class="brand-mark" src="assets/icon.png" alt="Mr. Ghozi Learning Kit logo" /></span>
+      <h1 id="kit-title">Mr. Ghozi Learning Kit</h1>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <nav id="menu" class="app-menu" aria-label="Curriculum menu"></nav>
+    <div class="menu-scrim" id="menu-scrim"></div>
+
+    <main class="app-content">
+      <div class="content-toolbar">
+        <p id="breadcrumb" class="breadcrumb">Loading…</p>
+        <div class="toolbar-actions">
+          <code id="permalink-box" class="permalink-box"></code>
+          <button id="open-full-btn" class="open-full-btn" type="button" title="Open full file in new tab">
+            Open full file
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <path d="M15 3h6v6" />
+              <path d="M10 14 21 3" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="content-frame-wrap">
+        <iframe id="content-frame" title="Lesson content" loading="lazy"></iframe>
+        <div id="content-empty" class="content-empty">
+          <p>Pick a lesson plan, board, interactive media, worksheet, or activity from the menu.</p>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <footer class="app-footer">
+    <span>Mr. Ghozi Learning Kit</span>
+    <span class="footer-dot">•</span>
+    <span>Built for Grade 9 &amp; Grade 12 mathematics</span>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
