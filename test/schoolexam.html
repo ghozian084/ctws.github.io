@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics School Exam: Package A</title>
+    
+    <!-- Tailwind CSS for clean UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        /* Disable text selection for added security */
+        body { background-color: #f3f4f6; user-select: none; -webkit-user-select: none; } 
+        .hidden { display: none !important; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- PAGE 1: Login / Start -->
+    <div id="page-login" class="page">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-2xl font-bold mb-2 text-blue-700">Math Exam: Package A</h1>
+            <p class="text-gray-500 mb-6 font-semibold">15 Questions (Randomized) | 60 Minutes | Max Score: 100</p>
+            <div class="text-left text-gray-700 mb-6 text-sm bg-blue-50 p-4 rounded border border-blue-200">
+                <strong>Strict Rules:</strong><br>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Test requires <b>Fullscreen</b>.</li>
+                    <li>You <b>cannot go backward</b> to previous questions.</li>
+                    <li>Right-click is disabled.</li>
+                    <li class="text-red-600 font-bold">DO NOT ALT-TAB or switch windows. If you leave the screen, your test will automatically submit instantly.</li>
+                </ul>
+            </div>
+            <input type="text" id="studentName" placeholder="Enter your full name" class="w-full border border-gray-300 p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+            <button onclick="startQuiz()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition">Start Quiz in Fullscreen</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Quiz Interface -->
+    <div id="page-quiz" class="page hidden justify-start pt-10">
+        <div class="w-full max-w-4xl">
+            <!-- Header: Timer and Progress -->
+            <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-lg shadow">
+                <div class="font-bold text-gray-700" id="studentDisplay"></div>
+                <div class="font-bold text-red-600 text-2xl tracking-widest" id="timerDisplay">60:00</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-300 rounded-full h-2.5 mb-6">
+                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Container -->
+            <div class="bg-white p-8 rounded-lg shadow-md mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-md font-bold text-gray-400 uppercase tracking-wider">Question <span id="qNumber"></span> / <span id="qTotal"></span></h2>
+                    <span id="qTypeBadge" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"></span>
+                </div>
+                
+                <div id="questionText" class="text-2xl mb-8 text-gray-800 font-medium leading-relaxed"></div>
+                
+                <!-- Dynamic Input Container (Radio for MC, Text for SA) -->
+                <div id="inputContainer" class="flex flex-col gap-3"></div>
+            </div>
+
+            <!-- Front-End Warning Message -->
+            <div class="flex justify-end items-center mb-2">
+                <p id="warningMessage" class="text-red-500 font-bold hidden mr-4">⚠️ Please provide an answer to continue.</p>
+                <button onclick="nextQuestion()" class="bg-blue-600 text-white px-8 py-3 rounded font-bold hover:bg-blue-700 transition shadow-lg">Next Question &rarr;</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 3: Final Report -->
+    <div id="page-report" class="page hidden">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-3xl font-bold mb-2 text-green-600">Exam Finished</h1>
+            <p id="finishReason" class="text-red-500 font-bold mb-6 text-sm"></p>
+            
+            <div class="bg-gray-100 p-5 rounded text-left mb-6 font-mono text-sm border border-gray-200" id="reportCard">
+                <!-- Report details injected here -->
+            </div>
+
+            <button onclick="copyReport()" class="w-full bg-gray-800 text-white font-bold py-3 rounded hover:bg-gray-900 transition mb-3">📋 Copy Report to Clipboard</button>
+            
+            <!-- Retake Quiz Button -->
+            <button onclick="retakeQuiz()" class="w-full bg-blue-100 text-blue-700 border border-blue-300 font-bold py-3 rounded hover:bg-blue-200 transition">🔄 Retake Exam</button>
+            
+            <p class="text-xs text-gray-500 mt-4">You may now exit fullscreen and take a screenshot of this page.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. QUIZ CONFIGURATION & DATA BANK ---
+        const TIME_LIMIT_SECONDS = 60 * 60; // 60 Minutes
+        const MAX_SCORE = 100;
+        const TOTAL_QUESTIONS = 15;
+
+        // The Data Bank: Array of 15 elements (1 for each question number). 
+        // Each element contains an array of 3 variations.
+        const questionBank = [
+            // Q1 (Multiple Choice) - Quadratic Roots
+            [
+                { type: 'mc', question: "The roots of the quadratic equation \\( 2x^2 + x - 6 = 0 \\) are \\( p \\) and \\( q \\), where \\( p > q \\). Determine the value of \\( 2p + q \\).", options: ["1", "-2", "4", "0"], correctIndex: 0 },
+                { type: 'mc', question: "The roots of the quadratic equation \\( x^2 - 5x + 6 = 0 \\) are \\( p \\) and \\( q \\), where \\( p > q \\). Determine the value of \\( 3p - q \\).", options: ["4", "7", "5", "9"], correctIndex: 1 },
+                { type: 'mc', question: "The roots of the quadratic equation \\( 3x^2 - 10x + 3 = 0 \\) are \\( p \\) and \\( q \\), where \\( p > q \\). Determine the value of \\( p + 3q \\).", options: ["10", "1", "4", "6"], correctIndex: 2 }
+            ],
+            // Q2 (Multiple Choice) - Work Rate
+            [
+                { type: 'mc', question: "If 5 painters can finish painting 10 rooms in 5 hours, how many rooms can be finished by 10 painters in 10 hours?", options: ["20", "30", "40", "50"], correctIndex: 2 },
+                { type: 'mc', question: "If 3 painters can finish painting 6 rooms in 2 hours, how many rooms can be finished by 6 painters in 4 hours?", options: ["12", "18", "24", "36"], correctIndex: 2 },
+                { type: 'mc', question: "If 4 painters can finish painting 12 rooms in 3 hours, how many rooms can be finished by 8 painters in 6 hours?", options: ["24", "48", "36", "72"], correctIndex: 1 }
+            ],
+            // Q3 (Multiple Choice) - Trigonometry
+            [
+                { type: 'mc', question: "A student observes the top of a tower with an angle of elevation of \\( 30^\\circ \\). If the distance from the student’s feet to the base of the tower is \\( 12\\sqrt{3} \\) meters (ignoring eye level height), calculate the height of the tower.", options: ["12 meters", "24 meters", "36 meters", "\\( 12\\sqrt{3} \\) meters"], correctIndex: 0 },
+                { type: 'mc', question: "A student observes the top of a tower with an angle of elevation of \\( 60^\\circ \\). If the distance from the student’s feet to the base of the tower is \\( 10\\sqrt{3} \\) meters, calculate the height of the tower.", options: ["10 meters", "20 meters", "30 meters", "15 meters"], correctIndex: 2 },
+                { type: 'mc', question: "A student observes the top of a tower with an angle of elevation of \\( 45^\\circ \\). If the distance from the student’s feet to the base of the tower is \\( 15 \\) meters, calculate the height of the tower.", options: ["\\( 15\\sqrt{2} \\) meters", "15 meters", "30 meters", "7.5 meters"], correctIndex: 1 }
+            ],
+            // Q4 (Multiple Choice) - Algebraic Simplification
+            [
+                { type: 'mc', question: "Simplify the following algebraic expression: \\( \\frac{32a^4 b^{-1} c^3 d^6}{8a^3 b^{-3} c^4 d^8} \\)", options: ["\\( \\frac{4ab^2}{cd^2} \\)", "\\( \\frac{4ab^{-4}}{cd^2} \\)", "\\( \\frac{4a^2b^2}{c^2d} \\)", "\\( 4ab^2cd^2 \\)"], correctIndex: 0 },
+                { type: 'mc', question: "Simplify the following algebraic expression: \\( \\frac{24x^5 y^{-2} z^2}{6x^2 y^{-4} z^3} \\)", options: ["\\( \\frac{4x^3}{y^2z} \\)", "\\( \\frac{4x^3 y^2}{z} \\)", "\\( 4x^3 y^2 z \\)", "\\( \\frac{4x^2 y^2}{z^2} \\)"], correctIndex: 1 },
+                { type: 'mc', question: "Simplify the following algebraic expression: \\( \\frac{50p^3 q^{-5} r^4}{5p^2 q^{-2} r^6} \\)", options: ["\\( \\frac{10p}{q^3 r^2} \\)", "\\( \\frac{10p}{q^7 r^2} \\)", "\\( \\frac{10p^2}{q^3 r} \\)", "\\( \\frac{10p}{q^3 r^{-2}} \\)"], correctIndex: 0 }
+            ],
+            // Q5 (Multiple Choice) - Geometry Volume
+            [
+                { type: 'mc', question: "A craft object is shaped like a cube with side lengths of 17 cm. A regular square pyramid is placed on top of the cube such that its base coincides with the top face of the cube. If the height of the pyramid is 12 cm, what is the total volume of the composite figure?", options: ["4913 \\( \\text{cm}^3 \\)", "6069 \\( \\text{cm}^3 \\)", "8377 \\( \\text{cm}^3 \\)", "7225 \\( \\text{cm}^3 \\)"], correctIndex: 1 },
+                { type: 'mc', question: "A craft object is shaped like a cube with side lengths of 10 cm. A regular square pyramid is placed on top of the cube. If the height of the pyramid is 6 cm, what is the total volume of the composite figure?", options: ["1200 \\( \\text{cm}^3 \\)", "1600 \\( \\text{cm}^3 \\)", "1300 \\( \\text{cm}^3 \\)", "1100 \\( \\text{cm}^3 \\)"], correctIndex: 0 },
+                { type: 'mc', question: "A craft object is shaped like a cube with side lengths of 6 cm. A regular square pyramid is placed on top. If the height of the pyramid is 4 cm, what is the total volume of the composite figure?", options: ["216 \\( \\text{cm}^3 \\)", "360 \\( \\text{cm}^3 \\)", "264 \\( \\text{cm}^3 \\)", "312 \\( \\text{cm}^3 \\)"], correctIndex: 2 }
+            ],
+            // Q6 (Multiple Choice) - Transformation
+            [
+                { type: 'mc', question: "Point \\( E(-1, 2) \\) is rotated \\( 90^\\circ \\) counter-clockwise about the origin \\( (0, 0) \\), and then translated by \\( T(4, 2) \\). Determine the coordinates of the final image.", options: ["(2, 1)", "(3, 3)", "(-6, 1)", "(2, 3)"], correctIndex: 0 },
+                { type: 'mc', question: "Point \\( E(3, 4) \\) is rotated \\( 180^\\circ \\) about the origin \\( (0, 0) \\), and then translated by \\( T(-2, 5) \\). Determine the coordinates of the final image.", options: ["(-5, 9)", "(-5, 1)", "(1, -1)", "(5, -1)"], correctIndex: 1 },
+                { type: 'mc', question: "Point \\( E(2, -3) \\) is rotated \\( 90^\\circ \\) clockwise about the origin \\( (0, 0) \\), and then translated by \\( T(1, -1) \\). Determine the coordinates of the final image.", options: ["(-2, -3)", "(4, 1)", "(-3, -2)", "(-2, 1)"], correctIndex: 0 }
+            ],
+            // Q7 (Multiple Choice) - Inverse Function
+            [
+                { type: 'mc', question: "Given the function \\( f(x) = \\frac{2x+1}{3-x} \\), find the value of \\( f^{-1}(1) = \\dots \\)", options: ["1", "2/3", "-2", "4/3"], correctIndex: 1 },
+                { type: 'mc', question: "Given the function \\( f(x) = \\frac{3x-2}{x+4} \\), find the value of \\( f^{-1}(2) = \\dots \\)", options: ["4", "6", "8", "10"], correctIndex: 3 },
+                { type: 'mc', question: "Given the function \\( f(x) = \\frac{5x+2}{2x-1} \\), find the value of \\( f^{-1}(3) = \\dots \\)", options: ["5", "3", "1/2", "7"], correctIndex: 0 }
+            ],
+            // Q8 (Multiple Choice) - Combinatorics
+            [
+                { type: 'mc', question: "An organization needs to send a delegation consisting of 3 men and 2 women. If there are 6 men and 5 women available, how many different ways can the delegation be chosen?", options: ["120 ways", "150 ways", "200 ways", "300 ways"], correctIndex: 2 },
+                { type: 'mc', question: "A delegation must consist of 2 men and 3 women. If there are 5 men and 6 women available, how many different ways can the delegation be chosen?", options: ["100 ways", "150 ways", "200 ways", "250 ways"], correctIndex: 2 },
+                { type: 'mc', question: "A delegation must consist of 4 men and 1 woman. If there are 7 men and 4 women available, how many different ways can the delegation be chosen?", options: ["140 ways", "105 ways", "210 ways", "70 ways"], correctIndex: 0 }
+            ],
+            // Q9 (Multiple Choice) - Statistics (Mean)
+            [
+                { type: 'mc', question: "The following table shows the mathematics test scores for a class.<br>Score 6 (Freq: 2) | Score 7 (Freq: 6) | Score 8 (Freq: 10) | Score 9 (Freq: 2)<br>Calculate the mean score.", options: ["7.2", "7.4", "7.6", "7.8"], correctIndex: 2 },
+                { type: 'mc', question: "The following table shows the mathematics test scores for a class.<br>Score 5 (Freq: 4) | Score 6 (Freq: 8) | Score 7 (Freq: 6) | Score 8 (Freq: 2)<br>Calculate the mean score.", options: ["6.1", "6.3", "6.5", "6.7"], correctIndex: 1 },
+                { type: 'mc', question: "The following table shows the mathematics test scores for a class.<br>Score 7 (Freq: 3) | Score 8 (Freq: 5) | Score 9 (Freq: 2)<br>Calculate the mean score.", options: ["7.9", "8.1", "8.0", "7.8"], correctIndex: 0 }
+            ],
+            // Q10 (Multiple Choice) - Arithmetic Series
+            [
+                { type: 'mc', question: "Given the arithmetic series: \\( -11 - 6 - 1 + 4 + 9 + \\dots \\)<br>Determine the sum of the first ten terms.", options: ["105", "110", "115", "120"], correctIndex: 2 },
+                { type: 'mc', question: "Given the arithmetic series: \\( 2 + 6 + 10 + 14 + \\dots \\)<br>Determine the sum of the first eight terms.", options: ["116", "128", "132", "144"], correctIndex: 1 },
+                { type: 'mc', question: "Given the arithmetic series: \\( 10 + 7 + 4 + 1 + \\dots \\)<br>Determine the sum of the first twelve terms.", options: ["-66", "-72", "-78", "-84"], correctIndex: 2 }
+            ],
+            // Q11 (Short Answer Integer) - Linear Systems
+            [
+                { type: 'sa', question: "The price of 3 rulers and 2 erasers is Rp11.000. Meanwhile, the price of 2 rulers and 4 erasers is Rp14.000. Find the total combined price of 1 ruler and 1 eraser (Enter integer only).", correctAnswer: "4500" },
+                { type: 'sa', question: "The price of 2 pencils and 3 pens is Rp12.000. Meanwhile, the price of 4 pencils and 1 pen is Rp14.000. Find the total combined price of 1 pencil and 1 pen (Enter integer only).", correctAnswer: "5000" },
+                { type: 'sa', question: "The price of 5 books and 2 bags is Rp85.000. Meanwhile, the price of 3 books and 4 bags is Rp135.000. Find the total combined price of 1 book and 1 bag (Enter integer only).", correctAnswer: "35000" }
+            ],
+            // Q12 (Short Answer Integer) - Linear Programming
+            [
+                { type: 'sa', question: "A tailor has 20m of plain fabric and 10m of batik. Model A needs 1m plain & 2m batik. Model B needs 2m plain & 1m batik. Profit A is Rp150.000, and B is Rp200.000. Calculate the maximum profit achievable. (Enter integer only)", correctAnswer: "2000000" },
+                { type: 'sa', question: "A tailor has 30m of plain fabric and 30m of batik. Model A needs 2m plain & 1m batik. Model B needs 1m plain & 2m batik. Profit A is Rp100.000, and B is Rp150.000. Calculate the maximum profit achievable. (Enter integer only)", correctAnswer: "2500000" },
+                { type: 'sa', question: "A tailor has 40m of plain fabric and 30m of batik. Model A needs 2m plain & 1m batik. Model B needs 2m plain & 3m batik. Profit A is Rp200.000, and B is Rp400.000. Calculate the maximum profit achievable. (Enter integer only)", correctAnswer: "5000000" }
+            ],
+            // Q13 (Short Answer Integer) - Discriminant
+            [
+                { type: 'sa', question: "Given the quadratic equation \\( x^2 + 6x + (k - 1) = 0 \\) has two equal real roots. Determine the value of \\( k \\) that satisfies the equation. (Enter integer only)", correctAnswer: "10" },
+                { type: 'sa', question: "Given the quadratic equation \\( x^2 - 8x + 2k = 0 \\) has two equal real roots. Determine the value of \\( k \\) that satisfies the equation. (Enter integer only)", correctAnswer: "8" },
+                { type: 'sa', question: "Given the quadratic equation \\( 2x^2 + 4x + (k + 3) = 0 \\) has two equal real roots. Determine the value of \\( k \\) that satisfies the equation. (Enter integer only)", correctAnswer: "-1" }
+            ],
+            // Q14 (Short Answer Integer) - Composite Function
+            [
+                { type: 'sa', question: "Given the functions \\( f(x) = 3x - 1 \\) and \\( g(x) = 2x^2 - 3 \\). Find the value of the composite function \\( (g \\circ f)(-3) \\). (Enter integer only)", correctAnswer: "197" },
+                { type: 'sa', question: "Given the functions \\( f(x) = 2x + 3 \\) and \\( g(x) = x^2 + 5 \\). Find the value of the composite function \\( (g \\circ f)(-4) \\). (Enter integer only)", correctAnswer: "30" },
+                { type: 'sa', question: "Given the functions \\( f(x) = x - 4 \\) and \\( g(x) = 3x^2 - x \\). Find the value of the composite function \\( (g \\circ f)(2) \\). (Enter integer only)", correctAnswer: "14" }
+            ],
+            // Q15 (Short Answer Integer) - Averages
+            [
+                { type: 'sa', question: "The average mathematics score of 9 students is 78. After one additional student takes a make-up exam, the class average becomes 80. What score did the last student receive? (Enter integer only)", correctAnswer: "98" },
+                { type: 'sa', question: "The average mathematics score of 14 students is 65. After one additional student takes a make-up exam, the class average becomes 67. What score did the last student receive? (Enter integer only)", correctAnswer: "95" },
+                { type: 'sa', question: "The average mathematics score of 4 students is 82. After one additional student takes a make-up exam, the class average becomes 85. What score did the last student receive? (Enter integer only)", correctAnswer: "97" }
+            ]
+        ];
+
+        // --- 2. APPLICATION STATE ---
+        let activeQuiz = []; // Will hold the 15 randomly selected questions
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let timeRemaining = TIME_LIMIT_SECONDS;
+        let timerInterval;
+        let studentName = "";
+        let isQuizActive = false;
+        let startTimeString = "";
+
+        // --- 3. CORE LOGIC ---
+        const pageLogin = document.getElementById('page-login');
+        const pageQuiz = document.getElementById('page-quiz');
+        const pageReport = document.getElementById('page-report');
+        const warningMessage = document.getElementById('warningMessage');
+
+        function startQuiz() {
+            studentName = document.getElementById('studentName').value.trim();
+            if(!studentName) {
+                alert("Please enter your name to begin.");
+                return;
+            }
+
+            // Generate Randomized Active Quiz Data
+            activeQuiz = [];
+            for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const randIndex = Math.floor(Math.random() * 3);
+                activeQuiz.push(questionBank[i][randIndex]);
+            }
+
+            // Attempt Fullscreen
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    initiateQuizState();
+                }).catch(err => {
+                    alert("Fullscreen is required. Please allow fullscreen to start the exam.");
+                });
+            } else {
+                initiateQuizState(); // Fallback for unsupported browsers
+            }
+        }
+
+        function initiateQuizState() {
+            pageLogin.classList.add('hidden');
+            pageQuiz.classList.remove('hidden');
+            
+            document.getElementById('studentDisplay').innerText = `Student: ${studentName}`;
+            document.getElementById('qTotal').innerText = activeQuiz.length;
+            startTimeString = new Date().toLocaleTimeString();
+            
+            isQuizActive = true;
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestion >= activeQuiz.length) {
+                endQuiz("Completed Successfully");
+                return;
+            }
+
+            // Hide warning message
+            warningMessage.classList.add('hidden');
+
+            // Update Progress Bar
+            let progress = (currentQuestion / activeQuiz.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            const qData = activeQuiz[currentQuestion];
+            document.getElementById('qNumber').innerText = currentQuestion + 1;
+            
+            // Set UI Tags based on Question Type
+            const qTypeBadge = document.getElementById('qTypeBadge');
+            if(qData.type === 'mc') {
+                qTypeBadge.innerText = "Multiple Choice";
+                qTypeBadge.className = "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-blue-200";
+            } else {
+                qTypeBadge.innerText = "Short Answer";
+                qTypeBadge.className = "bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-green-200";
+            }
+
+            document.getElementById('questionText').innerHTML = qData.question;
+
+            const inputContainer = document.getElementById('inputContainer');
+            inputContainer.innerHTML = '';
+
+            // Render Inputs dynamically based on type
+            if(qData.type === 'mc') {
+                qData.options.forEach((opt, index) => {
+                    const label = document.createElement('label');
+                    label.className = "block bg-gray-50 border border-gray-200 p-4 rounded-lg cursor-pointer hover:bg-blue-100 transition flex items-center gap-4";
+                    
+                    label.onclick = () => warningMessage.classList.add('hidden');
+
+                    label.innerHTML = `
+                        <input type="radio" name="q_option" value="${index}" class="w-5 h-5 text-blue-600 focus:ring-blue-500">
+                        <span class="text-xl">${opt}</span>
+                    `;
+                    inputContainer.appendChild(label);
+                });
+            } else if (qData.type === 'sa') {
+                const inputField = document.createElement('input');
+                inputField.type = "number";
+                inputField.id = "sa_answer";
+                inputField.placeholder = "Enter your integer answer here...";
+                inputField.className = "w-full border border-gray-300 p-4 rounded-lg text-xl outline-none focus:ring-2 focus:ring-green-500";
+                inputField.oninput = () => warningMessage.classList.add('hidden');
+
+                inputContainer.appendChild(inputField);
+                
+                // Auto focus for convenience
+                setTimeout(() => inputField.focus(), 100);
+            }
+
+            // Trigger LaTeX rendering
+            renderMathInElement(pageQuiz, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function nextQuestion() {
+            const qData = activeQuiz[currentQuestion];
+
+            if(qData.type === 'mc') {
+                const selected = document.querySelector('input[name="q_option"]:checked');
+                if(!selected) {
+                    warningMessage.classList.remove('hidden');
+                    return;
+                }
+                const answerIndex = parseInt(selected.value);
+                if(answerIndex === qData.correctIndex) {
+                    correctAnswers++;
+                }
+            } else if (qData.type === 'sa') {
+                const saInput = document.getElementById('sa_answer').value.trim();
+                if(saInput === "") {
+                    warningMessage.classList.remove('hidden');
+                    return;
+                }
+                if(saInput === qData.correctAnswer) {
+                    correctAnswers++;
+                }
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if(timeRemaining <= 0) {
+                    endQuiz("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            let s = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function endQuiz(reason) {
+            isQuizActive = false;
+            clearInterval(timerInterval);
+
+            // Auto close fullscreen on Finish
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log("Exit fullscreen bypassed by browser"));
+            }
+
+            pageQuiz.classList.add('hidden');
+            pageReport.classList.remove('hidden');
+
+            if (reason !== "Completed Successfully") {
+                document.getElementById('finishReason').innerText = `Notice: ${reason}`;
+            } else {
+                document.getElementById('finishReason').innerText = "";
+            }
+
+            // Calculate score linearly up to MAX_SCORE
+            const finalScore = Math.round((correctAnswers / TOTAL_QUESTIONS) * MAX_SCORE);
+
+            const reportText = `====== FINAL REPORT ======
+Subject : Math Exam Package A
+Student : ${studentName}
+Date    : ${new Date().toLocaleDateString()}
+Started : ${startTimeString}
+Ended   : ${new Date().toLocaleTimeString()}
+--------------------------
+Score   : ${finalScore} / ${MAX_SCORE}
+Correct : ${correctAnswers} out of ${TOTAL_QUESTIONS}
+==========================`;
+            
+            document.getElementById('reportCard').innerText = reportText;
+        }
+
+        function copyReport() {
+            const text = document.getElementById('reportCard').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Report successfully copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy. Please take a screenshot instead.");
+            });
+        }
+
+        function retakeQuiz() {
+            // Reset state
+            currentQuestion = 0;
+            correctAnswers = 0;
+            timeRemaining = TIME_LIMIT_SECONDS;
+            isQuizActive = false;
+            clearInterval(timerInterval);
+            
+            warningMessage.classList.add('hidden');
+            document.getElementById('progressBar').style.width = `0%`;
+            document.getElementById('finishReason').innerText = "";
+
+            // Transition UI
+            pageReport.classList.add('hidden');
+            pageLogin.classList.remove('hidden');
+        }
+
+        // --- 4. ANTI-CHEAT & SECURITY FEATURES ---
+
+        // Disable standard Right Click Context Menu
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Detect if user alt-tabs or switches browser tabs
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && isQuizActive) {
+                endQuiz("VIOLATION: You changed tabs or minimized the browser.");
+            }
+        });
+
+        // Detect if user clicks outside the window (loses window focus)
+        window.addEventListener('blur', () => {
+            if (isQuizActive) {
+                endQuiz("VIOLATION: The exam window lost focus (Alt-Tab detected).");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Differentiation Quiz - 11A</title>
+    
+    <!-- Tailwind CSS for clean UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        /* Disable text selection for added security */
+        body { background-color: #f3f4f6; user-select: none; -webkit-user-select: none; } 
+        .hidden { display: none !important; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- PAGE 1: Login / Start -->
+    <div id="page-login" class="page">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-2xl font-bold mb-2 text-blue-700">Differentiation Quiz 11A</h1>
+            <p class="text-gray-500 mb-6 font-semibold">21 Questions | 40 Minutes | Max Score: 100</p>
+            <div class="text-left text-gray-700 mb-6 text-sm bg-blue-50 p-4 rounded border border-blue-200">
+                <strong>Strict Rules:</strong><br>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Test requires <b>Fullscreen</b>.</li>
+                    <li>You <b>cannot go backward</b> to previous questions.</li>
+                    <li>Right-click is disabled.</li>
+                    <li class="text-red-600 font-bold">DO NOT ALT-TAB or switch windows. If you leave the screen, your test will automatically submit instantly.</li>
+                </ul>
+            </div>
+            <input type="text" id="studentName" placeholder="Enter your full name" class="w-full border border-gray-300 p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+            <button onclick="startQuiz()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition">Start Quiz in Fullscreen</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Quiz Interface -->
+    <div id="page-quiz" class="page hidden justify-start pt-10">
+        <div class="w-full max-w-3xl">
+            <!-- Header: Timer and Progress -->
+            <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-lg shadow">
+                <div class="font-bold text-gray-700" id="studentDisplay"></div>
+                <div class="font-bold text-red-600 text-2xl tracking-widest" id="timerDisplay">40:00</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-300 rounded-full h-2.5 mb-6">
+                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Container -->
+            <div class="bg-white p-8 rounded-lg shadow-md mb-4">
+                <h2 class="text-md font-bold text-gray-400 mb-2 uppercase tracking-wider">Question <span id="qNumber"></span> / <span id="qTotal"></span></h2>
+                <div id="questionText" class="text-2xl mb-8 text-gray-800 font-medium leading-relaxed"></div>
+                
+                <div id="optionsContainer" class="flex flex-col gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+
+            <!-- Front-End Warning Message -->
+            <div class="flex justify-end items-center mb-2">
+                <p id="warningMessage" class="text-red-500 font-bold hidden mr-4">⚠️ Please select an answer to continue.</p>
+                <button onclick="nextQuestion()" class="bg-blue-600 text-white px-8 py-3 rounded font-bold hover:bg-blue-700 transition shadow-lg">Next Question &rarr;</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 3: Final Report -->
+    <div id="page-report" class="page hidden">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-3xl font-bold mb-2 text-green-600">Quiz Finished</h1>
+            <p id="finishReason" class="text-red-500 font-bold mb-6 text-sm"></p>
+            
+            <div class="bg-gray-100 p-5 rounded text-left mb-6 font-mono text-sm border border-gray-200" id="reportCard">
+                <!-- Report details injected here -->
+            </div>
+
+            <button onclick="copyReport()" class="w-full bg-gray-800 text-white font-bold py-3 rounded hover:bg-gray-900 transition mb-3">📋 Copy Report to Clipboard</button>
+            
+            <!-- Retake Quiz Button -->
+            <button onclick="retakeQuiz()" class="w-full bg-blue-100 text-blue-700 border border-blue-300 font-bold py-3 rounded hover:bg-blue-200 transition">🔄 Retake Quiz</button>
+            
+            <p class="text-xs text-gray-500 mt-4">You may now take a screenshot of this page.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. QUIZ CONFIGURATION ---
+        const TIME_LIMIT_SECONDS = 40 * 60; // 40 Minutes
+        const MAX_SCORE = 100;
+
+        const quizData = [
+            { question: "Find the second derivative of \\( y = 5x^2 \\).", options: ["\\( 20 \\)", "\\( 0 \\)", "\\( 5 \\)", "\\( 10x \\)", "\\( 10 \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = 5x^2 \\).", options: ["\\( 7x \\)", "\\( 10x^2 \\)", "\\( 5x \\)", "\\( 10x \\)", "\\( 2x \\)"], correctIndex: 3 },
+            { question: "Find the second derivative of \\( y = 3x^5 \\).", options: ["\\( 12x^3 \\)", "\\( 60x^4 \\)", "\\( 15x^4 \\)", "\\( 20x^3 \\)", "\\( 60x^3 \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = 3x^5 \\).", options: ["\\( 8x^4 \\)", "\\( 3x^4 \\)", "\\( 15x^5 \\)", "\\( 15x^4 \\)", "\\( 5x^4 \\)"], correctIndex: 3 },
+            { question: "Find \\( y' \\) of the curve \\( y = \\frac{x^6}{2} \\).", options: ["\\( x^5 \\)", "\\( \\frac{x^5}{2} \\)", "\\( 2x^5 \\)", "\\( 6x^5 \\)", "\\( 3x^5 \\)"], correctIndex: 4 },
+            { question: "Find the second derivative of \\( y = \\frac{x^6}{2} \\).", options: ["\\( 30x^4 \\)", "\\( 3x^5 \\)", "\\( 12x^4 \\)", "\\( 6x^4 \\)", "\\( 15x^4 \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = 5(2x^2 - 1)^2 \\).", options: ["\\( 10(2x^2 - 1) \\)", "\\( 5(4x)(2x^2 - 1) \\)", "\\( 20x(2x^2 - 1) \\)", "\\( 40(2x^2 - 1) \\)", "\\( 40x(2x^2 - 1) \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = \\frac{3}{x} \\).", options: ["\\( -3x^2 \\)", "\\( 3 \\)", "\\( -\\frac{1}{x^2} \\)", "\\( -\\frac{3}{x^2} \\)", "\\( \\frac{3}{x^2} \\)"], correctIndex: 3 },
+            { question: "Find the Normal Line of \\( y = 3x^3 + x^2 - 4x + 1 \\) at the point \\( (0, 1) \\).", options: ["\\( y = \\frac{1}{4}x + 1 \\)", "\\( y = x + 4 \\)", "\\( y = -\\frac{1}{4}x + 1 \\)", "\\( y = -4x + 1 \\)", "\\( y = 4x + 1 \\)"], correctIndex: 0 },
+            { question: "Find \\( y' \\) of the curve \\( y = 7 - 3x^2 + 5x^4 \\).", options: ["\\( -6x^2 + 20x^3 \\)", "\\( 7 - 6x + 20x^3 \\)", "\\( -3x + 20x^3 \\)", "\\( 20x^3 - 3x^2 \\)", "\\( -6x + 20x^3 \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = 3\\sqrt{x} \\).", options: ["\\( \\frac{3}{2\\sqrt{x}} \\)", "\\( 1.5x \\)", "\\( \\frac{1}{2\\sqrt{x}} \\)", "\\( \\frac{3}{\\sqrt{x}} \\)", "\\( 3\\sqrt{x} \\)"], correctIndex: 0 },
+            { question: "Find the Normal Line of \\( y = (3x - 1)^5 \\) at the point \\( (0, -1) \\).", options: ["\\( y = -\\frac{1}{15}x - 1 \\)", "\\( y = 15x - 1 \\)", "\\( y = -15x - 1 \\)", "\\( y = \\frac{1}{15}x - 1 \\)", "\\( y = -x - 15 \\)"], correctIndex: 0 },
+            { question: "Find the Tangent Line of \\( y = (3x - 1)^5 \\) at the point \\( (0, -1) \\).", options: ["\\( y = 15x - 1 \\)", "\\( y = 5x - 1 \\)", "\\( y = 15x + 1 \\)", "\\( y = -15x - 1 \\)", "\\( y = x - 15 \\)"], correctIndex: 0 },
+            { question: "Find \\( y' \\) of the curve \\( y = (2x + 3)^4 \\).", options: ["\\( 4(2x+3)^3 \\)", "\\( 8(2x+3)^4 \\)", "\\( 8(2x+3)^3 \\)", "\\( 2(2x+3)^3 \\)", "\\( 8(2x+3)^2 \\)"], correctIndex: 2 },
+            { question: "Find the Tangent Line of \\( y = 3x^3 + x^2 - 4x + 1 \\) at the point \\( (0, 1) \\).", options: ["\\( y = 4x + 1 \\)", "\\( y = -4x + 1 \\)", "\\( y = \\frac{1}{4}x + 1 \\)", "\\( y = -4x - 1 \\)", "\\( y = x - 4 \\)"], correctIndex: 1 },
+            { question: "Find the second derivative of \\( y = (x + 6)^5 \\).", options: ["\\( 5(x+6)^4 \\)", "\\( 20(x+6)^4 \\)", "\\( 15(x+6)^3 \\)", "\\( 20(x+6)^3 \\)", "\\( 10(x+6)^3 \\)"], correctIndex: 3 },
+            { question: "Find the Tangent Line of \\( y = x^2 - 3x + 3 \\) at the point \\( (2, 1) \\).", options: ["\\( y = x + 1 \\)", "\\( y = -x + 3 \\)", "\\( y = 2x - 3 \\)", "\\( y = x - 3 \\)", "\\( y = x - 1 \\)"], correctIndex: 4 },
+            { question: "Find \\( y' \\) of the curve \\( y = (x + 6)^5 \\).", options: ["\\( 20(x+6)^3 \\)", "\\( (x+6)^4 \\)", "\\( 5(x+6)^4 \\)", "\\( 5(x+6)^5 \\)", "\\( x^5 + 6^5 \\)"], correctIndex: 2 },
+            { question: "Find \\( y' \\) of the curve \\( y = 2x^3 + 8x - 19 \\).", options: ["\\( 6x^2 - 8 \\)", "\\( 6x^2 + 8 \\)", "\\( 2x^2 + 8 \\)", "\\( 6x + 8 \\)", "\\( 6x^3 + 8 \\)"], correctIndex: 1 },
+            { question: "Find the second derivative of \\( y = (2x + 3)^4 \\).", options: ["\\( 24(2x+3)^2 \\)", "\\( 48(2x+3)^3 \\)", "\\( 8(2x+3)^3 \\)", "\\( 48(2x+3)^2 \\)", "\\( 32(2x+3)^2 \\)"], correctIndex: 3 },
+            { question: "Find the Normal Line of \\( y = x^2 - 3x + 3 \\) at the point \\( (2, 1) \\).", options: ["\\( y = x - 1 \\)", "\\( y = -x + 3 \\)", "\\( y = -x - 1 \\)", "\\( y = x + 3 \\)", "\\( y = -x + 1 \\)"], correctIndex: 1 }
+        ];
+
+        // --- 2. APPLICATION STATE ---
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let timeRemaining = TIME_LIMIT_SECONDS;
+        let timerInterval;
+        let studentName = "";
+        let isQuizActive = false;
+        let startTimeString = "";
+
+        // --- 3. CORE LOGIC ---
+        const pageLogin = document.getElementById('page-login');
+        const pageQuiz = document.getElementById('page-quiz');
+        const pageReport = document.getElementById('page-report');
+        const warningMessage = document.getElementById('warningMessage');
+
+        function startQuiz() {
+            studentName = document.getElementById('studentName').value.trim();
+            if(!studentName) {
+                // Just use browser alert for login as it's pre-quiz
+                alert("Please enter your name to begin.");
+                return;
+            }
+
+            // Attempt Fullscreen
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    initiateQuizState();
+                }).catch(err => {
+                    alert("Fullscreen is required. Please allow fullscreen to start the quiz.");
+                });
+            } else {
+                initiateQuizState(); // Fallback for unsupported browsers
+            }
+        }
+
+        function initiateQuizState() {
+            pageLogin.classList.add('hidden');
+            pageQuiz.classList.remove('hidden');
+            
+            document.getElementById('studentDisplay').innerText = `Student: ${studentName}`;
+            document.getElementById('qTotal').innerText = quizData.length;
+            startTimeString = new Date().toLocaleTimeString();
+            
+            isQuizActive = true;
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestion >= quizData.length) {
+                endQuiz("Completed Successfully");
+                return;
+            }
+
+            // Hide warning message when loading new question
+            warningMessage.classList.add('hidden');
+
+            // Update Progress Bar
+            let progress = (currentQuestion / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            const qData = quizData[currentQuestion];
+            document.getElementById('qNumber').innerText = currentQuestion + 1;
+            document.getElementById('questionText').innerHTML = qData.question;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, index) => {
+                const label = document.createElement('label');
+                label.className = "block bg-gray-50 border border-gray-200 p-4 rounded-lg cursor-pointer hover:bg-blue-100 transition flex items-center gap-4";
+                
+                // Hide warning when a user clicks an option
+                label.onclick = () => warningMessage.classList.add('hidden');
+
+                label.innerHTML = `
+                    <input type="radio" name="q_option" value="${index}" class="w-5 h-5 text-blue-600 focus:ring-blue-500">
+                    <span class="text-xl">${opt}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+
+            // Trigger LaTeX rendering
+            renderMathInElement(pageQuiz, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="q_option"]:checked');
+            
+            // Show inline UI Warning instead of browser alert
+            if(!selected) {
+                warningMessage.classList.remove('hidden');
+                return;
+            }
+
+            const answerIndex = parseInt(selected.value);
+
+            if(answerIndex === quizData[currentQuestion].correctIndex) {
+                correctAnswers++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if(timeRemaining <= 0) {
+                    endQuiz("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            let s = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function endQuiz(reason) {
+            isQuizActive = false;
+            clearInterval(timerInterval);
+
+            // Auto close fullscreen on Finish
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log("Exit fullscreen bypassed by browser"));
+            }
+
+            pageQuiz.classList.add('hidden');
+            pageReport.classList.remove('hidden');
+
+            if (reason !== "Completed Successfully") {
+                document.getElementById('finishReason').innerText = `Notice: ${reason}`;
+            } else {
+                document.getElementById('finishReason').innerText = "";
+            }
+
+            // Calculate score linearly up to 100
+            const finalScore = Math.round((correctAnswers / quizData.length) * MAX_SCORE);
+
+            const reportText = `====== FINAL REPORT ======
+Subject : Differentiation 11A
+Student : ${studentName}
+Date    : ${new Date().toLocaleDateString()}
+Started : ${startTimeString}
+Ended   : ${new Date().toLocaleTimeString()}
+--------------------------
+Score   : ${finalScore} / ${MAX_SCORE}
+Correct : ${correctAnswers} out of ${quizData.length}
+==========================`;
+            
+            document.getElementById('reportCard').innerText = reportText;
+        }
+
+        function copyReport() {
+            const text = document.getElementById('reportCard').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Report successfully copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy. Please take a screenshot instead.");
+            });
+        }
+
+        function retakeQuiz() {
+            // Reset all application state variables
+            currentQuestion = 0;
+            correctAnswers = 0;
+            timeRemaining = TIME_LIMIT_SECONDS;
+            isQuizActive = false;
+            clearInterval(timerInterval);
+            
+            // Clear warning state and progress bar
+            warningMessage.classList.add('hidden');
+            document.getElementById('progressBar').style.width = `0%`;
+            document.getElementById('finishReason').innerText = "";
+
+            // Transition UI back to Login
+            pageReport.classList.add('hidden');
+            pageLogin.classList.remove('hidden');
+        }
+
+        // --- 4. ANTI-CHEAT & SECURITY FEATURES ---
+
+        // Disable standard Right Click Context Menu
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Detect if user alt-tabs or switches browser tabs
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && isQuizActive) {
+                endQuiz("VIOLATION: You changed tabs or minimized the browser.");
+            }
+        });
+
+        // Detect if user clicks outside the window (loses window focus / taskbar click)
+        window.addEventListener('blur', () => {
+            if (isQuizActive) {
+                endQuiz("VIOLATION: The quiz window lost focus (Alt-Tab detected).");
+            }
+        });
+    </script>
+</body>
+</html>

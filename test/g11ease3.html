@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EASE 3 Mathematics Grade 11 2025/2026</title>
+    
+    <!-- Tailwind CSS for clean UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        /* Disable text selection for added security */
+        body { background-color: #f3f4f6; user-select: none; -webkit-user-select: none; } 
+        .hidden { display: none !important; }
+        .page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- PAGE 1: Login / Start -->
+    <div id="page-login" class="page">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-2xl font-bold mb-2 text-blue-700">EASE 3 Mathematics</h1>
+            <h2 class="text-md font-semibold mb-2 text-gray-700">Grade 11 (2025/2026)</h2>
+            <p class="text-gray-500 mb-6 font-semibold">25 Questions | 90 Minutes | Max Score: 100</p>
+            <div class="text-left text-gray-700 mb-6 text-sm bg-blue-50 p-4 rounded border border-blue-200">
+                <strong>Strict Rules:</strong><br>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Test requires <b>Fullscreen</b>.</li>
+                    <li>You <b>cannot go backward</b> to previous questions.</li>
+                    <li>Right-click is disabled.</li>
+                    <li class="text-red-600 font-bold">DO NOT ALT-TAB or switch windows. If you leave the screen, your test will automatically submit instantly.</li>
+                </ul>
+            </div>
+            <input type="text" id="studentName" placeholder="Enter your full name" class="w-full border border-gray-300 p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+            <button onclick="startQuiz()" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition">Start Quiz in Fullscreen</button>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Quiz Interface -->
+    <div id="page-quiz" class="page hidden justify-start pt-10">
+        <div class="w-full max-w-4xl">
+            <!-- Header: Timer and Progress -->
+            <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-lg shadow">
+                <div class="font-bold text-gray-700" id="studentDisplay"></div>
+                <div class="font-bold text-red-600 text-2xl tracking-widest" id="timerDisplay">90:00</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-300 rounded-full h-2.5 mb-6">
+                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Question Container -->
+            <div class="bg-white p-8 rounded-lg shadow-md mb-4">
+                <h2 class="text-md font-bold text-gray-400 mb-2 uppercase tracking-wider">Question <span id="qNumber"></span> / <span id="qTotal"></span></h2>
+                <div id="questionText" class="text-2xl mb-8 text-gray-800 font-medium leading-relaxed"></div>
+                
+                <div id="optionsContainer" class="flex flex-col gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+
+            <!-- Front-End Warning Message -->
+            <div class="flex justify-end items-center mb-2">
+                <p id="warningMessage" class="text-red-500 font-bold hidden mr-4">⚠️ Please select an answer to continue.</p>
+                <button onclick="nextQuestion()" class="bg-blue-600 text-white px-8 py-3 rounded font-bold hover:bg-blue-700 transition shadow-lg">Next Question &rarr;</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- PAGE 3: Final Report -->
+    <div id="page-report" class="page hidden">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+            <h1 class="text-3xl font-bold mb-2 text-green-600">Quiz Finished</h1>
+            <p id="finishReason" class="text-red-500 font-bold mb-6 text-sm"></p>
+            
+            <div class="bg-gray-100 p-5 rounded text-left mb-6 font-mono text-sm border border-gray-200" id="reportCard">
+                <!-- Report details injected here -->
+            </div>
+
+            <button onclick="copyReport()" class="w-full bg-gray-800 text-white font-bold py-3 rounded hover:bg-gray-900 transition mb-3">📋 Copy Report to Clipboard</button>
+            
+            <!-- Retake Quiz Button -->
+            <button onclick="retakeQuiz()" class="w-full bg-blue-100 text-blue-700 border border-blue-300 font-bold py-3 rounded hover:bg-blue-200 transition">🔄 Retake Quiz</button>
+            
+            <p class="text-xs text-gray-500 mt-4">You may now exit fullscreen and take a screenshot of this page.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. QUIZ CONFIGURATION ---
+        const TIME_LIMIT_SECONDS = 90 * 60; // 90 Minutes
+        const MAX_SCORE = 100;
+
+        const quizData = [
+            {
+                question: "A point is moving along the curve \\( y = 3\\sqrt{x} - \\frac{5}{\\sqrt{x}} \\) in such a way that the x-coordinate is increasing at a constant rate of 0.02 units per second.<br><br>Find the rate of change of \\( y \\) when \\( x = 1 \\).",
+                options: ["0.06 units per second", "0.07 units per second", "0.08 units per second", "0.09 units per second"],
+                correctIndex: 2
+            },
+            {
+                question: "If \\( \\frac{dy}{dx} = -\\frac{3}{2}x^{\\frac{1}{2}} \\). Find \\( y \\).",
+                options: ["\\( -x^{\\frac{3}{2}} + c \\)", "\\( -\\frac{3}{4}x^{\\frac{3}{2}} + c \\)", "\\( -3x^{\\frac{3}{2}} + c \\)", "\\( -x^{\\frac{1}{2}} + c \\)"],
+                correctIndex: 0
+            },
+            {
+                question: "Find the area of the region bounded by the curve \\( y = \\sqrt{x} \\), the \\( x \\)-axis, and the lines \\( x = 0 \\) and \\( x = 4 \\).",
+                options: ["\\( \\frac{16}{3} \\)", "\\( \\frac{8}{3} \\)", "4", "8"],
+                correctIndex: 0
+            },
+            {
+                question: "Evaluate: \\( \\int_{2}^{\\infty} \\frac{6}{x^4} dx \\)",
+                options: ["diverges", "\\( \\frac{1}{4} \\)", "\\( -\\frac{2}{8} \\)", "0"],
+                correctIndex: 1
+            },
+            {
+                question: "Evaluate: \\( \\int_{0}^{2} 3x^2 dx \\)",
+                options: ["4", "6", "8", "12"],
+                correctIndex: 2
+            },
+            {
+                question: "The function is given by \\( f(x) = 3x^2 - 4x + 7 \\). What is the gradient function \\( f'(x) \\)?",
+                options: ["\\( 6x - 4 \\)", "\\( 6x - 4x \\)", "\\( 3x - 4 \\)", "\\( 6x + 4 \\)"],
+                correctIndex: 0
+            },
+            {
+                question: "Given that \\( f(x) = x^3 + 2x^2 - 3x - 1 \\). Find \\( f''(1) \\).",
+                options: ["-2", "4", "6", "10"],
+                correctIndex: 3
+            },
+            {
+                question: "A curve has equation \\( y = 6x - x^2 \\). Calculate the area of the region bounded by the curve and the \\( x \\)-axis.",
+                options: ["36", "34", "32", "30"],
+                correctIndex: 0
+            },
+            {
+                question: "Given \\( y = (3x^2 - 5)^4 \\), find \\( \\frac{dy}{dx} \\).",
+                options: ["\\( 12x(3x^2 - 5)^3 \\)", "\\( 4(3x^2 - 5)^3 \\)", "\\( 24x^2(3x^2 - 5)^3 \\)", "\\( 24x(3x^2 - 5)^3 \\)"],
+                correctIndex: 3
+            },
+            {
+                question: "The diagram shows the curve \\( y = -x^2 + 6x \\) and the line \\( y = 2x \\). What is the area of the shaded region?",
+                options: [
+                    "\\( \\int_{0}^{4} (-x^2 + 6x) dx - \\int_{0}^{4} (-2x) dx \\)", 
+                    "\\( \\int_{0}^{4} (2x) dx - \\int_{0}^{4} (-x^2 + 6x) dx \\)", 
+                    "\\( \\int_{0}^{4} (-x^2 + 6x) dx + \\int_{0}^{4} (2x) dx \\)", 
+                    "\\( \\int_{0}^{4} (-x^2 + 6x) dx - \\int_{0}^{4} (2x) dx \\)"
+                ],
+                correctIndex: 3
+            },
+            {
+                question: "The diagram shows the curve \\( y = -x^2 + 2x + 24 \\) and the line \\( y = x + 4 \\). What is the area of the shaded region?",
+                options: [
+                    "\\( \\int_{-4}^{5} (-x^2 + x + 20) dx \\)", 
+                    "\\( \\int_{-5}^{4} (-x^2 + x + 20) dx \\)", 
+                    "\\( \\int_{-4}^{5} (x^2 - x - 20) dx \\)", 
+                    "\\( \\int_{-5}^{4} (x^2 - x - 20) dx \\)"
+                ],
+                correctIndex: 0
+            },
+            {
+                question: "Find the gradient of the curve \\( y = 5x^2 - 2x + 1 \\) at \\( (1, 4) \\).",
+                options: ["\\( m = 6 \\)", "\\( m = 8 \\)", "\\( m = 10 \\)", "\\( m = 12 \\)"],
+                correctIndex: 1
+            },
+            {
+                question: "A circle has a radius \\( r \\) cm and area \\( A \\text{ cm}^2 \\). The radius is increasing at a rate \\( 0.1 \\text{ cm s}^{-1} \\). Find the rate of increase of \\( A \\) when \\( r = 10 \\).",
+                options: ["\\( \\frac{4}{5}\\pi \\)", "\\( \\frac{8}{10}\\pi \\)", "\\( \\pi \\)", "\\( 2\\pi \\)"],
+                correctIndex: 3
+            },
+            {
+                question: "What is the interval of \\( x \\) so the function \\( y = x^3 - 6x^2 + 1 \\) is decreasing?",
+                options: ["\\( x < 0 \\text{ or } x > 4 \\)", "\\( 0 < x < 4 \\)", "\\( x > 0 \\)", "\\( x > 4 \\)"],
+                correctIndex: 1
+            },
+            {
+                question: "You have 20 m of fencing to build a rectangular enclosure against an existing stone wall. Since the wall acts as one side of the rectangle, you only need to fence the remaining three sides. What is the maximum area that can be enclosed?",
+                options: ["\\( 25 \\text{ m}^2 \\)", "\\( 40 \\text{ m}^2 \\)", "\\( 50 \\text{ m}^2 \\)", "\\( 100 \\text{ m}^2 \\)"],
+                correctIndex: 2
+            },
+            {
+                question: "Find the equation of the curve, given \\( \\frac{dy}{dx} = 3x^2 + 1 \\) and a point P = (1, 4) on the curve.",
+                options: ["\\( y = x^3 + x + 2 \\)", "\\( y = x^2 + 1 \\)", "\\( y = x^3 + x^2 + 2 \\)", "\\( y = x^3 \\)"],
+                correctIndex: 0
+            },
+            {
+                question: "The function \\( f \\) is defined by \\( f(x) = \\frac{10}{(2x-3)^2} \\). Find \\( f'(x) \\).",
+                options: ["\\( \\frac{20}{(2x-3)^3} \\)", "\\( -\\frac{40}{(2x-3)} \\)", "\\( -\\frac{40}{(2x-3)^3} \\)", "\\( -\\frac{20}{(2x-3)^3} \\)"],
+                correctIndex: 2
+            },
+            {
+                question: "Evaluate: \\( \\int_{1}^{3} (2x - 1) dx \\)",
+                options: ["6", "8", "4", "10"],
+                correctIndex: 0
+            },
+            {
+                question: "Find the volume obtained when the shaded region is rotated through \\( 360^{\\circ} \\) about the \\( x \\)-axis.",
+                options: ["\\( V = \\frac{98}{2}\\pi \\text{ units}^3 \\)", "\\( V = 8\\pi \\text{ units}^3 \\)", "\\( V = \\frac{98}{3}\\pi \\text{ units}^3 \\)", "\\( V = \\frac{92}{3}\\pi \\text{ units}^3 \\)"],
+                correctIndex: 2
+            },
+            {
+                question: "Given that the sum of two positive real numbers \\( a \\) and \\( b \\) is 12, find the maximum value of the product \\( P = a \\cdot b^2 \\).",
+                options: ["64", "128", "256", "512"],
+                correctIndex: 2
+            },
+            {
+                question: "Evaluate: \\( \\int \\sqrt{4x + 3} dx = \\dots \\)",
+                options: ["\\( \\frac{2}{3}(4x + 3)^{\\frac{3}{2}} + C \\)", "\\( \\frac{1}{6}(4x + 3)^{\\frac{3}{2}} + C \\)", "\\( \\frac{3}{2}(4x + 3)^{\\frac{3}{2}} + C \\)", "\\( \\frac{1}{4}(4x + 3)^{\\frac{3}{2}} + C \\)"],
+                correctIndex: 1
+            },
+            {
+                question: "A curve passes through the point \\( (2, -5) \\) and satisfies \\( \\frac{dy}{dx} = 6x^2 - 1 \\). Find \\( y \\) in terms of \\( x \\).",
+                options: ["\\( y = 2x^3 - x - 19 \\)", "\\( y = 2x^3 - x \\)", "\\( y = 2x^3 - x + 19 \\)", "\\( y = 2x^2 - x - 19 \\)"],
+                correctIndex: 0
+            },
+            {
+                question: "Find the volume obtained of the area that is bounded by \\( y = x^3 \\), \\( y = 1 \\) and \\( y = 3 \\) rotated through \\( 360^{\\circ} \\) about the \\( y \\)-axis.",
+                options: ["\\( V = 3\\pi \\text{ units}^3 \\)", "\\( V = 2.14\\pi \\text{ units}^3 \\)", "\\( V = 2\\pi \\text{ units}^3 \\)", "\\( V = 3.14\\pi \\text{ units}^3 \\)"],
+                correctIndex: 3
+            },
+            {
+                question: "If \\( f'(x) = \\frac{1}{2}x^3 - 6x^{-\\frac{5}{3}} + 2 \\) find \\( f(x) \\).",
+                options: [
+                    "\\( \\frac{1}{8}x^4 + 9x^{-\\frac{2}{3}} + 2x + c \\)", 
+                    "\\( \\frac{1}{8}x^4 - 9x^{-\\frac{2}{3}} + 2x + c \\)", 
+                    "\\( \\frac{1}{6}x^4 + 9x^{-\\frac{2}{3}} + 2x + c \\)", 
+                    "\\( \\frac{1}{6}x^4 - 9x^{-\\frac{2}{3}} + 2x + c \\)"
+                ],
+                correctIndex: 0
+            },
+            {
+                question: "A point with coordinates (x,y) moves along the curve \\( y = (1 + 2x)^{\\frac{1}{2}} \\) in such a way that the rate of increase of \\( x \\) has the constant value 0.01 units per second. Find the rate of increase of \\( y \\) at the instant when \\( x = 4 \\).",
+                options: ["\\( \\frac{1}{250} \\text{ units per second} \\)", "\\( \\frac{1}{300} \\text{ units per second} \\)", "\\( \\frac{1}{400} \\text{ units per second} \\)", "\\( \\frac{1}{500} \\text{ units per second} \\)"],
+                correctIndex: 1
+            }
+        ];
+
+        // --- 2. APPLICATION STATE ---
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let timeRemaining = TIME_LIMIT_SECONDS;
+        let timerInterval;
+        let studentName = "";
+        let isQuizActive = false;
+        let startTimeString = "";
+
+        // --- 3. CORE LOGIC ---
+        const pageLogin = document.getElementById('page-login');
+        const pageQuiz = document.getElementById('page-quiz');
+        const pageReport = document.getElementById('page-report');
+        const warningMessage = document.getElementById('warningMessage');
+
+        function startQuiz() {
+            studentName = document.getElementById('studentName').value.trim();
+            if(!studentName) {
+                alert("Please enter your name to begin.");
+                return;
+            }
+
+            // Attempt Fullscreen
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    initiateQuizState();
+                }).catch(err => {
+                    alert("Fullscreen is required. Please allow fullscreen to start the quiz.");
+                });
+            } else {
+                initiateQuizState(); // Fallback for unsupported browsers
+            }
+        }
+
+        function initiateQuizState() {
+            pageLogin.classList.add('hidden');
+            pageQuiz.classList.remove('hidden');
+            
+            document.getElementById('studentDisplay').innerText = `Student: ${studentName}`;
+            document.getElementById('qTotal').innerText = quizData.length;
+            startTimeString = new Date().toLocaleTimeString();
+            
+            isQuizActive = true;
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestion >= quizData.length) {
+                endQuiz("Completed Successfully");
+                return;
+            }
+
+            // Hide warning message when loading new question
+            warningMessage.classList.add('hidden');
+
+            // Update Progress Bar
+            let progress = (currentQuestion / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            const qData = quizData[currentQuestion];
+            document.getElementById('qNumber').innerText = currentQuestion + 1;
+            document.getElementById('questionText').innerHTML = qData.question;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, index) => {
+                const label = document.createElement('label');
+                label.className = "block bg-gray-50 border border-gray-200 p-4 rounded-lg cursor-pointer hover:bg-blue-100 transition flex items-center gap-4";
+                
+                // Hide warning when a user clicks an option
+                label.onclick = () => warningMessage.classList.add('hidden');
+
+                label.innerHTML = `
+                    <input type="radio" name="q_option" value="${index}" class="w-5 h-5 text-blue-600 focus:ring-blue-500">
+                    <span class="text-xl">${opt}</span>
+                `;
+                optionsContainer.appendChild(label);
+            });
+
+            // Trigger LaTeX rendering
+            renderMathInElement(pageQuiz, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="q_option"]:checked');
+            
+            // Show inline UI Warning instead of browser alert
+            if(!selected) {
+                warningMessage.classList.remove('hidden');
+                return;
+            }
+
+            const answerIndex = parseInt(selected.value);
+
+            if(answerIndex === quizData[currentQuestion].correctIndex) {
+                correctAnswers++;
+            }
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if(timeRemaining <= 0) {
+                    endQuiz("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+            let s = (timeRemaining % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function endQuiz(reason) {
+            isQuizActive = false;
+            clearInterval(timerInterval);
+
+            // Auto close fullscreen on Finish
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log("Exit fullscreen bypassed by browser"));
+            }
+
+            pageQuiz.classList.add('hidden');
+            pageReport.classList.remove('hidden');
+
+            if (reason !== "Completed Successfully") {
+                document.getElementById('finishReason').innerText = `Notice: ${reason}`;
+            } else {
+                document.getElementById('finishReason').innerText = "";
+            }
+
+            // Calculate score linearly up to MAX_SCORE
+            const finalScore = Math.round((correctAnswers / quizData.length) * MAX_SCORE);
+
+            const reportText = `====== FINAL REPORT ======
+Subject : EASE 3 Math 11 (2025/2026)
+Student : ${studentName}
+Date    : ${new Date().toLocaleDateString()}
+Started : ${startTimeString}
+Ended   : ${new Date().toLocaleTimeString()}
+--------------------------
+Score   : ${finalScore} / ${MAX_SCORE}
+Correct : ${correctAnswers} out of ${quizData.length}
+==========================`;
+            
+            document.getElementById('reportCard').innerText = reportText;
+        }
+
+        function copyReport() {
+            const text = document.getElementById('reportCard').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Report successfully copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy. Please take a screenshot instead.");
+            });
+        }
+
+        function retakeQuiz() {
+            // Reset all application state variables
+            currentQuestion = 0;
+            correctAnswers = 0;
+            timeRemaining = TIME_LIMIT_SECONDS;
+            isQuizActive = false;
+            clearInterval(timerInterval);
+            
+            // Clear warning state and progress bar
+            warningMessage.classList.add('hidden');
+            document.getElementById('progressBar').style.width = `0%`;
+            document.getElementById('finishReason').innerText = "";
+
+            // Transition UI back to Login
+            pageReport.classList.add('hidden');
+            pageLogin.classList.remove('hidden');
+        }
+
+        // --- 4. ANTI-CHEAT & SECURITY FEATURES ---
+
+        // Disable standard Right Click Context Menu
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Detect if user alt-tabs or switches browser tabs
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && isQuizActive) {
+                endQuiz("VIOLATION: You changed tabs or minimized the browser.");
+            }
+        });
+
+        // Detect if user clicks outside the window (loses window focus / taskbar click)
+        window.addEventListener('blur', () => {
+            if (isQuizActive) {
+                endQuiz("VIOLATION: The quiz window lost focus (Alt-Tab detected).");
+            }
+        });
+    </script>
+</body>
+</html>

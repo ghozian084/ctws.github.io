@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Permutations & Combinations - SMA Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* 5E/PBL Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMA Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Permutations and Combinations</h1>
+            <p><strong>School:</strong> SMA Semesta 2026/2025 | <strong>Grade:</strong> 12</p>
+            <p><strong>Time Allocation:</strong> 6 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 5. Permutations and combinations</p>
+            <p><strong>Reference:</strong> Cambridge International AS & A Level Math: Prob & Stat 1</p>
+            <p><strong>Method:</strong> 5E & Problem Based Learning (PBL)</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Deep Learning & <span class="rme">Realistic Math Education (RME)</span></p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Self-Regulated, Collaboration, Citizenship, Creativity</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>5.2.1:</strong> Understand and use the notation $n!$ (factorial) including evaluating numerical expressions.</li>
+        <li><strong>5.2.2:</strong> Understand and use permutations in simple cases including evaluating numerical expressions.</li>
+        <li><strong>5.2.3:</strong> Understand and use combinations in simple cases including evaluating numerical expressions and use the relationship between combinations and binomial coefficients.</li>
+        <li><strong>5.2.4:</strong> Solve problems using permutations and combinations including problems involving selections and arrangements.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: The Factorial Function (Subtopic 5.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | PBL Problem Introduction</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Contextual Hook<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li><span class="char-dev">Citizenship Context:</span> "Imagine you are organizing an Indonesian Independence Day ceremony. You have 4 different flags to arrange in a row on stage. How many possible visual arrangements are there?"</li>
+                </ul>
+                <h4>Problem Statement (5 min):</h4>
+                <ul>
+                    <li>"If we had 10 flags, counting them manually would take years. How do we model this mathematically?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Discovering the Multiplication Principle</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Group Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Slot Method Discovery (20 min):</h4>
+                <ul>
+                    <li>Groups draw 4 empty "slots" representing flagpoles.</li>
+                    <li><span class="meaningful">Meaningful:</span> Students deduce: "For the first slot, I have 4 choices. For the second, only 3 choices left..." $\rightarrow 4 \times 3 \times 2 \times 1$.</li>
+                    <li>Calculate the answer ($24$).</li>
+                    <li><span class="joyful">Joyful:</span> Groups race to find the number of ways to arrange 5 and then 6 objects.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Defining Factorial</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Introduce notation: $n! = n \times (n-1) \times (n-2) \dots \times 1$.</li>
+                    <li><strong>Slide 3:</strong> Algebraic properties: Show that $n! = n \times (n-1)!$.</li>
+                    <li><strong>Slide 4:</strong> The special case: Define $0! = 1$ and briefly explain why (mathematical consistency).</li>
+                    <li><span class="mindful">Mindful Check:</span> "Is $5! + 2!$ equal to $7!$?" (No! Prove it algebraically on the whiteboard).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL students ensure they pronounce "!" as "factorial", not an exclamation mark of surprise.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Evaluating Expressions & Exit Slip</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>& Teacher Check</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Students evaluate expressions by canceling out terms: $\frac{8!}{6!} = \frac{8 \times 7 \times 6!}{6!} = 56$.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Simplify algebraically: $\frac{n!}{(n-2)!}$. (Expected answer: $n^2 - n$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Permutations (Subtopic 5.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | OSIS Election Hook</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Interactive Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li><span class="char-dev">Citizenship Context:</span> "From 10 top students, SMA Semesta needs to elect an OSIS President, Vice President, and Secretary."</li>
+                    <li>Ask: "If Andi is President and Budi is VP, is that the same arrangement as Budi as President and Andi as VP?"</li>
+                    <li><span class="meaningful">Meaningful:</span> Establish that <strong>ORDER MATTERS</strong>. This is a Permutation.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Slot Method to Formula</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Pair Work<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Deriving the Formula (20 min):</h4>
+                <ul>
+                    <li>Students use the Slot Method: $10 \times 9 \times 8 = 720$.</li>
+                    <li>Teacher challenges pairs: "How can we write $10 \times 9 \times 8$ using factorials?"</li>
+                    <li>Hint provided: Multiply by $\frac{7!}{7!}$. Students discover $\frac{10!}{7!} = \frac{10!}{(10-3)!}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Permutation Formula</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formalize the formula: ${}^nP_r = \frac{n!}{(n-r)!}$.</li>
+                    <li><strong>Slide 3:</strong> Explain calculator usage for ${}^nP_r$.</li>
+                    <li><strong>Slide 4:</strong> Conditional permutations (e.g., "Two specific people MUST sit together"). Model treating the two people as one "block".</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers are encouraged to ALWAYS draw the 'Slot Method' boxes first before attempting to plug numbers into the formula.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 2 (Part A) on permutations without identical objects.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>In how many ways can 5 people be seated in a row of 7 chairs? Evaluate using the ${}^nP_r$ formula.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Permutations with Restrictions / Identical Objects (Subtopic 5.2/5.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | The Repeated Letter Problem</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">PBL Hook &<br>Exploration</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (5 min):</span></h4>
+                <ul>
+                    <li>Write the word "BATIK" on the board. (5 letters, all different = $5!$ ways).</li>
+                    <li>Write the word <span class="rme">"SEMESTA"</span>. "Are there still $7!$ ways? What happens when I swap the two 'S's?"</li>
+                </ul>
+                <h4>Exploration (15 min):</h4>
+                <ul>
+                    <li>Students experiment with a smaller word: "MAM". (M1-A-M2 vs M2-A-M1 look identical).</li>
+                    <li>Realization: We are overcounting! We must divide out the duplicates.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Identical Objects Formula</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formula: $\frac{n!}{p!q!r!}$ for identical objects.</li>
+                    <li><strong>Slide 3:</strong> Example: PANCASILA (9 letters, 3 A's). Ways = $\frac{9!}{3!}$.</li>
+                    <li><strong>Slide 4:</strong> <span class="mindful">Mindful Check:</span> "What if all letters are the same? e.g., 'AAAA'. $\frac{4!}{4!} = 1$ way. Does this make logical sense?" (Yes).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students calculate arrangements of "INDONESIA" where all vowels MUST be together.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Independent Practice & Exit</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (30 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 2 (Part B). Includes complex restrictions (e.g., arrangements of "STATISTICS" starting and ending with 'S').</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students verify their logic by writing out the specific condition fraction (e.g., fix the ends, calculate the middle).</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Calculate the number of different arrangements of the word "MATHEMATICS".</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Combinations (Subtopic 5.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Combination vs Permutation Hook</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Class Debate<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (15 min):</span></h4>
+                <ul>
+                    <li>"We need a team of 3 students to represent the school in a National Debate in Jakarta. From 10 students, we pick Andi, Budi, and Citra."</li>
+                    <li>"If I picked Budi, Citra, and Andi, is it a different team?"</li>
+                    <li><span class="meaningful">Meaningful:</span> Establish that <strong>ORDER DOES NOT MATTER</strong>. This is a Combination.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Removing the Order</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Logic Discovery (15 min):</h4>
+                <ul>
+                    <li>If picking 3 people from 10 where order matters is $\frac{10!}{7!}$.</li>
+                    <li>But for any 3 people (A, B, C), they can be arranged in $3!$ ways.</li>
+                    <li>How do we remove these $3!$ extra arrangements? Divide!</li>
+                    <li>Students derive $\frac{10!}{3!7!}$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Combination Formula & Binomials</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formalize the formula: ${}^nC_r = \binom{n}{r} = \frac{n!}{r!(n-r)!}$.</li>
+                    <li><strong>Slide 3:</strong> Symmetry property: Why is ${}^{10}C_2 = {}^{10}C_8$? (Choosing 2 to go is the same as choosing 8 to stay behind).</li>
+                    <li><strong>Slide 4:</strong> Briefly link ${}^nC_r$ to Pascal's Triangle and Binomial coefficients.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Write keywords explicitly on the board. PERMUTATION = Arrange, Line up, Code, Password. COMBINATION = Select, Choose, Group, Team.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 3. Basic combinations and identifying whether a scenario is P or C.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>A pizza parlor offers 8 toppings. How many different 3-topping pizzas can be ordered?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Problem Solving with Permutations & Combinations (Subtopic 5.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | The "AND" vs "OR" Dilemma</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>PBL Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore — Slide 1 (20 min):</span></h4>
+                <ul>
+                    <li><span class="rme">Culturally STEM:</span> "An Indonesian cultural committee of 4 is to be chosen from 5 boys and 6 girls."</li>
+                    <li>Problem 1: Choose 2 boys AND 2 girls.</li>
+                    <li>Problem 2: Choose 4 boys OR 4 girls.</li>
+                    <li><span class="char-dev">Collaboration:</span> Groups debate whether to multiply or add the combinations.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Fundamental Counting Principles</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2-3 (15 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Establish the golden rule: AND = Multiply ($\times$). OR = Add ($+$).</li>
+                    <li><strong>Slide 3:</strong> Solving "At least" problems. (e.g., "At least 1 girl" = (1G AND 3B) + (2G AND 2B) + (3G AND 1B) + (4G AND 0B)).</li>
+                    <li><span class="mindful">Mindful:</span> Teach the shortcut for "At least 1": (Total possible ways) $-$ (Ways with ZERO girls).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Complex Problem Solving</span>
+            <span>[45 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (35 min):</h4>
+                <ul>
+                    <li>Distribute Cambridge past paper questions (Worksheet 4) mixing permutations and combinations.</li>
+                    <li>Students must first highlight the "Trigger Words" (select vs arrange) before solving.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>A team of 5 is chosen from 4 doctors and 6 nurses. Find the number of ways if the team must contain exactly 2 doctors.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students tackle problems combining both: "Select a team of 4 from 10, then arrange them in a line for a photo." (${}^{10}C_4 \times 4!$).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 6
+    =========================================== -->
+    <h2>📅 Meeting 6: Chapter Review & Summative Evaluation</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Collaborative Review (Mind Mapping)</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Student-led Review</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Concept Mapping (20 min):</span></h4>
+                <ul>
+                    <li>Groups use A3 paper to map out a "Decision Tree" to use during exams.</li>
+                    <li>Example node: "Does order matter?" $\rightarrow$ Yes (Permutation) / No (Combination).</li>
+                    <li>"Are there repeating objects?" $\rightarrow$ Yes (Divide by $p!q!$).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Chapter Evaluation & Closure</span>
+            <span>[60 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 5 Test (50 min):</h4>
+                <ul>
+                    <li>Remove visual aids. Distribute the Chapter 5 Evaluation.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students pace themselves under strict exam conditions, ensuring they read "select" vs "arrange" carefully.</li>
+                </ul>
+                <h4>Closure & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Self-Reflection: "Which type of problem (Permutation with restriction or Combinations with 'at least') do you need more practice on for the AS Level exams?"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Provide circular permutation problems (e.g., seating around a round table: $(n-1)!$). Challenge them to solve "at least 1" problems using the complement method (Total - None) and algebraically prove why ${}^nC_r = {}^nC_{n-r}$.</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Mandate the use of the "Slot Method" for all permutation problems before using the formula. Provide a visual flowchart: "Does Order Matter? -> Yes (P) / No (C)" on their desks.</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a glossary mapping English trigger words to math operators: <em>And (Dan) = Multiply, Or (Atau) = Add, Arrange/Line up (Susun) = Permutation, Select/Team (Pilih) = Combination</em>.</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Use physical manipulatives (different colored blocks) for early permutation exercises. Break down multi-part word problems into explicit bullet-pointed steps.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 1 & 2: Factorials and Permutations</h3>
+        <p>1. Evaluate without a calculator: $\frac{10!}{8!2!}$</p>
+        <p>2. A password consists of 4 different letters chosen from the word "COMPUTER".<br>
+           a) How many arrangements of the letters in "COMPUTER" are there in total?<br>
+           b) How many arrangements begin with a vowel?
+        </p>
+        <p>3. Find the number of different ways the letters of the word "INDONESIA" can be arranged.</p>
+        <p>4. 5 boys and 4 girls sit in a row. How many arrangements are there if all the girls must sit together?</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3 & 4: Combinations and Mixed Problems</h3>
+        <p>1. Evaluate ${}^{12}C_4$.</p>
+        <p>2. A committee of 5 is to be selected from a group of 7 men and 6 women.<br>
+           a) How many different committees can be formed?<br>
+           b) How many committees consist of exactly 3 men and 2 women?<br>
+           c) How many committees contain at least 1 woman?
+        </p>
+        <p>3. A quiz team of 4 students is chosen from 10 students. The team is then arranged in a line for a photograph. How many different photographs can be taken?</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 5 Evaluation (Used in Meeting 6)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. Total: 35 Marks. (Cambridge AS Level Style)</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Basic Concepts & Factorials (10 Marks)</h3>
+        <p>1. Simplify the algebraic expression completely: $\frac{(n+1)!}{(n-1)!}$. (3 marks)</p>
+        <p>2. Calculate the number of ways 6 different books can be arranged on a shelf. (2 marks)</p>
+        <p>3. State whether the following scenario requires a Permutation or a Combination, and explain why briefly: "Choosing a President, Vice President, and Treasurer from 15 candidates." (2 marks)</p>
+        <p>4. Calculate ${}^8P_3$ and ${}^8C_3$. (3 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Permutations with Restrictions (12 Marks)</h3>
+        <p>5. Find the number of different arrangements of the letters in the word "STATISTICS". (3 marks)</p>
+        <p>6. From a group of 8 people, a row of 5 people is to be seated.<br>
+           a) How many possible seating arrangements are there? (2 marks)<br>
+           b) Two specific people in the group, Andi and Budi, refuse to sit next to each other. How many arrangements of 5 people can be formed that INCLUDE both Andi and Budi, but they are NOT seated together? (7 marks)
+        </p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Combinations & Complex Problem Solving (13 Marks)</h3>
+        <p>7. A school debate team of 4 members is to be selected from a class of 9 girls and 7 boys.<br>
+           a) Find the total number of possible teams that can be formed. (2 marks)<br>
+           b) Find the number of teams that contain exactly 2 girls and 2 boys. (3 marks)<br>
+           c) Find the number of teams that contain a majority of girls (more girls than boys). (4 marks)
+        </p>
+        <p>8. <strong>Modeling Question:</strong> A security code consists of 2 letters chosen from 'A,B,C,D,E' followed by 3 digits chosen from '1,2,3,4,5,6,7,8,9'. Letters and digits cannot be repeated.<br>
+           How many different codes can be generated if the letters must be in alphabetical order? (4 marks)
+        </p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Ahmad Nurani, S.T., M.Pd.</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>

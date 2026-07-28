@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Slides - Review of Number Concepts</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #e2e8f0;
+            --text-main: #2d3748;
+            --bg-color: #cbd5e0;
+            --badge-concept: #3182ce;
+            --badge-activity: #38a169;
+            --badge-question: #dd6b20;
+            --badge-exit: #805ad5;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden; color: var(--text-main);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            background-color: #2d3748; display: flex; align-items: center;
+            padding: 0 20px; box-sizing: border-box; z-index: 100; color: white; gap: 15px;
+        }
+        .tool-btn {
+            background-color: #4a5568; color: white; border: 2px solid transparent;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
+            transition: 0.2s;
+        }
+        .tool-btn:hover { background-color: #718096; }
+        .tool-btn.active { border-color: #63b3ed; background-color: #2b6cb0; }
+        .color-picker { width: 30px; height: 30px; border: none; cursor: pointer; padding: 0;}
+        .clear-btn { background-color: #e53e3e; margin-left: auto; }
+        .clear-btn:hover { background-color: #c53030; }
+
+        /* Slide Container */
+        #presentation-container {
+            width: 100%; height: calc(100% - 60px); margin-top: 60px;
+            display: flex; justify-content: center; align-items: center; position: relative;
+        }
+
+        .slide {
+            position: absolute; width: 92%; height: 88%; background: #fff;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 30px 40px; box-sizing: border-box;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out;
+            display: flex; flex-direction: column;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 10; }
+
+        /* Drawing Canvas */
+        .drawing-board {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50; cursor: crosshair; touch-action: none; border-radius: 12px;
+        }
+
+        /* Content Layout */
+        .content-layer { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; pointer-events: none;}
+        
+        .header-title { color: var(--primary); font-size: 2em; border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-top: 0; }
+        
+        .two-column { display: flex; gap: 30px; height: 100%; margin-top: 10px; }
+        .col { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .col-write { 
+            flex: 1.2; 
+            background-color: #fafafa; 
+            border: 2px dashed #a0aec0; 
+            border-radius: 8px; 
+            position: relative;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .write-label { position: absolute; top: 10px; right: 10px; color: #718096; font-weight: bold; font-style: italic; font-size: 1.2em;}
+
+        /* Typography & Badges */
+        h3 { font-size: 1.5em; margin: 5px 0; display: flex; align-items: center; gap: 10px;}
+        p, li { font-size: 1.3em; line-height: 1.5; margin-top: 5px;}
+        ul { margin-top: 5px; padding-left: 25px;}
+        
+        .badge { color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; }
+        .bg-concept { background-color: var(--badge-concept); }
+        .bg-activity { background-color: var(--badge-activity); }
+        .bg-question { background-color: var(--badge-question); }
+        .bg-exit { background-color: var(--badge-exit); }
+
+        .content-box { background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; }
+
+        /* Navigation */
+        .nav-panel {
+            position: absolute; bottom: 15px; width: 100%; display: flex;
+            justify-content: space-between; padding: 0 5%; box-sizing: border-box; z-index: 100; pointer-events: none;
+        }
+        .nav-btn {
+            background-color: var(--primary); color: #fff; border: none; padding: 10px 20px;
+            font-size: 1.2em; border-radius: 8px; cursor: pointer; pointer-events: auto;
+        }
+        .nav-btn:hover { background-color: var(--secondary); }
+        .nav-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+        .progress-indicator { font-size: 1.2em; font-weight: bold; color: #2d3748; align-self: center; pointer-events: auto;}
+
+        /* Title Slide */
+        .title-slide .content-layer { justify-content: center; align-items: center; text-align: center; }
+        .title-slide h1 { font-size: 3.5em; color: var(--primary); margin-bottom: 10px; }
+        .title-slide h2 { font-size: 2em; color: var(--text-main); border: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Teacher Drawing Toolbar -->
+    <div class="toolbar">
+        <span style="font-weight: bold; font-size: 1.2em; margin-right: 20px;">Teacher Tools:</span>
+        <button class="tool-btn active" id="penBtn" onclick="setMode('pen')">✏️ Pen</button>
+        <button class="tool-btn" id="eraserBtn" onclick="setMode('eraser')">🧽 Eraser</button>
+        <input type="color" id="colorPicker" class="color-picker" value="#000000" onchange="setColor(this.value)">
+        <button class="tool-btn clear-btn" onclick="clearCanvas()">🗑️ Clear Slide</button>
+    </div>
+
+    <div id="presentation-container">
+        
+        <!-- Slide 0: Title -->
+        <div class="slide active" id="slide-0">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h1>Review of Number Concepts</h1>
+                <h2>Grade 9 Mathematics</h2>
+                <p>Interactive Teaching Slides | <em>Use the pen tool to write anywhere!</em></p>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 1 ================= -->
+        <div class="slide" id="slide-1">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: Types of Numbers (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> The Number System</h3>
+                        <ul>
+                            <li><strong>Natural:</strong> Counting numbers ($1, 2, 3\dots$)</li>
+                            <li><strong>Integer:</strong> Positive, negative, zero ($-2, 0, 5$)</li>
+                            <li><strong>Rational:</strong> Can be written as $a/b$. Includes stopping and repeating decimals ($0.25, 0.33\dots$)</li>
+                            <li><strong>Irrational:</strong> Non-stopping, non-repeating decimals ($\pi, \sqrt{2}$)</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Card Sort & Gallery Walk</h3>
+                        <p><strong>Hook:</strong> <em>"If you buy 3 apples, pay with Rp 50,000, and get change, what numbers are you using?"</em></p>
+                        <p><strong>Task:</strong> In your groups, take the Number Card Set. Sort them into categories that make sense to you. We will do a gallery walk to compare logic!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 1: Types of Numbers (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Classify</h3>
+                            <p>Classify these measurements of traditional Batik fabric:</p>
+                            <ol>
+                                <li>Length is $2.5m$ (Rational or Irrational?)</li>
+                                <li>Motif count is $150$ (Natural or Integer?)</li>
+                                <li>Diagonal is $\sqrt{2}m$ (Rational or Irrational?)</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Write one Rational number and one Irrational number on a sticky note. Stick it to the door when leaving.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 2 ================= -->
+        <div class="slide" id="slide-3">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Multiples & Factors (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> HCF and LCM</h3>
+                        <ul>
+                            <li><strong>Factors:</strong> Numbers that fit perfectly into another. Find the <em>Highest Common Factor (HCF)</em> to split items equally.</li>
+                            <li><strong>Multiples:</strong> The "times tables" of a number. Find the <em>Lowest Common Multiple (LCM)</em> to see when events overlap.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> 100-Grid overlapping puzzle</h3>
+                        <p><strong>Hook:</strong> <em>"The Gong strikes every 8 beats. The Kenong strikes every 6 beats. When do they strike together?"</em></p>
+                        <p><strong>Task:</strong> Shade multiples of 6 in Yellow, and multiples of 8 in Blue on your grid. Where do they turn Green?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 2: Multiples & Factors (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> HCF</h3>
+                            <p>You are preparing snack boxes for an Indonesian Independence Day event. You have <strong>24 Kue Lemper</strong> and <strong>36 Kue Pastel</strong>.</p>
+                            <p>Find the HCF to know the maximum identical boxes we can make.</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>True or False: "The HCF of two numbers is always smaller than or equal to the LCM." Explain why.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 3 ================= -->
+        <div class="slide" id="slide-5">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Prime Numbers (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Prime Factorization</h3>
+                        <ul>
+                            <li><strong>Prime Number:</strong> Exactly 2 factors (1 and itself). <em>Note: 1 is NOT prime.</em></li>
+                            <li><strong>Factor Tree:</strong> Breaks a number down into primes.</li>
+                            <li><strong>Venn Diagram:</strong> Place primes inside. Intersection = HCF. Multiply all = LCM.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Borobudur Building Blocks</h3>
+                        <p><strong>Hook:</strong> <em>"Borobudur has 72 stupas. Let's break 72 down into its absolute smallest building blocks."</em></p>
+                        <p><strong>Task:</strong> Work in pairs to create factor trees for 72 and 100 on large poster paper.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 3: Prime Numbers (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Venn Method</h3>
+                            <p>Prime factors of <strong>120</strong> = $2^3 \times 3 \times 5$<br>
+                            Prime factors of <strong>84</strong> = $2^2 \times 3 \times 7$</p>
+                            <p>Use a Venn diagram to find the HCF and LCM.</p>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Write down the prime factorization of 24 in index form.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Draw Venn Diagram Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 4 ================= -->
+        <div class="slide" id="slide-7">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Powers & Indices (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Base, Index, and Negatives</h3>
+                        <ul>
+                            <li>$3^4$ means $3 \times 3 \times 3 \times 3$ (Base is 3, Index is 4).</li>
+                            <li><strong>Negative Bases:</strong><br>
+                                Even power = Positive answer (e.g., $(-2)^2 = 4$)<br>
+                                Odd power = Negative answer (e.g., $(-2)^3 = -8$)
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Physical Modeling</h3>
+                        <p><strong>Hook:</strong> <em>"Bandung Bondowoso doubled his workforce every hour (1, 2, 4, 8...). How do we represent this?"</em></p>
+                        <p><strong>Task:</strong> Use physical linking cubes to build $2^2$ (square) and $2^3$ (cube). Try to sketch $2^4$!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-8">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 4: Powers & Indices (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Calculate</h3>
+                            <ol>
+                                <li>Calculate the value of $4^3$.</li>
+                                <li>Calculate $(-3)^3$ and $(-3)^4$. Why is one negative and one positive?</li>
+                                <li>A square rice plot has a side length of $15$ meters. Find the area using powers.</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Calculate: $(-5)^2 + 2^3$.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 5 ================= -->
+        <div class="slide" id="slide-9">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Roots (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Inverse Operations</h3>
+                        <ul>
+                            <li>Roots "un-build" squares and cubes. It asks: "What number multiplied by itself makes this?"</li>
+                            <li>Exact roots are rational ($\sqrt{25} = 5$).</li>
+                            <li>Surds are irrational ($\sqrt{20}$).</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> The Archaeologist</h3>
+                        <p><strong>Hook:</strong> <em>"We found a square Kraton floor with an area of 400 tiles. How many tiles are on one side?"</em></p>
+                        <p><strong>Task:</strong> Discuss in pairs how to use prime factorization to find exact roots of large numbers without a calculator.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 5: Roots (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Evaluate</h3>
+                            <ol>
+                                <li>$\sqrt{121}$</li>
+                                <li>$\sqrt[3]{-64}$ (Can a cube root be negative? Explain.)</li>
+                                <li>A water tank in the shape of a perfect cube has a volume of $1000 \text{ m}^3$. Find the edge length.</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Which is larger: $\sqrt{81}$ or $\sqrt[3]{125}$? Show working.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 6 ================= -->
+        <div class="slide" id="slide-11">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Directed Numbers Add/Sub (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Double Signs</h3>
+                        <ul>
+                            <li>Adding a negative: $5 + (-3) \rightarrow 5 - 3$</li>
+                            <li>Subtracting a negative: $5 - (-3) \rightarrow 5 + 3$ (Taking away cold makes it warmer!)</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Sliding Counters</h3>
+                        <p><strong>Hook:</strong> <em>"At Puncak Jaya Wijaya, temperature drops from $-5^\circ C$ by $12^\circ C$. How do we survive?"</em></p>
+                        <p><strong>Task:</strong> Use physical number lines on desks to slide counters left and right to find answers visually.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 6: Directed Numbers Add/Sub (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Number Line</h3>
+                            <p>Calculate the following:</p>
+                            <ol>
+                                <li>$-12 + 7$</li>
+                                <li>$8 - 15$</li>
+                                <li>$-6 - (-9)$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>A scuba diver is at $-15$m. They ascend $6$m. What is their new depth?</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 7 ================= -->
+        <div class="slide" id="slide-13">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 7: Directed Numbers Mul/Div (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Sign Rules</h3>
+                        <ul>
+                            <li>Same signs Multiply/Divide to <strong>Positive (+)</strong>.</li>
+                            <li>Different signs Multiply/Divide to <strong>Negative (-)</strong>.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Bank Debt Pattern</h3>
+                        <p><strong>Hook:</strong> <em>"If the bank 'forgives' (subtracts) 3 debts of Rp 10,000, what happens to your balance?"</em></p>
+                        <p><strong>Task:</strong> Finish the pattern:<br>
+                            $2 \times -2 = -4$<br>
+                            $1 \times -2 = -2$<br>
+                            $0 \times -2 = 0$<br>
+                            $-1 \times -2 = ?$
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-14">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 7: Directed Numbers Mul/Div (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Calculate</h3>
+                            <ol>
+                                <li>$-6 \times -4$</li>
+                                <li>$\frac{-24}{3}$</li>
+                                <li>$-4 \times 5 + 12$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Calculate: $\frac{-18}{-6} - 5$</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Solve Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 8 ================= -->
+        <div class="slide" id="slide-15">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 8: Order of Operations (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> BODMAS</h3>
+                        <ul>
+                            <li><strong>B</strong>rackets</li>
+                            <li><strong>O</strong>rders (Powers/Roots)</li>
+                            <li><strong>D</strong>ivision & <strong>M</strong>ultiplication</li>
+                            <li><strong>A</strong>ddition & <strong>S</strong>ubtraction</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Target 24 & Vault Code</h3>
+                        <p><strong>Hook:</strong> <em>"Open the vault: $50 - 2 \times 15 + 10$. Left-to-right gets 730. BODMAS gets 30. Who is right?"</em></p>
+                        <p><strong>Task:</strong> Use the operation cards to arrange numbers to equal exactly 24 using brackets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-16">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 8: Order of Operations (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Evaluate</h3>
+                            <ol>
+                                <li>$15 - 3 \times (8 \div 2)$</li>
+                                <li>$2^3 + \frac{20 - 5}{3}$</li>
+                                <li>Insert brackets to make true: $4 + 3 \times 2 - 1 = 13$</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Spot the error in the equation on the board, circle it, and correct it.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Step-by-Step Here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MEETING 9 ================= -->
+        <div class="slide" id="slide-17">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 9: Rounding & Evaluation (Part 1)</h2>
+                <div class="two-column">
+                    <div class="col content-box">
+                        <h3><span class="badge bg-concept">Main Concept</span> Rounding Rules</h3>
+                        <ul>
+                            <li><strong>Decimal Places (d.p.):</strong> Count after the point.</li>
+                            <li><strong>Significant Figures (s.f.):</strong> Count from first non-zero.</li>
+                            <li><strong>Rule:</strong> Look at right neighbor. 5 or more = Round UP.</li>
+                        </ul>
+                    </div>
+                    <div class="col content-box">
+                        <h3><span class="badge bg-activity">Activity</span> Sabang to Merauke</h3>
+                        <p><strong>Hook:</strong> <em>"Distance is 5,245.83 km. Do we need exact decimal meters for flight budgets?"</em></p>
+                        <p><strong>Task:</strong> 45-Minute Summative Evaluation covering the entire chapter under exam conditions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-18">
+            <canvas class="drawing-board"></canvas>
+            <div class="content-layer">
+                <h2 class="header-title">Meeting 9: Rounding & Evaluation (Part 2)</h2>
+                <div class="two-column">
+                    <div class="col">
+                        <div class="content-box">
+                            <h3><span class="badge bg-question">Sample Question</span> Rounding</h3>
+                            <ol>
+                                <li>Round $3.14159$ to 2 d.p.</li>
+                                <li>Round $0.0456$ to 2 s.f.</li>
+                                <li>Round $54,392$ to 1 s.f.</li>
+                            </ol>
+                        </div>
+                        <div class="content-box">
+                            <h3><span class="badge bg-exit">Exit Ticket</span></h3>
+                            <p>Self-Reflection: Rate your confidence (1-5) and write one specific skill you mastered.</p>
+                        </div>
+                    </div>
+                    <div class="col-write">
+                        <div class="write-label">Workings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Panel -->
+    <div class="nav-panel">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">❮ Prev</button>
+        <div class="progress-indicator" id="progress">Slide 1 of 19</div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ❯</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateNav() {
+            progress.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) slide.classList.add('active');
+                else slide.classList.remove('active');
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            updateNav();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            else if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        updateNav();
+
+        // --- Canvas Drawing Logic ---
+        let currentMode = 'pen'; 
+        let strokeColor = '#000000';
+        let strokeWidth = 3;
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('penBtn').classList.remove('active');
+            document.getElementById('eraserBtn').classList.remove('active');
+            document.getElementById(mode + 'Btn').classList.add('active');
+        }
+
+        function setColor(color) {
+            strokeColor = color;
+            setMode('pen'); 
+        }
+
+        function clearCanvas() {
+            const canvas = slides[currentSlide].querySelector('canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function resizeCanvases() {
+            slides.forEach(slide => {
+                const canvas = slide.querySelector('canvas');
+                if (canvas) {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                }
+            });
+        }
+
+        slides.forEach(slide => {
+            const canvas = slide.querySelector('canvas');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: clientX - rect.left, y: clientY - rect.top };
+            }
+
+            function startDraw(e) {
+                isDrawing = true;
+                const pos = getPos(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault(); 
+                
+                const pos = getPos(e);
+                
+                if (currentMode === 'eraser') {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    ctx.lineWidth = 20; 
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = strokeWidth;
+                }
+                
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+
+            function stopDraw() {
+                isDrawing = false;
+                ctx.closePath();
+            }
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseout', stopDraw);
+
+            canvas.addEventListener('touchstart', startDraw, {passive: false});
+            canvas.addEventListener('touchmove', draw, {passive: false});
+            canvas.addEventListener('touchend', stopDraw);
+        });
+
+        window.onload = resizeCanvases;
+        window.onresize = resizeCanvases;
+
+    </script>
+</body>
+</html>

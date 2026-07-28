@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Lab - Permutations & Combinations</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent: #ebf8ff;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --bg-color: #f7fafc;
+            --box-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #2d3748;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        header h1 { margin: 0; font-size: 1.5em; }
+        .badge { background: var(--secondary); padding: 5px 10px; border-radius: 5px; font-size: 0.9em; }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            background-color: #2d3748;
+            padding: 0 20px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+        .tab-btn:hover { color: white; }
+        .tab-btn.active { color: white; border-bottom-color: #63b3ed; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-container {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .section-container.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Lab Modules (Sim, Example, Exercise) */
+        .module {
+            background: var(--box-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .module h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        button.action-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.action-btn:hover { background-color: var(--primary); }
+        button.action-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+
+        /* Simulation Specifics */
+        .sim-area {
+            min-height: 150px;
+            background: #edf2f7;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            padding: 20px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .sim-box {
+            width: 60px; height: 60px;
+            background: var(--primary); color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5em; font-weight: bold; border-radius: 8px;
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+        .sim-slot {
+            width: 60px; height: 60px;
+            border: 3px dashed #a0aec0; border-radius: 8px;
+            display: flex; justify-content: center; align-items: center;
+            color: #718096; font-weight: bold;
+        }
+        .sim-text {
+            font-size: 1.2em; font-weight: bold; color: var(--primary);
+            text-align: center; margin-top: 15px; min-height: 30px;
+        }
+
+        /* Step-by-Step Box */
+        .step-box {
+            background: #fffff0; border-left: 5px solid #ecc94b;
+            padding: 15px; margin-top: 15px; border-radius: 5px;
+        }
+        .step { display: none; margin-top: 10px; font-size: 1.1em;}
+        .step.active { display: block; animation: fadeIn 0.3s; }
+
+        /* Exercise Inputs */
+        .exercise-input {
+            padding: 10px; font-size: 1.1em;
+            border: 2px solid var(--secondary); border-radius: 5px;
+            width: 150px; margin-right: 10px;
+        }
+        .feedback {
+            font-weight: bold; font-size: 1.1em; margin-top: 10px; display: none;
+        }
+        .feedback.correct { color: var(--success); display: block;}
+        .feedback.incorrect { color: #e53e3e; display: block;}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🔬 Web Lab: Permutations & Combinations</h1>
+        <div class="badge">SMA Semesta • Grade 12</div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('sec1')">1. Factorials</button>
+        <button class="tab-btn" onclick="openTab('sec2')">2. Permutations</button>
+        <button class="tab-btn" onclick="openTab('sec3')">3. Identical Objects</button>
+        <button class="tab-btn" onclick="openTab('sec4')">4. Combinations</button>
+    </div>
+
+    <div class="main-content">
+
+        <!-- ================= SECTION 1: FACTORIALS ================= -->
+        <div id="sec1" class="section-container active">
+            
+            <div class="module">
+                <h2>🎮 Concept Simulation: The Multiplication Principle</h2>
+                <p>How many ways can we arrange 3 distinct blocks into 3 slots?</p>
+                <button class="action-btn" onclick="runSim1()">Play Simulation</button>
+                <div class="sim-area" id="sim1-area">
+                    <!-- Slots -->
+                    <div style="position:absolute; top:20px; display:flex; gap:20px;">
+                        <div class="sim-box" id="s1-b1" style="background:#e53e3e;">A</div>
+                        <div class="sim-box" id="s1-b2" style="background:#38a169;">B</div>
+                        <div class="sim-box" id="s1-b3" style="background:#3182ce;">C</div>
+                    </div>
+                    <!-- Target Slots -->
+                    <div style="position:absolute; bottom:20px; display:flex; gap:20px;">
+                        <div class="sim-slot">Slot 1</div>
+                        <div class="sim-slot">Slot 2</div>
+                        <div class="sim-slot">Slot 3</div>
+                    </div>
+                </div>
+                <div class="sim-text" id="sim1-text">Waiting to start...</div>
+            </div>
+
+            <div class="module">
+                <h2>📝 Step-by-Step Example</h2>
+                <p><strong>Problem:</strong> In how many ways can 5 books be arranged on a shelf?</p>
+                <div class="step-box">
+                    <button class="action-btn" id="btn-ex1" onclick="nextStep('ex1', 3)">Show Next Step</button>
+                    <div class="step ex1-1"><strong>Step 1:</strong> Identify that all 5 objects are being arranged. This is $5!$ (5 factorial).</div>
+                    <div class="step ex1-2"><strong>Step 2:</strong> Expand the factorial: $5 \times 4 \times 3 \times 2 \times 1$</div>
+                    <div class="step ex1-3"><strong>Step 3:</strong> Calculate: $120$ ways.</div>
+                </div>
+            </div>
+
+            <div class="module">
+                <h2>✍️ Student Exercise</h2>
+                <p>Calculate the value of $6!$</p>
+                <input type="number" id="ans1" class="exercise-input" placeholder="Your answer...">
+                <button class="action-btn" onclick="checkAns('ans1', 720, 'fb1')">Check Answer</button>
+                <div class="feedback" id="fb1"></div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 2: PERMUTATIONS ================= -->
+        <div id="sec2" class="section-container">
+            
+            <div class="module">
+                <h2>🎮 Concept Simulation: Permutations ($^nP_r$)</h2>
+                <p>Selecting 2 winners (1st and 2nd place) out of 4 runners. <strong>Order Matters!</strong></p>
+                <button class="action-btn" onclick="runSim2()">Play Simulation</button>
+                <div class="sim-area" id="sim2-area">
+                    <div style="position:absolute; top:20px; display:flex; gap:15px;">
+                        <div class="sim-box" id="s2-b1">R1</div><div class="sim-box" id="s2-b2">R2</div>
+                        <div class="sim-box" id="s2-b3">R3</div><div class="sim-box" id="s2-b4">R4</div>
+                    </div>
+                    <div style="position:absolute; bottom:20px; display:flex; gap:15px;">
+                        <div class="sim-slot" style="border-color:#ecc94b; color:#ecc94b;">1st</div>
+                        <div class="sim-slot" style="border-color:#a0aec0; color:#a0aec0;">2nd</div>
+                    </div>
+                </div>
+                <div class="sim-text" id="sim2-text">Waiting to start...</div>
+            </div>
+
+            <div class="module">
+                <h2>📝 Step-by-Step Example</h2>
+                <p><strong>Problem:</strong> Electing a President, VP, and Secretary from 6 students.</p>
+                <div class="step-box">
+                    <button class="action-btn" id="btn-ex2" onclick="nextStep('ex2', 4)">Show Next Step</button>
+                    <div class="step ex2-1"><strong>Step 1:</strong> Identify $n = 6$ (total students) and $r = 3$ (positions). Order matters, so use $^nP_r$.</div>
+                    <div class="step ex2-2"><strong>Step 2:</strong> Formula: $^6P_3 = \frac{6!}{(6-3)!} = \frac{6!}{3!}$</div>
+                    <div class="step ex2-3"><strong>Step 3:</strong> Expand and cancel: $\frac{6 \times 5 \times 4 \times 3!}{3!}$</div>
+                    <div class="step ex2-4"><strong>Step 4:</strong> Calculate: $6 \times 5 \times 4 = 120$ ways.</div>
+                </div>
+            </div>
+
+            <div class="module">
+                <h2>✍️ Student Exercise</h2>
+                <p>Arrange 4 paintings out of 7 on a gallery wall. How many arrangements?</p>
+                <input type="number" id="ans2" class="exercise-input" placeholder="Your answer...">
+                <button class="action-btn" onclick="checkAns('ans2', 840, 'fb2')">Check Answer</button>
+                <div class="feedback" id="fb2"></div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 3: IDENTICAL OBJECTS ================= -->
+        <div id="sec3" class="section-container">
+            
+            <div class="module">
+                <h2>🎮 Concept Simulation: Identical Objects</h2>
+                <p>Arranging the word "MAM". What happens when we swap the two 'M's?</p>
+                <button class="action-btn" onclick="runSim3()">Play Simulation</button>
+                <div class="sim-area" id="sim3-area">
+                    <div style="display:flex; gap:10px;" id="s3-container">
+                        <div class="sim-box" id="s3-b1" style="background:#e53e3e;">M₁</div>
+                        <div class="sim-box" id="s3-b2" style="background:#4a5568;">A</div>
+                        <div class="sim-box" id="s3-b3" style="background:#e53e3e;">M₂</div>
+                    </div>
+                </div>
+                <div class="sim-text" id="sim3-text">Original Arrangement: M₁ - A - M₂</div>
+            </div>
+
+            <div class="module">
+                <h2>📝 Step-by-Step Example</h2>
+                <p><strong>Problem:</strong> How many arrangements of the word "KATAK"?</p>
+                <div class="step-box">
+                    <button class="action-btn" id="btn-ex3" onclick="nextStep('ex3', 4)">Show Next Step</button>
+                    <div class="step ex3-1"><strong>Step 1:</strong> Total letters $n = 5$. Total initial arrangements = $5!$.</div>
+                    <div class="step ex3-2"><strong>Step 2:</strong> Identify repeating letters. 'K' repeats $2$ times. 'A' repeats $2$ times.</div>
+                    <div class="step ex3-3"><strong>Step 3:</strong> Divide out duplicates: $\frac{5!}{2! \times 2!}$</div>
+                    <div class="step ex3-4"><strong>Step 4:</strong> Calculate: $\frac{120}{2 \times 2} = \frac{120}{4} = 30$ ways.</div>
+                </div>
+            </div>
+
+            <div class="module">
+                <h2>✍️ Student Exercise</h2>
+                <p>How many different arrangements of the word <strong>SEMESTA</strong>? <br><em>(Hint: 7 letters total. Check for repeated letters!)</em></p>
+                <input type="number" id="ans3" class="exercise-input" placeholder="Your answer...">
+                <button class="action-btn" onclick="checkAns('ans3', 1260, 'fb3')">Check Answer</button>
+                <div class="feedback" id="fb3"></div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 4: COMBINATIONS ================= -->
+        <div id="sec4" class="section-container">
+            
+            <div class="module">
+                <h2>🎮 Concept Simulation: Combinations ($^nC_r$)</h2>
+                <p>Selecting a team of 3 from A, B, C. <strong>Order does NOT matter!</strong></p>
+                <button class="action-btn" onclick="runSim4()">Play Simulation</button>
+                <div class="sim-area" id="sim4-area">
+                    <div style="display:flex; gap:10px;" id="s4-container">
+                        <div class="sim-box" id="s4-b1">A</div>
+                        <div class="sim-box" id="s4-b2">B</div>
+                        <div class="sim-box" id="s4-b3">C</div>
+                    </div>
+                </div>
+                <div class="sim-text" id="sim4-text">Permutations view A-B-C and C-B-A as different...</div>
+            </div>
+
+            <div class="module">
+                <h2>📝 Step-by-Step Example</h2>
+                <p><strong>Problem:</strong> Choose a debate team of 3 students from a group of 8.</p>
+                <div class="step-box">
+                    <button class="action-btn" id="btn-ex4" onclick="nextStep('ex4', 4)">Show Next Step</button>
+                    <div class="step ex4-1"><strong>Step 1:</strong> Identify $n = 8$ and $r = 3$. Order doesn't matter (it's a team), so use $^nC_r$.</div>
+                    <div class="step ex4-2"><strong>Step 2:</strong> Formula: $^8C_3 = \frac{8!}{3!(8-3)!} = \frac{8!}{3!5!}$</div>
+                    <div class="step ex4-3"><strong>Step 3:</strong> Expand and cancel: $\frac{8 \times 7 \times 6 \times 5!}{3 \times 2 \times 1 \times 5!}$</div>
+                    <div class="step ex4-4"><strong>Step 4:</strong> Calculate: $\frac{8 \times 7 \times 6}{6} = 56$ teams.</div>
+                </div>
+            </div>
+
+            <div class="module">
+                <h2>✍️ Student Exercise</h2>
+                <p>Choose 2 pizza toppings from a menu of 6 toppings. How many combinations?</p>
+                <input type="number" id="ans4" class="exercise-input" placeholder="Your answer...">
+                <button class="action-btn" onclick="checkAns('ans4', 15, 'fb4')">Check Answer</button>
+                <div class="feedback" id="fb4"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // Tab Navigation
+        function openTab(tabId) {
+            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            // Re-typeset MathJax when making tab visible
+            if (window.MathJax) { MathJax.typesetPromise(); }
+        }
+
+        // Step-by-Step Logic
+        let stepCounters = { ex1: 0, ex2: 0, ex3: 0, ex4: 0 };
+        function nextStep(exId, maxSteps) {
+            if(stepCounters[exId] < maxSteps) {
+                stepCounters[exId]++;
+                document.querySelector(`.${exId}-${stepCounters[exId]}`).classList.add('active');
+                if(stepCounters[exId] === maxSteps) {
+                    document.getElementById(`btn-${exId}`).disabled = true;
+                    document.getElementById(`btn-${exId}`).innerText = "All Steps Shown";
+                }
+            }
+        }
+
+        // Exercise Checking Logic
+        function checkAns(inputId, correctAns, fbId) {
+            const userAns = document.getElementById(inputId).value;
+            const fb = document.getElementById(fbId);
+            if(userAns == correctAns) {
+                fb.innerText = "✅ Correct! Well done.";
+                fb.className = "feedback correct";
+            } else {
+                fb.innerText = "❌ Incorrect. Try again!";
+                fb.className = "feedback incorrect";
+            }
+        }
+
+        // ================= SIMULATIONS =================
+
+        function runSim1() {
+            const b1 = document.getElementById('s1-b1');
+            const b2 = document.getElementById('s1-b2');
+            const b3 = document.getElementById('s1-b3');
+            const txt = document.getElementById('sim1-text');
+            
+            // Reset
+            b1.style.transform = 'translate(0px, 0px)';
+            b2.style.transform = 'translate(0px, 0px)';
+            b3.style.transform = 'translate(0px, 0px)';
+            
+            setTimeout(() => {
+                txt.innerText = "Slot 1 has 3 choices. Choosing 'A'...";
+                b1.style.transform = 'translate(0px, 95px)'; // move to slot 1
+            }, 1000);
+            
+            setTimeout(() => {
+                txt.innerText = "Slot 2 has 2 choices left. Choosing 'B'...";
+                b2.style.transform = 'translate(0px, 95px)';
+            }, 2500);
+
+            setTimeout(() => {
+                txt.innerText = "Slot 3 has 1 choice left. Choosing 'C'...";
+                b3.style.transform = 'translate(0px, 95px)';
+            }, 4000);
+
+            setTimeout(() => {
+                txt.innerHTML = "Total ways = $3 \\times 2 \\times 1 = 6$ ways.";
+                if(window.MathJax) MathJax.typesetPromise([txt]);
+            }, 5500);
+        }
+
+        function runSim2() {
+            const b1 = document.getElementById('s2-b1');
+            const b2 = document.getElementById('s2-b2');
+            const txt = document.getElementById('sim2-text');
+            
+            b1.style.transform = 'translate(0px, 0px)';
+            b2.style.transform = 'translate(0px, 0px)';
+
+            setTimeout(() => {
+                txt.innerText = "1st Place: 4 choices available. R1 takes 1st.";
+                b1.style.transform = 'translate(0px, 95px)';
+            }, 1000);
+
+            setTimeout(() => {
+                txt.innerText = "2nd Place: 3 choices left. R2 takes 2nd.";
+                b2.style.transform = 'translate(-35px, 95px)';
+            }, 2500);
+
+            setTimeout(() => {
+                txt.innerHTML = "Calculation: $4 \\times 3 = 12$ possible arrangements.";
+                if(window.MathJax) MathJax.typesetPromise([txt]);
+            }, 4000);
+        }
+
+        function runSim3() {
+            const b1 = document.getElementById('s3-b1');
+            const b3 = document.getElementById('s3-b3');
+            const txt = document.getElementById('sim3-text');
+
+            b1.style.transform = 'translate(0px, 0px)';
+            b3.style.transform = 'translate(0px, 0px)';
+            b1.innerText = "M₁"; b3.innerText = "M₂";
+
+            setTimeout(() => {
+                txt.innerText = "Swapping M₁ and M₂...";
+                b1.style.transform = 'translate(140px, 0px)';
+                b3.style.transform = 'translate(-140px, 0px)';
+            }, 1500);
+
+            setTimeout(() => {
+                txt.innerText = "If we remove the subscripts, the word looks IDENTICAL.";
+                b1.innerText = "M"; b3.innerText = "M";
+            }, 3500);
+
+            setTimeout(() => {
+                txt.innerHTML = "Since $2!$ arrangements look identical, we divide by $2!$.";
+                if(window.MathJax) MathJax.typesetPromise([txt]);
+            }, 5000);
+        }
+
+        function runSim4() {
+            const cont = document.getElementById('s4-container');
+            const txt = document.getElementById('sim4-text');
+
+            setTimeout(() => {
+                txt.innerText = "But in a COMBINATION (a Team), A-B-C and C-B-A are the exact same team!";
+                // Visual shuffle
+                cont.style.flexDirection = "row-reverse";
+            }, 2000);
+
+            setTimeout(() => {
+                txt.innerText = "They merge into ONE single combination.";
+                cont.innerHTML = '<div class="sim-box" style="width: 140px; background:#38a169;">Team ABC</div>';
+            }, 4000);
+
+            setTimeout(() => {
+                txt.innerHTML = "We divide permutations by $r!$ to destroy the order.";
+                if(window.MathJax) MathJax.typesetPromise([txt]);
+                
+                // Reset for next play
+                setTimeout(() => {
+                    cont.style.flexDirection = "row";
+                    cont.innerHTML = '<div class="sim-box" id="s4-b1">A</div><div class="sim-box" id="s4-b2">B</div><div class="sim-box" id="s4-b3">C</div>';
+                }, 3000);
+            }, 6000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Idul Fitri 1447 H 🎉</title>
+    <!-- Google Fonts for a nicer look -->
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Pastikan body setinggi viewport */
+            background: linear-gradient(to bottom, #73c6b6, #d4f2e7);
+            color: #333;
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        /* Class untuk menonaktifkan scroll di body saat popup aktif */
+        body.no-scroll {
+            overflow: hidden; /* Cukup ini, tidak perlu fixed pada body */
+        }
+
+        /* Dekorasi Bintang Bergerak */
+        .star {
+            position: fixed;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 4s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Container for the whole page content */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-out;
+            position: relative; /* Penting agar z-index bekerja dengan benar dalam konteks */
+            overflow: hidden;
+            z-index: 1;
+            /* Hapus transform: translateY dari sini jika ada, karena dapat mengganggu fixed positioning anak */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header Styling */
+        h1 {
+            color: #2e8b57;
+            font-family: 'Amatic SC', cursive;
+            font-size: 3.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        /* Input and Button Styling */
+        .input-section {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-section label {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .input-section input[type="text"] {
+            padding: 15px 25px;
+            width: 70%;
+            max-width: 350px;
+            border: 2px solid #a5d6a7;
+            border-radius: 30px;
+            font-size: 1.2em;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .input-section input[type="text"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+        }
+
+        .input-section button {
+            background-color: #ffb300;
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(255, 179, 0, 0.4);
+        }
+
+        .input-section button:hover {
+            background-color: #ffa000;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 179, 0, 0.6);
+        }
+
+        /* Card Section Styling - DEFAULT HIDDEN */
+        .card-section {
+            display: none;
+            animation: slideIn 1s ease-out forwards;
+            margin-top: 30px;
+            height: auto;
+            min-height: 400px;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* Class untuk menampilkan dan memusatkan card-section */
+        .card-section.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting-card {
+            background: linear-gradient(to top right, #e8f5e9, #c8e6c9);
+            border: 5px solid #4CAF50;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            animation: cardPopUp 0.6s ease-out;
+
+            /* Properti 3D Card */
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+            cursor: grab;
+            min-width: 280px;
+        }
+
+        .greeting-card:active {
+            cursor: grabbing;
+        }
+
+        @keyframes cardPopUp {
+            from { transform: scale(0.8) rotateY(0deg) rotateX(0deg); opacity: 0; }
+            to { transform: scale(1) rotateY(0deg) rotateX(0deg); opacity: 1; }
+        }
+
+        .greeting-card p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .greeting-card .recipient-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2e8b57;
+            margin-bottom: 25px;
+        }
+
+        .greeting-card .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2.2em;
+            color: #00796b;
+            margin: 20px 0;
+            direction: rtl;
+            text-align: center;
+        }
+
+        .greeting-card .sender-names {
+            font-style: italic;
+            margin-top: 30px;
+            font-size: 1.15em;
+            color: #666;
+        }
+
+        /* Gift Boxes Styling */
+        .gift-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .gift-box {
+            background-color: #ff7043;
+            width: 160px;
+            height: 160px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 112, 67, 0.4);
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+
+        .gift-box.ketupat { background-color: #66bb6a; }
+        .gift-box.opor { background-color: #ffee58; color: #333;}
+        .gift-box.rendang { background-color: #bf360c; }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%);
+            left: 50%;
+        }
+        .gift-box::after {
+            content: '';
+            position: absolute;
+            height: 45px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%);
+            top: 50%;
+        }
+
+        /* Gift Popup Section */
+        .gift-content {
+            display: none;
+            position: fixed; /* Sudah benar */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            /* Pemusatan dengan flexbox pada container fixed */
+            display: flex; /* Aktifkan flex untuk pemusatan anak */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto; /* Memungkinkan scroll internal popup */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gift-content.active {
+            display: flex; /* Tetap pakai active untuk mengontrol visibility */
+        }
+        /* Override default display:none di .gift-content, hanya active yang visible */
+        .gift-content:not(.active) {
+            display: none !important;
+        }
+
+        .gift-popup {
+            background-color: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            animation: popUp 0.4s ease-out;
+            position: relative;
+            /* margin: auto; <-- Hapus, karena sudah diatur oleh flex parent */
+            /* transform: none !important; <-- Hapus, biarkan animasi popUp bekerja */
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .gift-popup img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            animation: imageScaleIn 0.5s ease-out;
+        }
+
+        @keyframes imageScaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .gift-popup h3 {
+            color: #2e8b57;
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+
+        .gift-popup p {
+            color: #555;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-3px);
+        }
+
+        /* Placeholder image for inspiration */
+        .decoration-image {
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+            margin: 30px auto;
+            display: block;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            animation: floatUp 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 3em; }
+            h2 { font-size: 1.7em; }
+            .container { padding: 30px; }
+            .input-section input[type="text"] { width: 85%; }
+            .input-section button { padding: 15px 30px; font-size: 1.2em; }
+            .gift-boxes { flex-direction: column; align-items: center; }
+            .gift-box { width: 140px; height: 140px; font-size: 1.1em;}
+            .greeting-card {
+                max-width: 500px;
+                padding: 25px;
+                width: 85%;
+            }
+            .greeting-card p {font-size: 1.1em;}
+            .greeting-card .recipient-name {font-size: 1.5em;}
+            .greeting-card .arabic-text { font-size: 1.8em; }
+            .gift-popup h3 { font-size: 1.7em; }
+            .gift-popup p { font-size: 1.1em; }
+            .card-section.active { min-height: 350px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 1.4em; }
+            .container { padding: 20px; }
+            .input-section input[type="text"] { width: 95%; font-size: 1.1em; }
+            .input-section button { padding: 12px 25px; font-size: 1.1em; }
+            .gift-box { width: 120px; height: 120px; font-size: 1em;}
+            .greeting-card {
+                max-width: 300px; /* Lebih kecil lagi */
+                width: 90%; /* Mengambil 95% dari lebar container, bukan 100% */
+                padding: 7px;
+                border-width: 3px;
+                /*margin: 0 auto; /* Pastikan terpusat */
+            }
+            .greeting-card p {font-size: 0.8em;}
+            .greeting-card .recipient-name {font-size: 1em;}
+            .greeting-card .arabic-text { font-size: 1.1em; margin: 5px 0; }
+            .greeting-card .sender-names { font-size: 1em; margin-top: 20px; }
+            .gift-popup h3 { font-size: 1.5em; }
+            .gift-popup p { font-size: 1em; }
+            .card-section.active { min-height: 300px; }
+            .gift-popup {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Animasi Bintang-bintang di Latar Belakang -->
+    <div class="star" style="width: 5px; height: 5px; top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="star" style="width: 7px; height: 7px; top: 50%; left: 80%; animation-delay: 1.5s;"></div>
+    <div class="star" style="width: 4px; height: 4px; top: 70%; left: 40%; animation-delay: 0.8s;"></div>
+    <div class="star" style="width: 6px; height: 6px; top: 25%; left: 60%; animation-delay: 2.2s;"></div>
+    <div class="star" style="width: 8px; height: 8px; top: 85%; left: 10%; animation-delay: 3s;"></div>
+    <div class="star" style="width: 5px; height: 5px; top: 30%; left: 90%; animation-delay: 0.5s;"></div>
+    <div class="star" style="width: 7px; height: 7px; top: 65%; left: 25%; animation-delay: 2s;"></div>
+
+
+    <div class="container">
+        <h1>Selamat Hari Raya Idul Fitri ✨</h1>
+        <h2>1447 Hijriah</h2>
+
+        <img src="lebaran/halaman-depan.png" alt="Dekorasi Lebaran" class="decoration-image">
+
+        <div class="input-section" id="inputSection">
+            <label for="userName">Masukkan Nama Anda: 👇</label>
+            <input type="text" id="userName" placeholder="Nama Anda di Sini...">
+            <button onclick="showGreetingCard()">Buka Kartu Ucapan 🎉</button>
+            <p style="margin-top: 30px; font-style: italic; color: #777;">Dari: Ghozian, Nazzun, dan Alhazen</p>
+        </div>
+
+        <div class="card-section" id="cardSection">
+            <div class="greeting-card" id="greetingCard">
+                <p class="recipient-name">Untuk <span id="displayUserName"></span>, Selamat Idul Fitri! 🌙</p>
+                <p>Di hari yang fitri ini, kami sekeluarga mengucapkan Selamat Hari Raya Idul Fitri 1447 Hijriah.</p>
+                <p>Mohon Maaf Lahir dan Batin 🙏. Semoga keberkahan senantiasa menyertai langkah kita semua. ✨</p>
+
+                <p class="arabic-text">
+                    تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ
+                </p>
+
+                <p class="sender-names">Hormat kami,<br>Ghozian, Nazzun, dan Alhazen</p>
+            </div>
+
+            <p style="font-size: 1.4em; color: #555; margin-top: 40px; margin-bottom: 25px;">Buka Kado Spesial Anda! 🎁</p>
+            <div class="gift-boxes">
+                <a href="#" class="gift-box ketupat" onclick="openGift('ketupat'); return false;">
+                    Ketupat 🍚
+                </a>
+                <a href="#" class="gift-box opor" onclick="openGift('opor'); return false;">
+                    Opor Ayam 🍗
+                </a>
+                <a href="#" class="gift-box rendang" onclick="openGift('rendang'); return false;">
+                    Rendang 🌶️
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gift Popup Section (Hidden by default) -->
+    <div class="gift-content" id="giftPopup">
+        <div class="gift-popup">
+            <img id="giftImage" src="" alt="Isi Kado">
+            <h3 id="giftTitle"></h3>
+            <p id="giftMessage"></p>
+            <button class="close-btn" onclick="closeGift()">Tutup ❌</button>
+        </div>
+    </div>
+
+    <script>
+        // Variabel untuk menyimpan posisi sentuhan awal
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+        let currentRotateX = 0;
+        let currentRotateY = 0;
+        const rotationSensitivityTouch = 0.2; // Sensitivitas rotasi untuk sentuhan
+
+        // Handler untuk mousemove
+        function handleMouseMove(e) {
+            const greetingCard = document.getElementById('greetingCard');
+            if (!greetingCard) return;
+
+            const rect = greetingCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotationSensitivity = 10; // Rotasi maks 10 derajat
+
+            const rotateX = ((y - centerY) / centerY) * rotationSensitivity;
+            const rotateY = ((x - centerX) / centerX) * -rotationSensitivity;
+
+            greetingCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+
+        // Handler untuk mouseleave
+        function handleMouseLeave() {
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            }
+        }
+
+        // Handler untuk touchstart
+        function handleTouchStart(e) {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+            // Dapatkan rotasi saat ini jika ada
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                 const st = window.getComputedStyle(greetingCard, null);
+                 const tr = st.getPropertyValue("-webkit-transform") ||
+                            st.getPropertyValue("-moz-transform") ||
+                            st.getPropertyValue("-ms-transform") ||
+                            st.getPropertyValue("-o-transform") ||
+                            st.getPropertyValue("transform") ||
+                            "none";
+
+                 if (tr !== "none" && tr.startsWith("matrix3d")) {
+                    const values = tr.split('(')[1].split(')')[0].split(',');
+                    // Mendapatkan rotasi dari matrix3d cukup kompleks, kita bisa menyimpan rotasi terakhir
+                    // Untuk kesederhanaan, kita anggap rotasi awal 0 jika tidak ada sistem yang menyimpan
+                    // atau reset ke 0 saat touchstart.
+                    // Untuk saat ini, kita akan reset agar lebih mudah dikontrol
+                     currentRotateX = 0;
+                     currentRotateY = 0;
+                 } else {
+                     currentRotateX = 0;
+                     currentRotateY = 0;
+                 }
+            }
+        }
+
+        // Handler untuk touchmove
+        function handleTouchMove(e) {
+            e.preventDefault(); // Mencegah scrolling default
+            const greetingCard = document.getElementById('greetingCard');
+            if (!greetingCard) return;
+
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - lastTouchX;
+            const deltaY = touch.clientY - lastTouchY;
+
+            // Sesuaikan rotasi berdasarkan pergerakan sentuhan
+            currentRotateY += deltaX * rotationSensitivityTouch;
+            currentRotateX -= deltaY * rotationSensitivityTouch; // Invers Y untuk rotasi X
+
+            // Batasi rotasi agar tidak berputar terlalu jauh
+            currentRotateX = Math.max(-20, Math.min(20, currentRotateX));
+            currentRotateY = Math.max(-20, Math.min(20, currentRotateY));
+
+            greetingCard.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+        }
+
+        // Handler untuk touchend
+        function handleTouchEnd() {
+            // Setelah sentuhan berakhir, kartu akan perlahan kembali ke posisi semula
+            const greetingCard = document.getElementById('greetingCard');
+            if (greetingCard) {
+                // Untuk efek kembali halus, kita bisa pakai transisi CSS yang sudah ada
+                // Atau reset transform langsung jika tidak ada transisi yang diinginkan
+                setTimeout(() => { // Memberi sedikit waktu untuk melihat hasil rotasi
+                    greetingCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                }, 300); // Kembali setelah 300ms
+            }
+        }
+
+
+        function showGreetingCard() {
+            const userNameInput = document.getElementById('userName');
+            const userName = userNameInput.value.trim();
+            const cardSection = document.getElementById('cardSection');
+            const greetingCard = document.getElementById('greetingCard');
+
+            if (userName) {
+                document.getElementById('displayUserName').textContent = userName;
+                const inputSection = document.getElementById('inputSection');
+                inputSection.style.opacity = '0';
+                inputSection.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    inputSection.style.display = 'none';
+                    cardSection.classList.add('active');
+                    cardSection.style.opacity = '1';
+                    cardSection.style.transform = 'translateY(0)';
+
+                    // Aktifkan event listener 3D setelah kartu terlihat
+                    if (greetingCard) {
+                        if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
+                            // Desktop (Mouse)
+                            greetingCard.addEventListener('mousemove', handleMouseMove);
+                            greetingCard.addEventListener('mouseleave', handleMouseLeave);
+                        } else {
+                            // Touchscreen (HP)
+                            greetingCard.addEventListener('touchstart', handleTouchStart);
+                            greetingCard.addEventListener('touchmove', handleTouchMove);
+                            greetingCard.addEventListener('touchend', handleTouchEnd);
+                            greetingCard.addEventListener('touchcancel', handleTouchEnd); // Penanganan sentuhan dibatalkan
+                        }
+                    }
+                }, 500);
+            } else {
+                alert('Silakan masukkan nama Anda terlebih dahulu! 😊');
+            }
+        }
+
+        function openGift(giftType) {
+            const giftPopup = document.getElementById('giftPopup');
+            const giftImage = document.getElementById('giftImage');
+            const giftTitle = document.getElementById('giftTitle');
+            const giftMessage = document.getElementById('giftMessage');
+
+            let imageUrl, title, message;
+
+            if (giftType === 'ketupat') {
+                imageUrl = 'lebaran/ketupat.png';
+                title = 'Lezatnya Ketupat! 😋';
+                message = 'Simbol kebersamaan dan maaf di hari raya. Selamat menikmati hidangan Lebaran ini! 💚';
+            } else if (giftType === 'opor') {
+                imageUrl = 'lebaran/opor.png';
+                title = 'Nikmatnya Opor Ayam! 🍲';
+                message = 'Hidangan wajib Lebaran yang selalu dinanti. Selamat menyantap dan merayakan kebersamaan! ✨';
+            } else if (giftType === 'rendang') {
+                imageUrl = 'lebaran/rendang.png';
+                title = 'Rendang Istimewa! 🔥';
+                message = 'Rasa otentik yang kaya rempah, favorit sepanjang masa. Selamat mencoba sajian lezat ini! 🌶️';
+            }
+
+            giftImage.src = imageUrl;
+            giftTitle.textContent = title;
+            giftMessage.textContent = message;
+
+            giftPopup.classList.add('active');
+            //document.body.classList.add('no-scroll');
+        }
+
+        function closeGift() {
+            document.getElementById('giftPopup').classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
+    </script>
+</body>
+</html>
