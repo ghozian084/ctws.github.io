@@ -46,7 +46,13 @@ const LEARNING_KIT_DATA = {
           sections: {
             lp: { label: "Lesson Plan", files: [{ file: "lp.html", title: "Lesson Plan" }] },
             bd: { label: "Board", files: [{ index: 1, file: "bd-01.html", title: "Board 1" }] },
-            im: { label: "Interactive Media", files: [{ index: 1, file: "im-01.html", title: "Interactive Media 1" }] },
+            im: {
+              label: "Interactive Media",
+              files: [
+                { index: 1, file: "im-01.html", title: "Interactive Media 1" },
+                { index: 2, file: "im-02.html", title: "Interactive Media 2" },
+              ],
+            },
             ws: {
               label: "Worksheet",
               files: [
