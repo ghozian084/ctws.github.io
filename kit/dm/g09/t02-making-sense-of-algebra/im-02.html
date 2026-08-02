@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Algebraic Modelling — Expressions &amp; Formulae</title>
+
+<script>
+  MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] },
+              options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+
+<style>
+:root{
+  --navy-900:#0f1b33; --navy-800:#16233f; --navy-700:#1f2f52;
+  --ink:#16233f; --ink-soft:#55628a;
+  --amber:#e8a33d; --amber-soft:#f7e3c0; --amber-deep:#b9761d;
+  --teal:#4fa69c; --teal-soft:#dcefec; --teal-deep:#2f6f68;
+  --clay:#c2603f; --clay-soft:#f6e0d8;
+  --paper:#fdfcf8; --line:#e4dfd2; --white:#fff;
+  --font-display:"Fraunces",Georgia,"Iowan Old Style",serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.6;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:32px 32px;background-attachment:fixed}
+button{font-family:inherit;cursor:pointer}
+
+/* ---------- header ---------- */
+.hdr{background:var(--navy-900);color:#fff;padding:26px 24px 0}
+.hdr-in{max-width:1000px;margin:0 auto}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 6px}
+.hdr h1{font-family:var(--font-display);font-weight:600;font-size:clamp(22px,4vw,30px);margin:0 0 6px}
+.hdr p.sub{color:#aab6d0;margin:0 0 18px;font-size:14px;max-width:70ch}
+.progress-wrap{display:flex;align-items:center;gap:12px;padding-bottom:18px}
+.progress-bar{flex:1;height:7px;background:var(--navy-700);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));transition:width .35s ease}
+.progress-txt{font-family:var(--font-mono);font-size:12px;color:var(--amber-soft);white-space:nowrap}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid var(--navy-700);border-bottom:none;color:#aab6d0;
+  padding:10px 16px;border-radius:9px 9px 0 0;font-size:13.5px;font-weight:500}
+.tab:hover{background:var(--navy-800);color:#fff}
+.tab.active{background:var(--paper);color:var(--navy-900);border-color:var(--paper);font-weight:600}
+.tab .tab-sub{display:block;font-size:10.5px;font-weight:400;opacity:.75;font-family:var(--font-mono)}
+
+/* ---------- layout ---------- */
+main{max-width:1000px;margin:0 auto;padding:26px 20px 60px}
+.module{display:none}.module.active{display:block}
+.mod-intro{background:var(--navy-900);color:#cdd7ec;border-radius:12px;padding:20px 22px;margin-bottom:26px}
+.mod-intro h2{font-family:var(--font-display);color:#fff;margin:0 0 8px;font-size:20px;font-weight:600}
+.mod-intro p{margin:0 0 10px;font-size:14px}
+.mod-intro ul{margin:0;padding-left:18px;font-size:13.5px;color:#aab6d0}
+.mod-intro li{margin-bottom:3px}
+
+/* ---------- activity card ---------- */
+.act{background:var(--white);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;
+  box-shadow:0 1px 3px rgba(22,35,63,.05);overflow:hidden}
+.act-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#fff,#fbfaf5);flex-wrap:wrap}
+.act-num{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--white);background:var(--navy-800);
+  padding:4px 9px;border-radius:6px;flex:0 0 auto}
+.act-head h3{font-family:var(--font-display);font-size:17px;font-weight:600;margin:0;flex:1 1 240px}
+.comp{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;color:var(--teal-deep);
+  background:var(--teal-soft);border:1px solid #bfdfda;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.comp.m34{color:var(--amber-deep);background:#fdf1dd;border-color:#f0d9ae}
+.act-body{padding:20px}
+.act-body>p{margin:0 0 14px}
+.ctx{font-size:12px;font-family:var(--font-mono);color:var(--clay);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+
+/* ---------- guide + note boxes ---------- */
+.guide{background:#fffdf2;border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:14px 16px;margin:0 0 18px}
+.guide b{color:var(--amber-deep);display:block;margin-bottom:5px;font-size:13px;letter-spacing:.02em}
+.guide p{margin:0 0 6px;font-size:14px}
+.guide p:last-child{margin-bottom:0}
+.note{background:var(--teal-soft);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:12px 15px;margin:16px 0;font-size:13.5px}
+.note b{color:var(--teal-deep)}
+.gapflag{background:var(--clay-soft);border-left:4px solid var(--clay);border-radius:0 8px 8px 0;padding:12px 15px;margin:0 0 16px;font-size:13px}
+.gapflag b{color:var(--clay)}
+
+/* ---------- stages ---------- */
+.stage{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#fdfdfb;position:relative}
+.stage.locked{opacity:.5}
+.stage-lbl{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--ink-soft);margin-bottom:9px}
+.stage-lbl .dot{width:7px;height:7px;border-radius:99px;background:var(--amber);flex:0 0 auto}
+.stage.done .stage-lbl .dot{background:var(--teal)}
+.lock-msg{font-size:12px;color:var(--clay);font-style:italic;margin:6px 0 0}
+
+.field{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+.field .pre{font-family:var(--font-mono);font-size:15px;padding-top:8px;color:var(--navy-800)}
+input.ans,textarea.ans{font-family:var(--font-mono);font-size:15px;padding:8px 11px;border:1px solid #c9d0e0;
+  border-radius:7px;background:#fff;color:var(--ink);min-width:0;flex:1 1 190px;max-width:100%}
+textarea.ans{font-family:var(--font-body);min-height:64px;resize:vertical;flex-basis:100%}
+input.ans:focus,textarea.ans:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber)}
+input.ans:disabled,textarea.ans:disabled{background:#f1f1ee;cursor:not-allowed}
+input.ans.tiny{flex:0 0 76px;text-align:center}
+input.ans.small{flex:0 0 120px}
+input.ans.ok,textarea.ans.ok{border-color:var(--teal);background:#f4fbfa}
+input.ans.bad,textarea.ans.bad{border-color:var(--clay);background:#fdf5f2}
+.check{background:var(--navy-800);color:#fff;border:none;border-radius:7px;padding:9px 15px;font-size:13px;font-weight:500;flex:0 0 auto}
+.check:hover{background:var(--navy-700)}
+.check:disabled{opacity:.4;cursor:not-allowed}
+.fb{flex-basis:100%;margin:2px 0 0;font-size:13px;min-height:0}
+.fb.ok{color:var(--teal-deep)}
+.fb.bad{color:var(--clay)}
+.fb:empty{display:none}
+
+/* ---------- tables ---------- */
+table.wt{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:14px}
+table.wt th{background:var(--navy-800);color:#fff;font-weight:500;font-size:12.5px;text-align:left;padding:9px 11px}
+table.wt th:first-child{border-radius:8px 0 0 0}table.wt th:last-child{border-radius:0 8px 0 0}
+table.wt td{border:1px solid var(--line);padding:9px 11px;vertical-align:middle}
+table.wt tr:nth-child(even) td{background:#fbfaf5}
+table.wt .given{font-family:var(--font-mono);color:var(--ink-soft)}
+
+/* ---------- match-up ---------- */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:8px}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--ink-soft);margin:0 0 2px;font-weight:500}
+.mi{text-align:left;background:#fff;border:1px solid #c9d0e0;border-radius:8px;padding:11px 13px;font-size:14px;transition:all .12s}
+.mi:hover:not(.matched){border-color:var(--amber);background:#fffdf2}
+.mi.sel{border-color:var(--amber);background:var(--amber-soft);box-shadow:0 0 0 3px rgba(232,163,61,.18)}
+.mi.matched{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep);cursor:default}
+.mi.matched::after{content:" ✓";color:var(--teal);font-weight:700}
+.mi.shake{animation:shake .3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ---------- 3D ---------- */
+.viz{display:grid;grid-template-columns:1fr 210px;gap:14px;margin:8px 0 16px;align-items:start}
+.canvas-box{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#101a2e;aspect-ratio:4/3}
+.canvas-box canvas{display:block;width:100%;height:100%;touch-action:none}
+.canvas-hint{position:absolute;left:10px;bottom:9px;font-family:var(--font-mono);font-size:10.5px;color:#8c9ab8;pointer-events:none}
+.legend{display:flex;flex-direction:column;gap:9px}
+.legend h4{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin:0}
+.lg{display:flex;align-items:center;gap:9px;font-size:13.5px}
+.sw{width:15px;height:15px;border-radius:4px;flex:0 0 auto;border:1px solid rgba(0,0,0,.15)}
+.viz-btn{background:#fff;border:1px solid #c9d0e0;border-radius:7px;padding:8px 11px;font-size:12.5px;text-align:left;color:var(--ink)}
+.viz-btn:hover{border-color:var(--amber);background:#fffdf2}
+.slider-row{display:flex;flex-direction:column;gap:3px;margin-bottom:9px}
+.slider-row label{font-size:12.5px;display:flex;justify-content:space-between;font-family:var(--font-mono);color:var(--ink-soft)}
+.slider-row label b{color:var(--navy-800)}
+.slider-row input[type=range]{width:100%;accent-color:var(--amber)}
+.verify-out{font-family:var(--font-mono);font-size:13px;background:var(--navy-900);color:#cdd7ec;border-radius:8px;padding:11px 13px;margin-top:8px}
+.verify-out .hit{color:var(--teal)}
+.verify-out .miss{color:var(--amber)}
+
+/* ---------- both-sides rearranger ---------- */
+.bs{background:var(--navy-900);border-radius:10px;padding:18px;margin:6px 0 12px;overflow-x:auto}
+.bs-line{display:flex;align-items:center;justify-content:center;gap:14px;font-family:var(--font-mono);
+  font-size:16px;color:#fff;padding:9px 0;white-space:nowrap}
+.bs-line.ghost{color:#7c8cae;font-size:14px}
+.bs-line .eq{color:var(--amber);font-weight:700}
+.bs-side{background:var(--navy-700);border-radius:7px;padding:7px 13px}
+.bs-line.solved .bs-side{background:var(--teal-deep)}
+.bs-ops{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+.bs-op{background:var(--amber);color:var(--navy-900);border:none;border-radius:7px;padding:8px 13px;
+  font-family:var(--font-mono);font-size:13px;font-weight:500}
+.bs-op:hover{background:#f0b459}
+.bs-op.ghost{background:transparent;color:#8c9ab8;border:1px solid var(--navy-700)}
+.bs-op.ghost:hover{background:var(--navy-700);color:#fff}
+.bs-msg{text-align:center;font-size:13px;color:#aab6d0;margin:12px 0 0;min-height:19px}
+.bs-msg.good{color:var(--teal)}
+.bs-msg.warn{color:var(--amber)}
+
+/* ---------- placeholder module ---------- */
+.ph{background:#fff;border:2px dashed var(--line);border-radius:12px;padding:36px 26px;text-align:center}
+.ph h3{font-family:var(--font-display);font-size:19px;margin:0 0 8px}
+.ph p{color:var(--ink-soft);max-width:56ch;margin:0 auto 12px;font-size:14px}
+.ph ul{text-align:left;max-width:56ch;margin:0 auto;font-size:13.5px;color:var(--ink-soft)}
+
+footer{background:var(--navy-900);color:#8c9ab8;padding:20px;text-align:center;font-size:12.5px}
+footer b{color:var(--amber-soft);font-weight:500}
+
+@media(max-width:760px){
+  .match{grid-template-columns:1fr;gap:14px}
+  .viz{grid-template-columns:1fr}
+  .canvas-box{aspect-ratio:1/1}
+  main{padding:18px 14px 40px}
+  .act-body{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <p class="eyebrow">Grade 9 · Local Instructional Theory · Modelling Competencies M1–M4</p>
+    <h1>Algebraic Modelling: Expressions &amp; Formulae</h1>
+    <p class="sub">Work through each step in order. The medium will not let you jump straight to a number &mdash;
+       you must build the symbolic model first, then solve it, then say what your answer means in the real situation.</p>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+      <span class="progress-txt" id="ptxt">0 / 0 steps</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-mod="m1">Objective 1<span class="tab-sub">Expressions from statements</span></button>
+      <button class="tab" data-mod="m2">Objective 2<span class="tab-sub">Formulas from real problems</span></button>
+      <button class="tab" data-mod="m3">Objective 3<span class="tab-sub">Substitution &middot; coming</span></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= MODULE 1 ================= -->
+<section class="module active" id="m1">
+
+  <div class="mod-intro">
+    <h2>Objective 1 &mdash; Constructing a mathematical expression from a factual statement</h2>
+    <p>Competencies developed here: <b>M1 Understanding/Simplifying</b> and <b>M2 Mathematizing</b>.</p>
+    <ul>
+      <li>Identifying variables, coefficients and constants</li>
+      <li>Identifying and symbolizing quantities</li>
+      <li>Constructing mathematical expressions based on information</li>
+      <li>Constructing mathematical equations based on information</li>
+    </ul>
+  </div>
+
+  <!-- 1.1 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.1</span><h3>Translation Match-Up</h3><span class="comp">M1</span></div>
+    <div class="act-body">
+      <div class="guide">
+        <b>Guided step &mdash; variables and translation</b>
+        <p><b>Variable:</b> a <i>single letter</i> <i>x</i>, <i>y</i>, <i>m</i> standing for an unknown number.</p>
+        <p><b>Coefficient:</b> the number multiplying the variable. \(4x\) means \(4\times x\). We never write \(\times\) in algebra because it looks like an <i>x</i>.</p>
+        <p><b>Translation key:</b> sum / more than \(\rightarrow +\) &nbsp;|&nbsp; difference / less than \(\rightarrow -\) &nbsp;|&nbsp; product / times \(\rightarrow \times\) &nbsp;|&nbsp; quotient / half \(\rightarrow \div\)</p>
+      </div>
+      <p>Tap a phrase on the left, then tap the expression on the right that matches it.</p>
+      <div class="match" id="match1">
+        <div class="match-col" data-side="l">
+          <h4>English phrase</h4>
+          <button class="mi" data-key="a">A number <i>x</i> increased by 7</button>
+          <button class="mi" data-key="b">7 less than a number <i>x</i></button>
+          <button class="mi" data-key="c">The product of 7 and <i>x</i></button>
+          <button class="mi" data-key="d">A number <i>x</i> divided by 7</button>
+          <button class="mi" data-key="e">Double a number <i>x</i>, then add 7</button>
+        </div>
+        <div class="match-col" data-side="r">
+          <h4>Algebraic expression</h4>
+          <button class="mi" data-key="c">\(7x\)</button>
+          <button class="mi" data-key="e">\(2x + 7\)</button>
+          <button class="mi" data-key="a">\(x + 7\)</button>
+          <button class="mi" data-key="d">\(\frac{x}{7}\)</button>
+          <button class="mi" data-key="b">\(x - 7\)</button>
+        </div>
+      </div>
+      <p class="fb" id="fb-match1"></p>
+    </div>
+  </article>
+
+  <!-- 1.2 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.2</span><h3>Physical Modelling &mdash; Bandeng Presto</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p class="ctx">Pasar Bandeng, Ungaran</p>
+      <p>You visit Pasar Bandeng. A <b>sealed box</b> of Bandeng Presto contains an unknown number of fish.
+         Loose fish are counted as ordinary numbers.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; symbolize the unknown</div>
+        <p style="margin:0 0 8px;font-size:14px">Choose <b>one single letter</b> to represent the number of fish in one sealed box.</p>
+        <div class="field">
+          <span class="pre">Let</span>
+          <input class="ans tiny" data-id="q12-sym" data-check="sym" maxlength="3" placeholder="?" aria-label="variable letter">
+          <span class="pre">= number of fish in one sealed box.</span>
+          <button class="check">Check</button>
+          <p class="fb"></p>
+        </div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; write each expression</div>
+        <table class="wt">
+          <tr><th>Scenario</th><th>Algebraic expression</th></tr>
+          <tr><td>You buy 3 sealed boxes.</td>
+              <td><div class="field"><input class="ans" data-id="q12a" data-check="expr" data-ans="3b" data-gate="q12-sym"
+                   data-hint="Three boxes means the box quantity is repeated 3 times. What number goes in front of your letter?" placeholder="e.g. 3?">
+                   <button class="check">Check</button><p class="fb"></p></div></td></tr>
+          <tr><td>You buy 2 sealed boxes and 5 loose fish.</td>
+              <td><div class="field"><input class="ans" data-id="q12b" data-check="expr" data-ans="2b+5" data-gate="q12-sym"
+                   data-hint="You have two different kinds of quantity here: unknown boxes and known loose fish. Both must appear."><button class="check">Check</button><p class="fb"></p></div></td></tr>
+          <tr><td>You buy 4 sealed boxes, but give 2 loose fish to your friend.</td>
+              <td><div class="field"><input class="ans" data-id="q12c" data-check="expr" data-ans="4b-2" data-gate="q12-sym"
+                   data-hint="Giving fish away reduces your total. Which operation shows a decrease?"><button class="check">Check</button><p class="fb"></p></div></td></tr>
+        </table>
+      </div>
+    </div>
+  </article>
+
+  <!-- 1.3 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.3</span><h3>Spot the Error</h3><span class="comp">M1</span></div>
+    <div class="act-body">
+      <p>Budi translates the phrase <b>&ldquo;5 less than a number <i>y</i>&rdquo;</b> and writes: \(5 - y\).</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; the correct expression</div>
+        <div class="field">
+          <input class="ans small" data-id="q13a" data-check="expr" data-ans="y-5"
+                 data-hint="Read the phrase slowly: what is the starting quantity, and what is taken away from it? The order of writing is not the order of reading.">
+          <button class="check">Check</button><p class="fb"></p>
+        </div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; explain his mistake</div>
+        <div class="field">
+          <textarea class="ans" data-id="q13b" data-check="open" data-gate="q13a"
+            placeholder="Explain in your own words why 5 − y does not match the phrase..."></textarea>
+          <button class="check">Submit</button><p class="fb"></p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 1.4 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.4</span><h3>The Angkot Journey</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p class="ctx">Public minivan route, Semarang</p>
+      <p>An Angkot leaves the terminal carrying <i>p</i> passengers. After <i>each</i> stop, write a new expression
+         for the total number of passengers. Each answer builds on the one before it.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Start &mdash; at the terminal</div>
+        <p style="margin:0;font-size:14px">Expression: <b style="font-family:var(--font-mono)">p</b> &nbsp;<span style="color:var(--teal-deep)">(given)</span></p>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Stop 1 &mdash; 4 new passengers get on</div>
+        <div class="field"><input class="ans small" data-id="q14b" data-check="expr" data-ans="p+4"
+             data-hint="Start from the expression you already have and change only what the stop tells you."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Stop 2 &mdash; 2 passengers get off</div>
+        <div class="field"><input class="ans small" data-id="q14c" data-check="expr" data-ans="p+2" data-gate="q14b"
+             data-hint="Take your Stop 1 answer and subtract 2 from it. Then simplify the two ordinary numbers."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Stop 3 &mdash; the number on board suddenly doubles</div>
+        <div class="field"><input class="ans small" data-id="q14d" data-check="expr" data-ans="2(p+2)" data-gate="q14c"
+             data-hint="Everyone on board doubles — not just the unknown part. Use brackets so the multiplication acts on the WHOLE expression."><button class="check">Check</button><p class="fb"></p></div>
+        <p class="lock-msg">Either \(2(p+2)\) or its expanded form will be accepted.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- 1.5 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.5</span><h3>Geometry Meets Algebra &mdash; counting before symbolizing</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p>Write an expression for the <b>perimeter</b> (total distance around the outside) of each shape.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>a) Equilateral triangle, each side <i>m</i></div>
+        <div class="field"><span class="pre">Perimeter = \(m+m+m\) =</span>
+          <input class="ans tiny" data-id="q15a" data-check="expr" data-ans="3m"
+                 data-hint="How many times does m appear? Write that count in front of the letter."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>b) Rectangle, length <i>y</i>, width 4</div>
+        <div class="field"><span class="pre">Perimeter = \(y+y+4+4\) =</span>
+          <input class="ans small" data-id="q15b" data-check="expr" data-ans="2y+8"
+                 data-hint="Collect the letters together and the ordinary numbers together — they cannot be added to each other."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="note"><b>Now in 3D.</b> A flat drawing hides how often an edge repeats. Rotate the bamboo frame below and
+        count each colour <i>before</i> you write any algebra.</div>
+
+      <p class="ctx">Bamboo drying frame</p>
+      <div class="viz">
+        <div class="canvas-box" id="cv-frame"><div class="canvas-hint">drag to rotate &middot; pinch or scroll to zoom</div></div>
+        <div class="legend">
+          <h4>Edge types</h4>
+          <div class="lg"><span class="sw" style="background:#e8a33d"></span>length <i>p</i></div>
+          <div class="lg"><span class="sw" style="background:#4fa69c"></span>width <i>l</i></div>
+          <div class="lg"><span class="sw" style="background:#c2603f"></span>height <i>t</i></div>
+          <button class="viz-btn" id="frame-count">▶ Count the edges for me</button>
+          <button class="viz-btn" id="frame-reset">↺ Reset view</button>
+        </div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; how many of each?</div>
+        <div class="field">
+          <span class="pre">amber <i>p</i>:</span><input class="ans tiny" data-id="q15p" data-check="num" data-ans="4" data-hint="Rotate the frame — some edges are hidden behind the front ones.">
+          <span class="pre">teal <i>l</i>:</span><input class="ans tiny" data-id="q15l" data-check="num" data-ans="4" data-hint="Rotate the frame — some edges are hidden behind the front ones.">
+          <span class="pre">clay <i>t</i>:</span><input class="ans tiny" data-id="q15t" data-check="num" data-ans="4" data-hint="Look at the four upright posts, one at each corner.">
+          <button class="check">Check</button><p class="fb"></p>
+        </div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; total length of bamboo needed</div>
+        <div class="field"><span class="pre">Total = </span>
+          <input class="ans" data-id="q15c" data-check="expr" data-ans="4p+4l+4t" data-gate="q15p"
+                 data-hint="Use the three counts you just made as the coefficients. Three different letters means three separate terms.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 1.6 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.6</span><h3>From Expression to Equation</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <div class="gapflag"><b>Added activity.</b> The printed worksheet only ever asks for <i>expressions</i>.
+        Objective 1 also lists <i>constructing mathematical equations</i>, so this task closes that gap.</div>
+      <div class="guide"><b>Expression vs equation</b>
+        <p>An <b>expression</b> such as \(3b+2\) is only a description &mdash; there is nothing to solve.</p>
+        <p>An <b>equation</b> such as \(3b+2=26\) states that two things are equal. The equals sign is what makes it solvable.</p>
+      </div>
+      <p>You buy 3 sealed boxes of Bandeng Presto plus 2 loose fish. When you count everything at home,
+         you have <b>26 fish</b> altogether.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; the expression for what you bought</div>
+        <div class="field"><input class="ans small" data-id="q16a" data-check="expr" data-ans="3b+2"
+             data-hint="This is the same structure as activity 1.2 — boxes plus loose fish."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; turn it into an equation</div>
+        <div class="field"><input class="ans" data-id="q16b" data-check="eq" data-ans="3b+2=26" data-gate="q16a"
+             data-hint="An equation needs an equals sign and a known total on the other side. What did you count at home?"><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; what does the letter mean here?</div>
+        <div class="field"><textarea class="ans" data-id="q16c" data-check="open" data-gate="q16b"
+             placeholder="In this situation, the value of the unknown letter tells us..."></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 1.7 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">1.7</span><h3>Create Your Own</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p>Think of a real situation near you that involves an unknown quantity. Define your variable,
+         describe the situation, then write the expression.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; define one variable</div>
+        <div class="field"><span class="pre">Let</span>
+          <input class="ans tiny" data-id="q17-sym" data-check="sym" maxlength="3" placeholder="?">
+          <span class="pre">represent</span>
+          <input class="ans" data-id="q17-mean" data-check="open" placeholder="the number of ...">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; your story</div>
+        <div class="field"><textarea class="ans" data-id="q17-story" data-check="open" data-gate="q17-sym"
+            placeholder="Describe the situation in one or two sentences..."></textarea><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; your expression</div>
+        <div class="field"><input class="ans small" data-id="q17-expr" data-check="open" data-gate="q17-story" placeholder="e.g. 5k + 3">
+          <button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ================= MODULE 2 ================= -->
+<section class="module" id="m2">
+
+  <div class="mod-intro">
+    <h2>Objective 2 &mdash; Obtaining formulas from real problems</h2>
+    <p>Competencies developed here: <b>M1 Understanding/Simplifying</b> and <b>M2 Mathematizing</b>.</p>
+    <ul>
+      <li>Obtaining mathematical formulas and equations from a case</li>
+      <li>Rearranging the formula to another form (both-sides scaffolding)</li>
+      <li>Deriving a formula from another formula</li>
+      <li>Applying formulas to solve problems</li>
+    </ul>
+  </div>
+
+  <div class="guide">
+    <b>Guided step &mdash; discovering the formula</b>
+    <p>A <b>formula</b> is a rule written with variables and an equals sign.</p>
+    <p>In real life, costs usually have two parts:</p>
+    <p style="text-align:center;font-size:15px">Total \(=\) (fixed constant fee) \(+\) (variable rate \(\times\) quantity)</p>
+  </div>
+
+  <!-- 2.1 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.1</span><h3>The Lawang Sewu Trip</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p class="ctx">OSIS school trip, Semarang</p>
+      <p>Renting the tourist bus costs a fixed <b>Rp 500,000</b> no matter how many students go.
+         Each entry ticket costs <b>Rp 10,000 per student</b>.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; find the pattern</div>
+        <table class="wt">
+          <tr><th>Students <i>n</i></th><th>Calculation (bus + tickets)</th><th>Total cost <i>C</i></th></tr>
+          <tr><td class="given">10</td><td class="given">500000 + (10 × 10000)</td><td class="given">Rp 600,000</td></tr>
+          <tr><td class="given">20</td>
+              <td><div class="field"><span class="pre">500000 + (</span>
+                <input class="ans tiny" data-id="q21r1" data-check="num" data-ans="20" data-hint="Look at the row above — which number in the bracket changed with the number of students?">
+                <span class="pre">× 10000)</span><button class="check">Check</button><p class="fb"></p></div></td>
+              <td><div class="field"><span class="pre">Rp</span><input class="ans small" data-id="q21r2" data-check="num" data-ans="700000" data-hint="Work out the bracket first, then add the bus fee."><button class="check">Check</button><p class="fb"></p></div></td></tr>
+          <tr><td class="given">50</td><td class="given">500000 + (50 × 10000)</td>
+              <td><div class="field"><span class="pre">Rp</span><input class="ans small" data-id="q21r3" data-check="num" data-ans="1000000" data-hint="Fifty tickets, then add the same fixed bus fee as always."><button class="check">Check</button><p class="fb"></p></div></td></tr>
+        </table>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; name the parts</div>
+        <div class="field"><span class="pre">The number that <b>never changes</b> (constant) =</span>
+          <input class="ans small" data-id="q21const" data-check="num" data-ans="500000" data-gate="q21r2"
+                 data-hint="Scan down your table — which figure is identical in every single row?"><button class="check">Check</button><p class="fb"></p></div>
+        <div class="field"><span class="pre">The number that <b>multiplies</b> the students (coefficient) =</span>
+          <input class="ans small" data-id="q21coef" data-check="num" data-ans="10000" data-gate="q21r2"
+                 data-hint="Which figure is attached to the number of students every time?"><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; the general formula</div>
+        <div class="field"><span class="pre"><i>C</i> =</span>
+          <input class="ans" data-id="q21f" data-check="expr" data-ans="500000+10000n" data-gate="q21const"
+                 data-hint="Replace the changing number in your table with the letter n, and keep the constant exactly as it is.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2.2 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.2</span><h3>Multi-Variable Modelling &mdash; Joglo Construction</h3><span class="comp">M1 · M2</span></div>
+    <div class="act-body">
+      <p class="ctx">Traditional Javanese Joglo house</p>
+      <p>A builder needs two materials. Teak wood costs <b>Rp 400,000 per block</b> &mdash; let <i>W</i> be the number of
+         blocks. Clay roof tiles cost <b>Rp 5,000 per piece</b> &mdash; let <i>T</i> be the number of tiles.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; write the model first</div>
+        <div class="field"><span class="pre"><i>C</i> =</span>
+          <input class="ans" data-id="q22f" data-check="expr" data-ans="400000w+5000t"
+                 data-hint="Two materials means two terms added together. Each term is a price multiplied by its own letter.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="note"><b>Step 2 &mdash; check your model against the object.</b> The sliders change the real Joglo below.
+        Your formula is only correct if it predicts the same cost as the materials actually shown.</div>
+
+      <div class="viz">
+        <div class="canvas-box" id="cv-joglo"><div class="canvas-hint">drag to rotate &middot; pinch or scroll to zoom</div></div>
+        <div class="legend">
+          <div class="slider-row"><label>wood blocks <b><span id="wv">8</span></b></label>
+            <input type="range" id="wSlider" min="4" max="20" value="8"></div>
+          <div class="slider-row"><label>roof tiles <b><span id="tv">60</span></b></label>
+            <input type="range" id="tSlider" min="20" max="180" step="4" value="60"></div>
+          <div class="lg"><span class="sw" style="background:#8a5a33"></span>teak wood</div>
+          <div class="lg"><span class="sw" style="background:#c2603f"></span>clay tiles</div>
+          <button class="viz-btn" id="joglo-reset">↺ Reset view</button>
+        </div>
+      </div>
+      <div class="verify-out" id="jogloOut">Enter your formula above to unlock the check.</div>
+    </div>
+  </article>
+
+  <!-- 2.3 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.3</span><h3>Taxi Fare in Semarang</h3><span class="comp">M1 · M2 · M3 · M4</span></div>
+    <div class="act-body">
+      <p class="ctx">Airport journey, Semarang</p>
+      <p>A taxi charges a &ldquo;flag fall&rdquo; starting fee of <b>Rp 12,000</b> as soon as you sit down,
+         then <b>Rp 5,000 for every kilometre</b> driven.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; mathematize (M2)</div>
+        <div class="field"><span class="pre"><i>F</i> =</span>
+          <input class="ans" data-id="q23f" data-check="expr" data-ans="12000+5000k"
+                 data-hint="One fee is paid once; the other is paid per kilometre. Only one of them should be attached to k.">
+          <button class="check">Check</button><p class="fb"></p></div>
+        <p class="lock-msg">The calculation below stays locked until your formula is correct &mdash; the model comes before the number.</p>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; work mathematically (M3): a 10 km trip</div>
+        <div class="field"><span class="pre"><i>F</i> = Rp</span>
+          <input class="ans small" data-id="q23n" data-check="num" data-ans="62000" data-gate="q23f"
+                 data-hint="Substitute 10 for k in YOUR formula, then follow the order of operations — multiply before you add.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; summarize the mathematical result (M4)</div>
+        <div class="field"><input class="ans" data-id="q23s" data-check="open" data-gate="q23n"
+             placeholder="Purely mathematically: when k = 10, F = ..."><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 4 &mdash; write the conclusion in context (M4)</div>
+        <div class="field"><textarea class="ans" data-id="q23c" data-check="open" data-gate="q23s"
+             placeholder="Now say what this means for the passenger. Mention the trip, the distance and the money..."></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+        <p class="lock-msg">Steps 3 and 4 are deliberately separate. A number on its own is not yet an answer to a real question.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2.4 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.4</span><h3>Phone Data Plan &mdash; reading a formula backwards</h3><span class="comp">M1 · M4</span></div>
+    <div class="act-body">
+      <p>Your monthly bill <i>B</i> in Rupiah is given by \[B = 50000 + 15000d\]
+         where <i>d</i> is the number of extra gigabytes you buy.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>a) What does 50000 represent in real life?</div>
+        <div class="field"><input class="ans" data-id="q24a" data-check="open" placeholder="In your own words..."><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>b) What does 15000 represent?</div>
+        <div class="field"><input class="ans" data-id="q24b" data-check="open" placeholder="In your own words..."><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>c) Inverse thinking &mdash; your bill was exactly Rp 95,000</div>
+        <div class="field"><span class="pre"><i>d</i> =</span>
+          <input class="ans tiny" data-id="q24c" data-check="num" data-ans="3"
+                 data-hint="First remove the part of the bill you would pay even with no extra data. What is left, and what does each GB cost?">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2.5 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.5</span><h3>Rearranging a Formula &mdash; both sides, every time</h3><span class="comp">M2 · M3</span></div>
+    <div class="act-body">
+      <div class="gapflag"><b>Added activity.</b> The worksheet only reaches inverse thinking through &ldquo;guess and check&rdquo;.
+        Objective 2 requires <i>rearranging the formula to another form</i>, and the design brief requires it to be shown
+        as an operation applied to <b>both sides</b> &mdash; never as terms &ldquo;moving across&rdquo; the equals sign.</div>
+
+      <p>Your taxi formula gives the fare from the distance. Now rearrange it so it gives the <b>distance from the fare</b>.
+         Choose an operation &mdash; watch it land on both sides at once.</p>
+
+      <div class="bs" id="bs">
+        <div class="bs-line ghost" id="bsGhost"></div>
+        <div class="bs-line" id="bsMain">
+          <span class="bs-side" id="bsL">F</span><span class="eq">=</span><span class="bs-side" id="bsR">12000 + 5000k</span>
+        </div>
+        <div class="bs-ops">
+          <button class="bs-op" data-op="sub12000">− 12000</button>
+          <button class="bs-op" data-op="div5000">÷ 5000</button>
+          <button class="bs-op" data-op="add12000">+ 12000</button>
+          <button class="bs-op" data-op="mul5000">× 5000</button>
+          <button class="bs-op ghost" data-op="reset">↺ start again</button>
+        </div>
+        <p class="bs-msg" id="bsMsg">Goal: get <i>k</i> alone on one side.</p>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Use your rearranged formula: the fare was Rp 47,000</div>
+        <div class="field"><span class="pre"><i>k</i> =</span>
+          <input class="ans tiny" data-id="q25" data-check="num" data-ans="7"
+                 data-hint="Put 47000 into the rearranged form you just built. Do the subtraction before the division.">
+          <span class="pre">km</span><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 2.6 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">2.6</span><h3>Deriving a Formula from Another Formula</h3><span class="comp">M2</span></div>
+    <div class="act-body">
+      <div class="gapflag"><b>Added activity.</b> Objective 2 lists <i>deriving a formula from another formula</i>,
+        which the printed worksheet never asks for.</div>
+
+      <p>Your Lawang Sewu formula was \[C = 500000 + 10000n\]
+         The OSIS now decides to also collect <b>Rp 5,000 per student</b> for snacks.
+         Do not start from zero &mdash; build the new formula out of the old one.</p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; which part of the formula changes?</div>
+        <div class="field"><input class="ans" data-id="q26a" data-check="open"
+             placeholder="The snack money is charged per student, so it changes the ..."><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; the new formula</div>
+        <div class="field"><span class="pre"><i>C</i> =</span>
+          <input class="ans" data-id="q26b" data-check="expr" data-ans="500000+15000n" data-gate="q26a"
+                 data-hint="The bus fee has not changed at all. Only the per-student rate absorbs the extra 5000.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; cost for 40 students, with snacks</div>
+        <div class="field"><span class="pre"><i>C</i> = Rp</span>
+          <input class="ans small" data-id="q26c" data-check="num" data-ans="1100000" data-gate="q26b"
+                 data-hint="Substitute 40 into your NEW formula, not the old one."><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ================= MODULE 3 ================= -->
+<section class="module" id="m3">
+  <div class="mod-intro">
+    <h2>Objective 3 &mdash; Substituting positive and negative numbers</h2>
+    <p>Competencies: <b>M3 Working Mathematically</b> and <b>M4 Interpreting</b>.</p>
+    <ul>
+      <li>Solving math equations</li>
+      <li>Substituting values to variables in formulas</li>
+      <li>Summarizing the result of the mathematical solution</li>
+      <li>Writing the conclusion of the calculation into the context of the problem</li>
+    </ul>
+  </div>
+  <div class="ph">
+    <h3>Reserved for the Objective 3 worksheet</h3>
+    <p>This module is wired up and waiting. When you send the Objective 3 worksheet, its activities drop
+       into this section and are counted by the same progress bar &mdash; nothing else in the file needs to change.</p>
+    <p style="margin-top:16px"><b>The following pieces are already reusable for it:</b></p>
+    <ul>
+      <li>the staged <code>symbolize → solve → summarize → conclude</code> pattern from activity 2.3</li>
+      <li>the both-sides rearranger from activity 2.5, for solving equations</li>
+      <li>the algebra checker, which already handles negative terms and brackets</li>
+      <li>the gate system, which keeps a numeric answer locked until its model is built</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <b>Algebraic Modelling &mdash; Expressions &amp; Formulae</b> &nbsp;·&nbsp;
+  Local Instructional Theory, Grade 9 &nbsp;·&nbsp; Contexts: Bandeng Presto, Angkot, Lawang Sewu, Joglo, Semarang taxi
+</footer>
+
+<script>
+/* =====================================================================
+   SESSION STATE  (in memory only — cleared when the tab closes)
+   ===================================================================== */
+const state = { correct:{}, answers:{}, matched:0, bsSolved:false, jogloFormula:null };
+
+/* =====================================================================
+   ALGEBRA NORMALISER
+   Accepts 2b+5 / 5+2b / 2*b+5 / "Rp 500.000" / 2(p+2) vs 2p+4
+   ===================================================================== */
+function normalizeExpr(s){
+  if(s===null||s===undefined) return '';
+  let t=String(s).toLowerCase().trim();
+  t=t.replace(/rp\.?/g,'').replace(/\s+/g,'');
+  t=t.replace(/[·×✕x](?=\()/g,'*');
+  t=t.replace(/[·×]/g,'*');
+  for(let i=0;i<4;i++) t=t.replace(/(\d)[.,](\d{3})(?!\d)/g,'$1$2');  // 500.000 -> 500000
+  t=t.replace(/\*/g,'');
+  t=t.replace(/[{\[]/g,'(').replace(/[}\]]/g,')');
+  return t;
+}
+function cleanSigns(t){
+  let g=0;
+  while(g++<8){
+    const b=t;
+    t=t.replace(/\+\+/g,'+').replace(/\+-/g,'-').replace(/-\+/g,'-').replace(/--/g,'+');
+    if(t===b) break;
+  }
+  return t.replace(/^\+/,'');
+}
+function splitTerms(s){
+  const out=[]; let cur='';
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if((c==='+'||c==='-')&&i>0){ if(cur) out.push(cur); cur=(c==='-'?'-':''); }
+    else if(c==='+'&&i===0){ /* skip leading + */ }
+    else cur+=c;
+  }
+  if(cur) out.push(cur);
+  return out.filter(x=>x&&x!=='-'&&x!=='+');
+}
+function parseTerm(t){
+  if(!t) return null;
+  let sign=1;
+  if(t[0]==='-'){sign=-1;t=t.slice(1);}
+  else if(t[0]==='+'){t=t.slice(1);}
+  if(!t) return null;
+  if(!/^[a-z0-9.]+$/.test(t)) return null;          // rejects '/', stray symbols
+  const nums=t.match(/\d+(?:\.\d+)?/g);
+  const lets=t.match(/[a-z]/g);
+  let coef=1;
+  if(nums) for(const n of nums) coef*=parseFloat(n); // '3b' and 'b3' both -> 3b
+  const vars=(lets||[]).sort().join('');
+  return {coef:sign*coef, vars};
+}
+function expand(t){
+  let g=0;
+  while(t.indexOf('(')>=0 && g++<12){
+    const before=t;
+    t=t.replace(/(\d+(?:\.\d+)?)?\(([^()]+)\)/, (m,coef,inner)=>{
+      const k=(coef===undefined||coef==='')?1:parseFloat(coef);
+      const terms=splitTerms(cleanSigns(inner));
+      let out='';
+      for(const tm of terms){
+        const p=parseTerm(tm);
+        if(!p) return m;
+        const c=p.coef*k;
+        out+=(c<0?'-':'+')+Math.abs(c)+p.vars;
+      }
+      return out;
+    });
+    if(t===before) break;
+  }
+  return t;
+}
+function canon(s){
+  let t=normalizeExpr(s);
+  if(!t) return '';
+  t=cleanSigns(expand(t));
+  const terms=splitTerms(t);
+  if(!terms.length) return '';
+  const map={};
+  for(const tm of terms){
+    const p=parseTerm(tm);
+    if(!p) return '?'+t;
+    map[p.vars]=(map[p.vars]||0)+p.coef;
+  }
+  const keys=Object.keys(map).filter(k=>Math.abs(map[k])>1e-9).sort();
+  if(!keys.length) return '0';
+  return keys.map(k=>map[k]+'#'+k).join('+');
+}
+function evalExpr(str, vals){
+  let t=cleanSigns(expand(normalizeExpr(str)));
+  const terms=splitTerms(t);
+  let sum=0;
+  for(const tm of terms){
+    const p=parseTerm(tm);
+    if(!p) return NaN;
+    let v=p.coef;
+    for(const ch of p.vars){ if(!(ch in vals)) return NaN; v*=vals[ch]; }
+    sum+=v;
+  }
+  return sum;
+}
+function toNum(s){
+  let t=normalizeExpr(s).replace(/[^0-9.\-]/g,'');
+  if(t===''||t==='-') return NaN;
+  return parseFloat(t);
+}
+
+/* =====================================================================
+   CHECKING ENGINE
+   ===================================================================== */
+const PRAISE=['Correct.','That is right.','Exactly right.','Good — that matches.','Correct model.'];
+const OPEN_OK=['Recorded. Compare it with a partner before you move on.',
+               'Recorded. Read it back — does it mention the real situation, not just the numbers?',
+               'Recorded. Keep this wording, you will need it again.'];
+let praiseI=0, openI=0;
+
+function checkField(field){
+  const inputs=[...field.querySelectorAll('.ans')];
+  const fb=field.querySelector('.fb');
+  let allOk=true, msg='';
+
+  for(const el of inputs){
+    const id=el.dataset.id, type=el.dataset.check, raw=el.value;
+    const hint=el.dataset.hint||'';
+    let ok=false, why='';
+
+    if(type==='sym'){
+      const v=raw.trim();
+      if(/^[a-zA-Z]$/.test(v)) ok=true;
+      else if(v.length>1) why='Use exactly ONE letter. A label like "Bp" reads as b × p in algebra, so it cannot stand for a single unknown.';
+      else why='Choose a single letter to stand for the unknown quantity.';
+    }
+    else if(type==='num'){
+      const want=parseFloat(el.dataset.ans), got=toNum(raw);
+      if(isNaN(got)) why='Enter a number.';
+      else if(Math.abs(got-want)<1e-6) ok=true;
+      else why=hint||'Not quite — check your working.';
+    }
+    else if(type==='expr'){
+      if(!raw.trim()) why='Write your expression here first.';
+      else if(canon(raw)===canon(el.dataset.ans)) ok=true;
+      else if(/[a-zA-Z]{2,}/.test(normalizeExpr(raw).replace(/[0-9+\-()\/]/g,''))
+              && !/^[0-9+\-()\/ ]*$/.test(raw))
+        why='Careful — two letters written together mean "multiply" in algebra. Use one letter per quantity.';
+      else if(!/[a-zA-Z]/.test(raw)) why='Your answer has no letter in it. This step asks for the symbolic model, not a number.';
+      else why=hint||'Not yet — re-read the sentence and check which quantity is unknown.';
+    }
+    else if(type==='eq'){
+      if(raw.indexOf('=')<0) why='This step asks for an EQUATION. An equation must contain an equals sign.';
+      else{
+        const [l,r]=raw.split('=');
+        const [al,ar]=el.dataset.ans.split('=');
+        const a=canon(l)+'|'+canon(r), b=canon(al)+'|'+canon(ar), c=canon(ar)+'|'+canon(al);
+        if(a===b||a===c) ok=true; else why=hint||'The two sides do not yet describe the same total.';
+      }
+    }
+    else if(type==='open'){
+      const min=parseInt(el.dataset.min||(el.tagName==='TEXTAREA'?'15':'3'),10);
+      if(raw.trim().length>=min) ok=true;
+      else why='Write a little more — a full thought, not one word.';
+    }
+    if(!ok){allOk=false; if(!msg) msg=why;}
+    el.classList.toggle('ok',ok);
+    el.classList.toggle('bad',!ok);
+    state.correct[id]=ok;
+    state.answers[id]=raw;
+  }
+
+  if(fb){
+    if(allOk){
+      const isOpen=inputs.some(e=>e.dataset.check==='open');
+      fb.textContent = isOpen ? OPEN_OK[openI++%OPEN_OK.length] : PRAISE[praiseI++%PRAISE.length];
+      fb.className='fb ok';
+    } else { fb.textContent=msg; fb.className='fb bad'; }
+  }
+  const stage=field.closest('.stage');
+  if(stage) stage.classList.toggle('done',allOk);
+
+  if(allOk && inputs.some(e=>e.dataset.id==='q22f')){
+    state.jogloFormula=inputs.find(e=>e.dataset.id==='q22f').value;
+    updateJogloVerdict();
+  }
+  applyGates(); updateProgress();
+  return allOk;
+}
+
+function applyGates(){
+  document.querySelectorAll('[data-gate]').forEach(el=>{
+    const open=!!state.correct[el.dataset.gate];
+    el.disabled=!open;
+    const st=el.closest('.stage');
+    if(st && !st.querySelector('.ans:not([data-gate])')) st.classList.toggle('locked',!open);
+    const td=el.closest('td'); if(td) td.style.opacity=open?'1':'.5';
+  });
+}
+
+function totalSteps(){ return document.querySelectorAll('.ans[data-id]').length + 2; }
+function updateProgress(){
+  let done=Object.values(state.correct).filter(Boolean).length;
+  if(state.matched===5) done++;
+  if(state.bsSolved) done++;
+  const total=totalSteps();
+  document.getElementById('pfill').style.width=(done/total*100)+'%';
+  document.getElementById('ptxt').textContent=done+' / '+total+' steps';
+}
+
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.check');
+  if(!btn) return;
+  const field=btn.closest('.field');
+  if(field) checkField(field);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && e.target.classList.contains('ans') && e.target.tagName!=='TEXTAREA'){
+    e.preventDefault();
+    const f=e.target.closest('.field'); if(f) checkField(f);
+  }
+});
+
+/* =====================================================================
+   TABS
+   ===================================================================== */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.mod).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    setTimeout(ensureViz,60);
+  });
+});
+
+/* =====================================================================
+   1.1  MATCH-UP
+   ===================================================================== */
+(function(){
+  const root=document.getElementById('match1');
+  const fb=document.getElementById('fb-match1');
+  let sel=null;
+  root.querySelectorAll('.mi').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(btn.classList.contains('matched')) return;
+      if(!sel){ sel=btn; btn.classList.add('sel'); return; }
+      if(sel===btn){ sel=null; btn.classList.remove('sel'); return; }
+      const sameCol=sel.parentElement===btn.parentElement;
+      if(sameCol){ sel.classList.remove('sel'); sel=btn; btn.classList.add('sel'); return; }
+      if(sel.dataset.key===btn.dataset.key){
+        sel.classList.remove('sel'); sel.classList.add('matched'); btn.classList.add('matched');
+        state.matched++; sel=null;
+        if(state.matched===5){ fb.textContent='All five matched. Notice that "7 less than x" reverses the order it is written in.'; fb.className='fb ok'; }
+        else { fb.textContent=state.matched+' of 5 matched.'; fb.className='fb ok'; }
+        updateProgress();
+      } else {
+        btn.classList.add('shake'); sel.classList.add('shake');
+        const a=sel; setTimeout(()=>{a.classList.remove('shake');btn.classList.remove('shake');},320);
+        fb.textContent='Not that one. Read the phrase again — which operation word does it contain?';
+        fb.className='fb bad';
+        sel.classList.remove('sel'); sel=null;
+      }
+    });
+  });
+})();
+
+/* =====================================================================
+   2.5  BOTH-SIDES REARRANGER
+   ===================================================================== */
+const BS={
+  s0:{L:'F',R:'12000 + 5000k',ops:{
+    sub12000:{to:'s1',ghost:'F − 12000   =   12000 + 5000k − 12000',
+      msg:'Good — the same subtraction landed on both sides, so the equation stays balanced. The constant on the right cancels itself out.',cls:'good'},
+    div5000:{to:'stuckA',ghost:'F ÷ 5000   =   (12000 + 5000k) ÷ 5000',
+      msg:'Perfectly legal — you did divide both sides. But k is still not alone: a constant is stuck to it. Start again and clear the constant first.',cls:'warn'},
+    add12000:{to:'stuckB',ghost:'F + 12000   =   12000 + 5000k + 12000',
+      msg:'Legal, but that made the constant bigger instead of clearing it. Start again.',cls:'warn'},
+    mul5000:{to:'stuckC',ghost:'5000 × F   =   5000 × (12000 + 5000k)',
+      msg:'Legal, but every number grew. Start again.',cls:'warn'}}},
+  s1:{L:'F − 12000',R:'5000k',ops:{
+    div5000:{to:'s2',ghost:'(F − 12000) ÷ 5000   =   5000k ÷ 5000',
+      msg:'Solved. k now stands alone — you have turned a fare formula into a distance formula.',cls:'good'},
+    add12000:{to:'s0',ghost:'F − 12000 + 12000   =   5000k + 12000',
+      msg:'That undid your previous move. You are back at the start — which is still balanced.',cls:'warn'},
+    sub12000:{to:'stuckD',ghost:'F − 12000 − 12000   =   5000k − 12000',
+      msg:'Legal, but it moved you away from isolating k. Start again.',cls:'warn'},
+    mul5000:{to:'stuckE',ghost:'5000(F − 12000)   =   5000 × 5000k',
+      msg:'Legal, but k now has an even bigger coefficient. Start again.',cls:'warn'}}},
+  s2:{L:'(F − 12000) ÷ 5000',R:'k',solved:true,ops:{}},
+  stuckA:{L:'F ÷ 5000',R:'2.4 + k',ops:{}},
+  stuckB:{L:'F + 12000',R:'24000 + 5000k',ops:{}},
+  stuckC:{L:'5000F',R:'60000000 + 25000000k',ops:{}},
+  stuckD:{L:'F − 24000',R:'5000k − 12000',ops:{}},
+  stuckE:{L:'5000F − 60000000',R:'25000000k',ops:{}}
+};
+let bsState='s0';
+function bsRender(ghost,msg,cls){
+  const s=BS[bsState];
+  document.getElementById('bsL').textContent=s.L;
+  document.getElementById('bsR').textContent=s.R;
+  document.getElementById('bsGhost').textContent=ghost||'';
+  document.getElementById('bsMain').classList.toggle('solved',!!s.solved);
+  const m=document.getElementById('bsMsg');
+  m.textContent=msg||''; m.className='bs-msg'+(cls?' '+cls:'');
+}
+document.querySelectorAll('.bs-op').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const op=b.dataset.op;
+    if(op==='reset'){ bsState='s0'; bsRender('','Back to the original formula. Goal: get k alone on one side.',''); return; }
+    const s=BS[bsState];
+    if(s.solved){ bsRender('','Already solved — press start again to explore a different route.',''); return; }
+    const tr=s.ops[op];
+    if(!tr){ bsRender('','This path has stalled. Press start again to take a cleaner route.','warn'); return; }
+    bsState=tr.to;
+    bsRender(tr.ghost,tr.msg,tr.cls);
+    if(BS[bsState].solved && !state.bsSolved){ state.bsSolved=true; updateProgress(); }
+  });
+});
+
+/* =====================================================================
+   3D  —  minimal touch-friendly orbit controls (no external controls file)
+   ===================================================================== */
+function makeOrbit(camera,dom,opt){
+  const tgt=opt.target||new THREE.Vector3(0,0,0);
+  const d={theta:opt.theta??0.75,phi:opt.phi??1.15,r:opt.r??10};
+  let theta=d.theta,phi=d.phi,r=d.r;
+  const minR=opt.minR??3,maxR=opt.maxR??60;
+  const pts=new Map(); let lastDist=0;
+  function apply(){
+    phi=Math.max(.18,Math.min(Math.PI-.18,phi));
+    r=Math.max(minR,Math.min(maxR,r));
+    camera.position.set(tgt.x+r*Math.sin(phi)*Math.sin(theta),
+                        tgt.y+r*Math.cos(phi),
+                        tgt.z+r*Math.sin(phi)*Math.cos(theta));
+    camera.lookAt(tgt);
+  }
+  dom.addEventListener('pointerdown',e=>{ dom.setPointerCapture(e.pointerId); pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); });
+  dom.addEventListener('pointermove',e=>{
+    if(!pts.has(e.pointerId)) return;
+    const prev=pts.get(e.pointerId);
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===1){ theta-=(e.clientX-prev.x)*.008; phi-=(e.clientY-prev.y)*.008; apply(); }
+    else if(pts.size===2){
+      const a=[...pts.values()];
+      const dist=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+      if(lastDist){ r*=lastDist/dist; apply(); }
+      lastDist=dist;
+    }
+  });
+  const up=e=>{ pts.delete(e.pointerId); if(pts.size<2) lastDist=0; };
+  dom.addEventListener('pointerup',up); dom.addEventListener('pointercancel',up);
+  dom.addEventListener('wheel',e=>{ e.preventDefault(); r*=(1+Math.sign(e.deltaY)*.12); apply(); },{passive:false});
+  apply();
+  return {apply,reset(){theta=d.theta;phi=d.phi;r=d.r;apply();}};
+}
+function makeScene(el){
+  const w=el.clientWidth||480,h=el.clientHeight||360;
+  const renderer=new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(w,h);
+  el.appendChild(renderer.domElement);
+  const scene=new THREE.Scene(); scene.background=new THREE.Color(0x101a2e);
+  const camera=new THREE.PerspectiveCamera(45,w/h,.1,500);
+  scene.add(new THREE.AmbientLight(0xffffff,.62));
+  const l1=new THREE.DirectionalLight(0xffffff,.8); l1.position.set(6,12,8); scene.add(l1);
+  const l2=new THREE.DirectionalLight(0xffffff,.3); l2.position.set(-8,5,-7); scene.add(l2);
+  return {renderer,scene,camera,el};
+}
+function edgeMesh(a,b,color,rad){
+  const dir=new THREE.Vector3().subVectors(b,a), len=dir.length();
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,len,14),
+                         new THREE.MeshLambertMaterial({color}));
+  m.position.copy(a).addScaledVector(dir,.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+  return m;
+}
+function squarePerim(t,h){
+  const s=(t/(Math.PI*2))*4, seg=Math.floor(s)%4, f=s-Math.floor(s), a=-h+2*h*f;
+  if(seg===0) return {x:a,z:-h};
+  if(seg===1) return {x:h,z:a};
+  if(seg===2) return {x:-a,z:h};
+  return {x:-h,z:-a};
+}
+
+/* ---------- 3D #1 : bamboo frame, colour-coded repeated edges ---------- */
+let frameViz=null;
+function initFrame(){
+  const el=document.getElementById('cv-frame');
+  if(!el||el.dataset.init) return; el.dataset.init='1';
+  const {renderer,scene,camera}=makeScene(el);
+  const P=3.4,L=2.2,T=2.6, rad=.075;
+  const g=new THREE.Group(); scene.add(g);
+  const edges={p:[],l:[],t:[]};
+  const xs=[-P/2,P/2], zs=[-L/2,L/2], ys=[-T/2,T/2];
+  for(const y of ys) for(const z of zs)
+    edges.p.push(edgeMesh(new THREE.Vector3(xs[0],y,z),new THREE.Vector3(xs[1],y,z),0xe8a33d,rad));
+  for(const y of ys) for(const x of xs)
+    edges.l.push(edgeMesh(new THREE.Vector3(x,y,zs[0]),new THREE.Vector3(x,y,zs[1]),0x4fa69c,rad));
+  for(const x of xs) for(const z of zs)
+    edges.t.push(edgeMesh(new THREE.Vector3(x,ys[0],z),new THREE.Vector3(x,ys[1],z),0xc2603f,rad));
+  const all=[...edges.p,...edges.l,...edges.t];
+  all.forEach(m=>g.add(m));
+  for(const x of xs) for(const y of ys) for(const z of zs){
+    const j=new THREE.Mesh(new THREE.SphereGeometry(rad*1.7,14,10),
+                           new THREE.MeshLambertMaterial({color:0xf0ead8}));
+    j.position.set(x,y,z); g.add(j);
+  }
+  const orb=makeOrbit(camera,renderer.domElement,{r:8.5,minR:4.5,maxR:20});
+  (function loop(){ requestAnimationFrame(loop); renderer.render(scene,camera); })();
+  frameViz={renderer,camera,orb,el,edges,all};
+
+  const hint=el.querySelector('.canvas-hint');
+  document.getElementById('frame-reset').onclick=()=>orb.reset();
+  document.getElementById('frame-count').onclick=()=>{
+    if(el.dataset.busy) return; el.dataset.busy='1';
+    const seq=[['length p',edges.p],['width l',edges.l],['height t',edges.t]];
+    all.forEach(m=>m.material.emissive.setHex(0x000000));
+    let si=0,i=0;
+    const step=()=>{
+      if(si>=seq.length){ hint.textContent='4 of each — three groups, all repeated 4 times.';
+        setTimeout(()=>{ all.forEach(m=>m.material.emissive.setHex(0x000000));
+          hint.textContent='drag to rotate · pinch or scroll to zoom'; el.dataset.busy=''; },2600); return; }
+      const [name,arr]=seq[si];
+      arr[i].material.emissive.setHex(0x666666);
+      hint.textContent=name+': '+(i+1)+' of '+arr.length;
+      i++;
+      if(i>=arr.length){ si++; i=0; }
+      setTimeout(step,520);
+    };
+    step();
+  };
+}
+
+/* ---------- 3D #2 : Joglo, materials driven by W and T ---------- */
+let jogloViz=null;
+function initJoglo(){
+  const el=document.getElementById('cv-joglo');
+  if(!el||el.dataset.init) return;
+  if(!el.clientWidth) return;                 // hidden tab — try again later
+  el.dataset.init='1';
+  const {renderer,scene,camera}=makeScene(el);
+  const group=new THREE.Group(); scene.add(group);
+  const woodMat=new THREE.MeshLambertMaterial({color:0x8a5a33});
+  const tileMat=new THREE.MeshLambertMaterial({color:0xc2603f});
+  const baseMat=new THREE.MeshLambertMaterial({color:0x8d94a3});
+
+  function build(W,T){
+    while(group.children.length) group.remove(group.children[0]);
+    const base=new THREE.Mesh(new THREE.BoxGeometry(5.4,.3,5.4),baseMat);
+    base.position.y=-.15; group.add(base);
+    for(let i=0;i<W;i++){
+      const p=squarePerim((i/W)*Math.PI*2,2.1);
+      const post=new THREE.Mesh(new THREE.BoxGeometry(.26,2.2,.26),woodMat);
+      post.position.set(p.x,1.1,p.z); group.add(post);
+    }
+    for(let s=0;s<4;s++){
+      const beam=new THREE.Mesh(new THREE.BoxGeometry(s%2?.2:4.5,.2,s%2?4.5:.2),woodMat);
+      beam.position.set(s===1?2.1:(s===3?-2.1:0),2.25,s===0?-2.1:(s===2?2.1:0));
+      group.add(beam);
+    }
+    const rows=5; let placed=0;
+    for(let r=0;r<rows&&placed<T;r++){
+      const f=r/rows, radius=2.35-f*1.75, y=2.45+f*1.45;
+      const per=Math.max(1,Math.ceil((T-placed)/(rows-r)));
+      for(let i=0;i<per&&placed<T;i++,placed++){
+        const t=(i/per)*Math.PI*2, p=squarePerim(t,radius);
+        const tile=new THREE.Mesh(new THREE.BoxGeometry(.34,.08,.26),tileMat);
+        tile.position.set(p.x,y,p.z); tile.rotation.y=-t; tile.rotation.x=-.34;
+        group.add(tile);
+      }
+    }
+    const ridge=new THREE.Mesh(new THREE.BoxGeometry(1.3,.16,.16),woodMat);
+    ridge.position.y=3.95; group.add(ridge);
+  }
+  const orb=makeOrbit(camera,renderer.domElement,{r:11,minR:6,maxR:28,phi:1.25,target:new THREE.Vector3(0,1.6,0)});
+  (function loop(){ requestAnimationFrame(loop); renderer.render(scene,camera); })();
+  jogloViz={build,orb,renderer,camera,el};
+  build(8,60);
+  document.getElementById('joglo-reset').onclick=()=>orb.reset();
+}
+function jogloVals(){
+  return {W:+document.getElementById('wSlider').value, T:+document.getElementById('tSlider').value};
+}
+function updateJogloVerdict(){
+  const {W,T}=jogloVals();
+  const out=document.getElementById('jogloOut');
+  const truth=400000*W+5000*T;
+  const fmt=n=>'Rp '+n.toLocaleString('en-US').replace(/,/g,'.');
+  if(!state.jogloFormula){
+    out.innerHTML='Materials shown: <b>'+W+'</b> wood blocks and <b>'+T+'</b> tiles. '+
+                  'Enter your formula above to unlock the check.';
+    return;
+  }
+  const mine=evalExpr(state.jogloFormula,{w:W,t:T});
+  const match=!isNaN(mine)&&Math.abs(mine-truth)<1e-6;
+  out.innerHTML='W = '+W+' &nbsp; T = '+T+'<br>'+
+    'your formula gives &nbsp;'+(isNaN(mine)?'—':fmt(mine))+'<br>'+
+    'the materials shown cost &nbsp;'+fmt(truth)+'<br>'+
+    (match?'<span class="hit">✓ your model predicts the real object at every setting</span>'
+          :'<span class="miss">✗ these do not agree — re-check which price belongs to which letter</span>');
+}
+['wSlider','tSlider'].forEach(id=>{
+  const s=document.getElementById(id);
+  s.addEventListener('input',()=>{
+    const {W,T}=jogloVals();
+    document.getElementById('wv').textContent=W;
+    document.getElementById('tv').textContent=T;
+    if(jogloViz) jogloViz.build(W,T);
+    updateJogloVerdict();
+  });
+});
+
+/* ---------- lazy init + resize ---------- */
+function ensureViz(){
+  try{
+    if(typeof THREE==='undefined') return;
+    initFrame(); initJoglo();
+    [frameViz,jogloViz].forEach(v=>{
+      if(!v||!v.el.clientWidth) return;
+      const w=v.el.clientWidth,h=v.el.clientHeight;
+      v.renderer.setSize(w,h); v.camera.aspect=w/h; v.camera.updateProjectionMatrix();
+    });
+  }catch(err){ console.warn('3D unavailable:',err); }
+}
+window.addEventListener('resize',()=>{ clearTimeout(window._rz); window._rz=setTimeout(ensureViz,150); });
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+window.addEventListener('load',()=>{
+  if(typeof THREE==='undefined'){
+    document.querySelectorAll('.canvas-box').forEach(b=>{
+      b.style.display='flex'; b.style.alignItems='center'; b.style.justifyContent='center';
+      b.innerHTML='<p style="color:#8c9ab8;font-size:13px;text-align:center;padding:20px">'+
+        '3D viewer needs an internet connection the first time it loads.<br>The rest of the worksheet works offline.</p>';
+    });
+  }
+  ensureViz();
+});
+applyGates(); updateProgress(); bsRender('','Goal: get k alone on one side.','');
+</script>
+</body>
+</html>
