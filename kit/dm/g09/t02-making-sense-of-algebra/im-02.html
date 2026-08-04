@@ -148,6 +148,21 @@ table.wt .given{font-family:var(--font-mono);color:var(--ink-soft)}
 .verify-out{font-family:var(--font-mono);font-size:13px;background:var(--navy-900);color:#cdd7ec;border-radius:8px;padding:11px 13px;margin-top:8px}
 .verify-out .hit{color:var(--teal)}
 .verify-out .miss{color:var(--amber)}
+.seg{display:flex;gap:3px;background:#eef0f5;border-radius:8px;padding:3px;margin-bottom:4px}
+.segb{flex:1;border:none;background:transparent;border-radius:6px;padding:6px 4px;font-size:12px;color:var(--ink-soft)}
+.segb.active{background:var(--navy-800);color:#fff;font-weight:500}
+.segb:hover:not(.active){background:#dfe3ec}
+.mcq{display:flex;flex-direction:column;gap:7px}
+.mc{text-align:left;background:#fff;border:1px solid #c9d0e0;border-radius:8px;padding:10px 13px;
+  font-family:var(--font-mono);font-size:14px;color:var(--ink)}
+.mc:hover:not(:disabled){border-color:var(--amber);background:#fffdf2}
+.mc.right{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep);font-weight:600}
+.mc.wrong{border-color:var(--clay);background:var(--clay-soft)}
+.mc:disabled{cursor:default;opacity:.85}
+.terms{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px;font-family:var(--font-mono);font-size:13px}
+.term{background:var(--navy-700);color:#fff;border:1px solid #33456e;border-radius:6px;padding:5px 10px;font-family:var(--font-mono);font-size:12.5px}
+.term:hover{border-color:var(--amber)}
+.term.on{background:var(--amber);color:var(--navy-900);border-color:var(--amber)}
 
 /* ---------- both-sides rearranger ---------- */
 .bs{background:var(--navy-900);border-radius:10px;padding:18px;margin:6px 0 12px;overflow-x:auto}
@@ -176,6 +191,59 @@ table.wt .given{font-family:var(--font-mono);color:var(--ink-soft)}
 footer{background:var(--navy-900);color:#8c9ab8;padding:20px;text-align:center;font-size:12.5px}
 footer b{color:var(--amber-soft);font-weight:500}
 
+/* ---------- identity bar ---------- */
+.ident{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:24px;
+  display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;box-shadow:0 1px 3px rgba(22,35,63,.05)}
+.ident .fgrp{display:flex;flex-direction:column;gap:4px;flex:1 1 170px}
+.ident label{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-soft)}
+.ident input{font-family:var(--font-body);font-size:14px;padding:8px 11px;border:1px solid #c9d0e0;border-radius:7px;background:#fff}
+.ident input:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber)}
+.quickbar{display:flex;gap:7px;flex-wrap:wrap;flex:0 0 auto}
+.qbtn{background:var(--navy-800);color:#fff;border:none;border-radius:7px;padding:9px 13px;font-size:12.5px;font-weight:500}
+.qbtn:hover{background:var(--navy-700)}
+.ident .save-note{flex:1 1 100%;font-size:12px;color:var(--ink-soft);margin:0}
+.ident .save-note b{color:var(--teal-deep)}
+
+/* ---------- finish panel ---------- */
+.finish{background:var(--navy-900);color:#cdd7ec;border-radius:12px;padding:24px;margin-top:8px}
+.finish h2{font-family:var(--font-display);color:#fff;font-size:20px;margin:0 0 6px;font-weight:600}
+.finish p.lead{margin:0 0 16px;font-size:14px;color:#aab6d0}
+.fin-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{background:var(--navy-700);border-radius:9px;padding:11px 15px;flex:1 1 120px}
+.stat .n{font-family:var(--font-display);font-size:22px;color:var(--amber);display:block;line-height:1.15}
+.stat .l{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#8c9ab8}
+.fin-btns{display:flex;gap:9px;flex-wrap:wrap}
+.fbtn{border:none;border-radius:8px;padding:11px 17px;font-size:13.5px;font-weight:500}
+.fbtn.primary{background:var(--amber);color:var(--navy-900)}
+.fbtn.primary:hover{background:#f0b459}
+.fbtn.primary:disabled{background:#5a6580;opacity:.45;cursor:not-allowed}
+.fbtn.ghost{background:transparent;color:#cdd7ec;border:1px solid var(--navy-700)}
+.fbtn.ghost:hover{background:var(--navy-700);color:#fff}
+.fbtn.danger{background:transparent;color:#d99a86;border:1px solid #5a3a33;margin-left:auto}
+.fbtn.danger:hover{background:#3a2320;color:#fff}
+.fin-status{margin:14px 0 0;font-size:13px;min-height:19px}
+.fin-status.ok{color:var(--teal)}
+.fin-status.bad{color:var(--amber)}
+
+/* ---------- printable report ---------- */
+#report{display:none}
+#report h1{font-family:var(--font-display);font-size:19px;margin:0 0 3px}
+#report .rid{font-size:13px;color:#444;margin:0 0 14px;border-bottom:2px solid #222;padding-bottom:9px}
+#report .rid span{margin-right:18px}
+#report h2{font-family:var(--font-display);font-size:14.5px;margin:16px 0 5px;background:#eee;padding:5px 8px;border-radius:4px}
+#report .rq{margin:0 0 7px;padding-left:10px;border-left:2px solid #ccc}
+#report .rl{font-size:10.5px;color:#666;text-transform:uppercase;letter-spacing:.05em}
+#report .ra{font-family:var(--font-mono);font-size:12.5px;white-space:pre-wrap;word-break:break-word}
+#report .rm{font-size:10.5px;color:#666}
+
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff!important;background-image:none!important}
+  body>*{display:none!important}
+  #report{display:block!important}
+  #report .rq{page-break-inside:avoid}
+}
+
 @media(max-width:760px){
   .match{grid-template-columns:1fr;gap:14px}
   .viz{grid-template-columns:1fr}
@@ -200,12 +268,26 @@ footer b{color:var(--amber-soft);font-weight:500}
     <nav class="tabs">
       <button class="tab active" data-mod="m1">Objective 1<span class="tab-sub">Expressions from statements</span></button>
       <button class="tab" data-mod="m2">Objective 2<span class="tab-sub">Formulas from real problems</span></button>
-      <button class="tab" data-mod="m3">Objective 3<span class="tab-sub">Substitution &middot; coming</span></button>
+      <button class="tab" data-mod="m3">Objective 3<span class="tab-sub">Substitution &amp; solving</span></button>
+      <button class="tab" data-mod="m4">Hand in<span class="tab-sub">Submit &middot; PDF &middot; save</span></button>
     </nav>
   </div>
 </header>
 
 <main>
+
+<div class="ident">
+  <div class="fgrp"><label for="stName">Student name</label><input id="stName" placeholder="Full name"></div>
+  <div class="fgrp"><label for="stClass">Class</label><input id="stClass" placeholder="e.g. 9A"></div>
+  <div class="fgrp"><label for="stDate">Date</label><input id="stDate" type="date"></div>
+  <div class="quickbar">
+    <button class="qbtn act-print">Save as PDF</button>
+    <button class="qbtn act-copy">Copy answers</button>
+    <button class="qbtn act-download">Download file</button>
+  </div>
+  <p class="save-note" id="saveNote">Your work saves automatically on this device as you go.</p>
+  <p class="fin-status" id="quickStatus" style="flex:1 1 100%;margin:0"></p>
+</div>
 
 <!-- ================= MODULE 1 ================= -->
 <section class="module active" id="m1">
@@ -540,22 +622,53 @@ footer b{color:var(--amber-soft);font-weight:500}
           <button class="check">Check</button><p class="fb"></p></div>
       </div>
 
-      <div class="note"><b>Step 2 &mdash; check your model against the object.</b> The sliders change the real Joglo below.
-        Your formula is only correct if it predicts the same cost as the materials actually shown.</div>
+      <div class="note"><b>Step 2 &mdash; read the quantities off the real object.</b>
+        The builder did not tell you <i>W</i> and <i>T</i>. Rotate the Joglo, count what is actually there,
+        then use your own formula to price it.</div>
 
       <div class="viz">
         <div class="canvas-box" id="cv-joglo"><div class="canvas-hint">drag to rotate &middot; pinch or scroll to zoom</div></div>
         <div class="legend">
-          <div class="slider-row"><label>wood blocks <b><span id="wv">8</span></b></label>
-            <input type="range" id="wSlider" min="4" max="20" value="8"></div>
-          <div class="slider-row"><label>roof tiles <b><span id="tv">60</span></b></label>
-            <input type="range" id="tSlider" min="20" max="180" step="4" value="60"></div>
-          <div class="lg"><span class="sw" style="background:#8a5a33"></span>teak wood</div>
-          <div class="lg"><span class="sw" style="background:#c2603f"></span>clay tiles</div>
-          <button class="viz-btn" id="joglo-reset">↺ Reset view</button>
+          <h4>Show only</h4>
+          <div class="seg" id="jogloView">
+            <button class="segb active" data-focus="both">All</button>
+            <button class="segb" data-focus="wood">Wood</button>
+            <button class="segb" data-focus="tiles">Tiles</button>
+          </div>
+          <div class="slider-row"><label>wood posts <b><span id="wv">?</span></b></label>
+            <input type="range" id="wSlider" min="4" max="12" value="8" disabled></div>
+          <div class="slider-row"><label>tile rows <b><span id="rv">?</span></b> &times; 8 = <b><span id="tv">?</span></b></label>
+            <input type="range" id="rSlider" min="2" max="5" value="3" disabled></div>
+          <p style="font-size:11.5px;color:var(--ink-soft);margin:2px 0 4px;line-height:1.4">
+            Only the <b style="color:#8a5a33">brown posts</b> and <b style="color:#c2603f">clay tiles</b> are paid for.
+            The grey floor and frame are not counted.</p>
+          <button class="viz-btn" id="joglo-challenge">&#127968; Build a different house</button>
+          <button class="viz-btn" id="joglo-reset">&#8634; Reset view</button>
         </div>
       </div>
-      <div class="verify-out" id="jogloOut">Enter your formula above to unlock the check.</div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; count what the builder actually used</div>
+        <p style="margin:0 0 9px;font-size:13.5px">Use the <b>Wood</b> and <b>Tiles</b> buttons to hide one material while you count the other.
+           The tiles are laid in rows of 8 &mdash; count the rows, do not count one by one.</p>
+        <div class="field">
+          <span class="pre">posts <i>W</i> =</span><input class="ans tiny" data-id="q22w" data-check="num" data-ans="8"
+            data-hint="Switch to Wood only and rotate right round — posts at the back are hidden behind the front ones.">
+          <span class="pre">tiles <i>T</i> =</span><input class="ans tiny" data-id="q22t" data-check="num" data-ans="24"
+            data-hint="Count the ROWS first, then multiply by 8. That multiplication is exactly what a coefficient does.">
+          <button class="check">Check</button><p class="fb"></p>
+        </div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 4 &mdash; substitute your counts into your own formula</div>
+        <div class="field"><span class="pre"><i>C</i> = Rp</span>
+          <input class="ans small" data-id="q22cost" data-check="num" data-ans="0" data-gate="q22w"
+                 data-hint="Put your two counts into the formula you wrote in Step 1. Multiply each price by its own quantity before adding.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="verify-out" id="jogloOut">Write your formula in Step 1 to unlock the check.</div>
     </div>
   </article>
 
@@ -637,9 +750,9 @@ footer b{color:var(--amber-soft);font-weight:500}
          Choose an operation &mdash; watch it land on both sides at once.</p>
 
       <div class="bs" id="bs">
-        <div class="bs-line ghost" id="bsGhost"></div>
-        <div class="bs-line" id="bsMain">
-          <span class="bs-side" id="bsL">F</span><span class="eq">=</span><span class="bs-side" id="bsR">12000 + 5000k</span>
+        <div class="bs-line ghost bs-ghost"></div>
+        <div class="bs-line bs-main">
+          <span class="bs-side bs-L">F</span><span class="eq">=</span><span class="bs-side bs-R">12000 + 5000k</span>
         </div>
         <div class="bs-ops">
           <button class="bs-op" data-op="sub12000">− 12000</button>
@@ -648,7 +761,7 @@ footer b{color:var(--amber-soft);font-weight:500}
           <button class="bs-op" data-op="mul5000">× 5000</button>
           <button class="bs-op ghost" data-op="reset">↺ start again</button>
         </div>
-        <p class="bs-msg" id="bsMsg">Goal: get <i>k</i> alone on one side.</p>
+        <p class="bs-msg">Goal: get <i>k</i> alone on one side.</p>
       </div>
 
       <div class="stage" data-stage>
@@ -706,18 +819,247 @@ footer b{color:var(--amber-soft);font-weight:500}
       <li>Writing the conclusion of the calculation into the context of the problem</li>
     </ul>
   </div>
-  <div class="ph">
-    <h3>Reserved for the Objective 3 worksheet</h3>
-    <p>This module is wired up and waiting. When you send the Objective 3 worksheet, its activities drop
-       into this section and are counted by the same progress bar &mdash; nothing else in the file needs to change.</p>
-    <p style="margin-top:16px"><b>The following pieces are already reusable for it:</b></p>
-    <ul>
-      <li>the staged <code>symbolize → solve → summarize → conclude</code> pattern from activity 2.3</li>
-      <li>the both-sides rearranger from activity 2.5, for solving equations</li>
-      <li>the algebra checker, which already handles negative terms and brackets</li>
-      <li>the gate system, which keeps a numeric answer locked until its model is built</li>
-    </ul>
+  <div class="guide">
+    <b>Guided step &mdash; the bracket rule</b>
+    <p>Substitution is like a substitute player coming on: the letter goes off, a number comes on in its place.</p>
+    <p><b>Always put the incoming number in brackets.</b> The brackets are not decoration &mdash; they hold a
+       negative number together so the minus sign cannot escape.</p>
   </div>
+
+  <!-- 3.1 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.1</span><h3>Why the Brackets Matter</h3><span class="comp m34">M3</span></div>
+    <div class="act-body">
+      <p>Pick a value for <i>x</i> and watch what happens to <i>x</i><sup>2</sup> with and without brackets.</p>
+      <div class="bs" id="brk">
+        <div class="bs-ops" style="margin-top:0;margin-bottom:14px">
+          <button class="bs-op brkv" data-x="-4">x = −4</button>
+          <button class="bs-op brkv" data-x="-3">x = −3</button>
+          <button class="bs-op brkv" data-x="-2">x = −2</button>
+          <button class="bs-op brkv ghost" data-x="3">x = 3</button>
+        </div>
+        <div class="bs-line ghost" id="brkBad"></div>
+        <div class="bs-line" id="brkGood"></div>
+        <p class="bs-msg" id="brkMsg">Tap a value above.</p>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>In your own words &mdash; why do the brackets change the answer?</div>
+        <div class="field"><textarea class="ans" data-id="q31" data-check="open"
+          placeholder="Without brackets the minus sign..."></textarea><button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3.2 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.2</span><h3>Back to Lawang Sewu</h3><span class="comp m34">M3 · M4</span></div>
+    <div class="act-body">
+      <p class="ctx">Same trip, same formula &mdash; now with a number</p>
+      <p>In activity 2.1 you built <i>C</i> = 500000 + 10000<i>n</i>. Find the total cost when <b>25 students</b> go.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; substitute, with brackets</div>
+        <div class="field"><span class="pre"><i>C</i> = 500000 + 10000(</span>
+          <input class="ans tiny" data-id="q32a" data-check="num" data-ans="25"
+                 data-hint="Which quantity does n stand for? Put that number, and only that number, inside the brackets.">
+          <span class="pre">)</span><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; work it out</div>
+        <div class="field"><span class="pre"><i>C</i> = Rp</span>
+          <input class="ans small" data-id="q32b" data-check="num" data-ans="750000" data-gate="q32a"
+                 data-hint="Multiply before you add — the bus fee is only paid once, not once per student.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; conclusion in context</div>
+        <div class="field"><textarea class="ans" data-id="q32c" data-check="open" data-gate="q32b"
+          placeholder="Say what this means for the OSIS committee — mention the students, the trip and the money..."></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3.3 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.3</span><h3>Substituting Negative Numbers</h3><span class="comp m34">M3</span></div>
+    <div class="act-body">
+      <p>Throughout this activity: <b><i>a</i> = 3, &nbsp; <i>b</i> = &minus;2, &nbsp; <i>c</i> = 5.</b></p>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>a) &nbsp; 4<i>a</i> &minus; <i>b</i></div>
+        <p style="margin:0 0 8px;font-size:13.5px">Which substitution is written correctly?</p>
+        <div class="mcq" data-id="q33a-sub">
+          <button class="mc" data-why="This drops the minus sign that belongs to b. Subtracting −2 is not the same as subtracting 2.">4(3) − 2</button>
+          <button class="mc" data-correct data-why="">4(3) − (−2)</button>
+          <button class="mc" data-why="The 4 multiplies a, not b. Check which letter the coefficient is attached to.">4(−2) − 3</button>
+        </div>
+        <div class="field" style="margin-top:10px"><span class="pre">=</span>
+          <input class="ans tiny" data-id="q33a" data-check="num" data-ans="14" data-gate="q33a-sub"
+                 data-hint="Subtracting a negative turns into adding. Work out 4 × 3 first.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>b) &nbsp; <i>b</i><sup>2</sup> + 2<i>c</i></div>
+        <p style="margin:0 0 8px;font-size:13.5px">Which substitution is written correctly?</p>
+        <div class="mcq" data-id="q33b-sub">
+          <button class="mc" data-why="Without brackets this reads as −(2×2), which loses the squaring of the negative. This is the single most common slip in the whole topic.">−2² + 2(5)</button>
+          <button class="mc" data-why="This squares only the 2 and leaves the minus outside. The whole value of b must go inside the brackets.">−(2)² + 2(5)</button>
+          <button class="mc" data-correct data-why="">(−2)² + 2(5)</button>
+        </div>
+        <div class="field" style="margin-top:10px"><span class="pre">=</span>
+          <input class="ans tiny" data-id="q33b" data-check="num" data-ans="14" data-gate="q33b-sub"
+                 data-hint="A negative times a negative gives a positive. Square first, then add.">
+          <button class="check">Check</button><p class="fb"></p></div>
+        <p class="lock-msg">Parts a) and b) give the same answer by coincidence &mdash; check both, do not assume.</p>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>c) &nbsp; (<i>a</i> + <i>c</i>) &divide; <i>b</i></div>
+        <div class="field"><span class="pre">top line <i>a</i> + <i>c</i> =</span>
+          <input class="ans tiny" data-id="q33c1" data-check="num" data-ans="8"
+                 data-hint="Finish the whole top line before you divide by anything.">
+          <button class="check">Check</button><p class="fb"></p></div>
+        <div class="field"><span class="pre">answer =</span>
+          <input class="ans tiny" data-id="q33c2" data-check="num" data-ans="-4" data-gate="q33c1"
+                 data-hint="A positive divided by a negative gives a negative. Type the minus sign too.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3.4 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.4</span><h3>Using the Formula You Rearranged</h3><span class="comp m34">M3 · M4</span></div>
+    <div class="act-body">
+      <p class="ctx">Semarang taxi, again</p>
+      <p>In activity 2.5 you rearranged the fare formula into
+         <i>k</i> = (<i>F</i> &minus; 12000) &divide; 5000. A passenger is charged <b>Rp 87,000</b>.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; substitute into the brackets first</div>
+        <div class="field"><span class="pre"><i>k</i> = (</span>
+          <input class="ans small" data-id="q34a" data-check="num" data-ans="87000"
+                 data-hint="F stands for the fare that was actually charged. That whole number goes inside the brackets.">
+          <span class="pre">− 12000) ÷ 5000</span><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; the distance</div>
+        <div class="field"><span class="pre"><i>k</i> =</span>
+          <input class="ans tiny" data-id="q34b" data-check="num" data-ans="15" data-gate="q34a"
+                 data-hint="The brackets come first, always. Subtract before you divide.">
+          <span class="pre">km</span><button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 3 &mdash; conclusion in context</div>
+        <div class="field"><textarea class="ans" data-id="q34c" data-check="open" data-gate="q34b"
+          placeholder="What does this tell the passenger about their journey?"></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3.5 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.5</span><h3>When the Answer Comes Out Negative</h3><span class="comp m34">M3 · M4</span></div>
+    <div class="act-body">
+      <p class="ctx">Warung near the school</p>
+      <p>A warung's daily profit in Rupiah is <i>P</i> = 15000<i>n</i> &minus; 200000, where <i>n</i> is the number of
+         portions sold. The 200000 is the cost of ingredients and gas, paid whether anything sells or not.</p>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>a) A quiet rainy day: only 8 portions sold</div>
+        <div class="field"><span class="pre"><i>P</i> = Rp</span>
+          <input class="ans small" data-id="q35a" data-check="num" data-ans="-80000"
+                 data-hint="Work out 15000 × 8 first, then subtract the fixed cost. Do not drop the sign of your answer.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>b) What does a negative profit actually mean here?</div>
+        <div class="field"><textarea class="ans" data-id="q35b" data-check="open" data-gate="q35a"
+          placeholder="For the owner of the warung, this number means..."></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+        <p class="lock-msg">The mathematics stops at a number. Interpreting the sign is the part only you can do.</p>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>c) A busy market day: 20 portions sold</div>
+        <div class="field"><span class="pre"><i>P</i> = Rp</span>
+          <input class="ans small" data-id="q35c" data-check="num" data-ans="100000" data-gate="q35a"
+                 data-hint="Same formula, bigger n. This time the selling should overtake the fixed cost.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>d) How many portions just to break even? (<i>P</i> = 0)</div>
+        <div class="field"><span class="pre"><i>n</i> =</span>
+          <input class="ans tiny" data-id="q35d" data-check="num" data-ans="14" data-gate="q35c"
+                 data-hint="Divide the fixed cost by the price per portion. You cannot sell part of a portion, so round the way the warung owner would.">
+          <span class="pre">portions</span><button class="check">Check</button><p class="fb"></p></div>
+        <p class="lock-msg">13 portions still leaves a small loss, so think about which way to round.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3.6 -->
+  <article class="act">
+    <div class="act-head"><span class="act-num">3.6</span><h3>Solving the Equation You Built</h3><span class="comp m34">M3 · M4</span></div>
+    <div class="act-body">
+      <p class="ctx">Bandeng Presto &mdash; closing the loop</p>
+      <p>Back in activity 1.6 you wrote the equation <b>3<i>b</i> + 2 = 26</b> for 3 sealed boxes plus 2 loose fish
+         making 26 fish altogether. Until now you had no way to solve it. You do now &mdash; the same both-sides
+         moves you used on the taxi formula work here.</p>
+
+      <div class="bs" id="bs2">
+        <div class="bs-line ghost bs-ghost"></div>
+        <div class="bs-line bs-main">
+          <span class="bs-side bs-L">3b + 2</span><span class="eq">=</span><span class="bs-side bs-R">26</span>
+        </div>
+        <div class="bs-ops">
+          <button class="bs-op" data-op="sub2">− 2</button>
+          <button class="bs-op" data-op="div3">÷ 3</button>
+          <button class="bs-op" data-op="add2">+ 2</button>
+          <button class="bs-op" data-op="mul3">× 3</button>
+          <button class="bs-op ghost" data-op="reset">↺ start again</button>
+        </div>
+        <p class="bs-msg">Goal: get <i>b</i> alone on one side.</p>
+      </div>
+
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 1 &mdash; check your solution by substituting it back</div>
+        <div class="field"><span class="pre">3(</span>
+          <input class="ans tiny" data-id="q36a" data-check="num" data-ans="8"
+                 data-hint="Put your solution back into the original equation. If it is right, the left side must come to exactly 26.">
+          <span class="pre">) + 2 =</span>
+          <input class="ans tiny" data-id="q36b" data-check="num" data-ans="26"
+                 data-hint="Work out the bracket first, then add 2.">
+          <button class="check">Check</button><p class="fb"></p></div>
+      </div>
+      <div class="stage" data-stage>
+        <div class="stage-lbl"><span class="dot"></span>Step 2 &mdash; answer the original question</div>
+        <div class="field"><textarea class="ans" data-id="q36c" data-check="open" data-gate="q36a"
+          placeholder="So how many fish are in one sealed box, and how do you know?"></textarea>
+          <button class="check">Submit</button><p class="fb"></p></div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="module" id="m4">
+<section class="finish" id="finish">
+  <h2>Finish &amp; hand in</h2>
+  <p class="lead">You do not have to be at 100% to submit. Your written explanations matter as much as the ticks.</p>
+  <div class="fin-stats">
+    <div class="stat"><span class="n" id="sDone">0</span><span class="l">steps complete</span></div>
+    <div class="stat"><span class="n" id="sPct">0%</span><span class="l">of worksheet</span></div>
+    <div class="stat"><span class="n" id="sWritten">0</span><span class="l">written answers</span></div>
+    <div class="stat"><span class="n" id="sTries">0</span><span class="l">total attempts</span></div>
+  </div>
+  <div class="fin-btns">
+    <button class="fbtn primary" id="btnSubmit">Submit to Mr. Ghozi</button>
+    <button class="fbtn ghost act-print" id="btnPrint">Save as PDF</button>
+    <button class="fbtn ghost act-copy">Copy answers</button>
+    <button class="fbtn ghost act-download">Download file</button>
+    <button class="fbtn danger" id="btnReset">Clear for next student</button>
+  </div>
+  <p class="fin-status" id="finStatus"></p>
+</section>
 </section>
 
 </main>
@@ -727,11 +1069,23 @@ footer b{color:var(--amber-soft);font-weight:500}
   Local Instructional Theory, Grade 9 &nbsp;·&nbsp; Contexts: Bandeng Presto, Angkot, Lawang Sewu, Joglo, Semarang taxi
 </footer>
 
+<div id="report"></div>
+
 <script>
 /* =====================================================================
-   SESSION STATE  (in memory only — cleared when the tab closes)
+   TEACHER SETTING — paste your Google Apps Script /exec URL between the
+   quotes to turn on "Submit to Mr. Ghozi". Leave empty and that button
+   simply hides, leaving PDF / copy / download working as normal.
    ===================================================================== */
-const state = { correct:{}, answers:{}, matched:0, bsSolved:false, jogloFormula:null };
+const SUBMIT_URL = "";
+
+/* =====================================================================
+   SESSION STATE  (mirrored to this device's storage so a refresh,
+   a locked screen, or a stray back-swipe does not wipe the lesson)
+   ===================================================================== */
+const state = { correct:{}, answers:{}, attempts:{}, matched:0, matchedKeys:[],
+                bs1Solved:false, bs1State:'s0', bs2Solved:false, bs2State:'s0', jogloFormula:null };
+const STORE_KEY = 'ghozi-lit-ws02';
 
 /* =====================================================================
    ALGEBRA NORMALISER
@@ -855,6 +1209,7 @@ function checkField(field){
     const id=el.dataset.id, type=el.dataset.check, raw=el.value;
     const hint=el.dataset.hint||'';
     let ok=false, why='';
+    if(!state.correct[id]) state.attempts[id]=(state.attempts[id]||0)+1;
 
     if(type==='sym'){
       const v=raw.trim();
@@ -912,7 +1267,10 @@ function checkField(field){
     state.jogloFormula=inputs.find(e=>e.dataset.id==='q22f').value;
     updateJogloVerdict();
   }
-  applyGates(); updateProgress();
+  if(state.correct['q22w'] && state.correct['q22t'] && !jogloRevealed){
+    revealJoglo(); updateJogloVerdict();
+  }
+  applyGates(); updateProgress(); saveState();
   return allOk;
 }
 
@@ -926,14 +1284,24 @@ function applyGates(){
   });
 }
 
-function totalSteps(){ return document.querySelectorAll('.ans[data-id]').length + 2; }
+function totalSteps(){ return document.querySelectorAll('.ans[data-id]').length
+                            + document.querySelectorAll('.mcq[data-id]').length + 3; }
 function updateProgress(){
   let done=Object.values(state.correct).filter(Boolean).length;
   if(state.matched===5) done++;
-  if(state.bsSolved) done++;
+  if(state.bs1Solved) done++;
+  if(state.bs2Solved) done++;
   const total=totalSteps();
   document.getElementById('pfill').style.width=(done/total*100)+'%';
   document.getElementById('ptxt').textContent=done+' / '+total+' steps';
+
+  const written=[...document.querySelectorAll('.ans[data-check="open"]')]
+                  .filter(e=>(state.answers[e.dataset.id]||'').trim().length>0).length;
+  const tries=Object.values(state.attempts).reduce((a,b)=>a+b,0);
+  document.getElementById('sDone').textContent=done;
+  document.getElementById('sPct').textContent=Math.round(done/total*100)+'%';
+  document.getElementById('sWritten').textContent=written;
+  document.getElementById('sTries').textContent=tries;
 }
 
 document.addEventListener('click',e=>{
@@ -948,6 +1316,18 @@ document.addEventListener('keydown',e=>{
     const f=e.target.closest('.field'); if(f) checkField(f);
   }
 });
+
+/* keep every keystroke — a student who types but never presses Check must
+   not lose the text on refresh */
+let saveTimer=null;
+document.addEventListener('input',e=>{
+  if(!e.target.classList.contains('ans')) return;
+  state.answers[e.target.dataset.id]=e.target.value;
+  if(e.target.classList.contains('bad')) e.target.classList.remove('bad');
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{ saveState(); updateProgress(); },400);
+});
+window.addEventListener('beforeunload',()=>{ try{ saveState(); }catch(err){} });
 
 /* =====================================================================
    TABS
@@ -979,10 +1359,10 @@ document.querySelectorAll('.tab').forEach(tab=>{
       if(sameCol){ sel.classList.remove('sel'); sel=btn; btn.classList.add('sel'); return; }
       if(sel.dataset.key===btn.dataset.key){
         sel.classList.remove('sel'); sel.classList.add('matched'); btn.classList.add('matched');
-        state.matched++; sel=null;
+        state.matched++; state.matchedKeys.push(btn.dataset.key); sel=null;
         if(state.matched===5){ fb.textContent='All five matched. Notice that "7 less than x" reverses the order it is written in.'; fb.className='fb ok'; }
         else { fb.textContent=state.matched+' of 5 matched.'; fb.className='fb ok'; }
-        updateProgress();
+        updateProgress(); saveState();
       } else {
         btn.classList.add('shake'); sel.classList.add('shake');
         const a=sel; setTimeout(()=>{a.classList.remove('shake');btn.classList.remove('shake');},320);
@@ -995,9 +1375,12 @@ document.querySelectorAll('.tab').forEach(tab=>{
 })();
 
 /* =====================================================================
-   2.5  BOTH-SIDES REARRANGER
+   BOTH-SIDES ENGINE  (one factory, two instances: rearrange + solve)
+   Every legal move is shown landing on BOTH sides. Moves that are legal
+   but unhelpful are allowed on purpose — students learn that keeping the
+   equation balanced is not the same as making progress.
    ===================================================================== */
-const BS={
+const BS_TAXI={
   s0:{L:'F',R:'12000 + 5000k',ops:{
     sub12000:{to:'s1',ghost:'F − 12000   =   12000 + 5000k − 12000',
       msg:'Good — the same subtraction landed on both sides, so the equation stays balanced. The constant on the right cancels itself out.',cls:'good'},
@@ -1023,29 +1406,63 @@ const BS={
   stuckD:{L:'F − 24000',R:'5000k − 12000',ops:{}},
   stuckE:{L:'5000F − 60000000',R:'25000000k',ops:{}}
 };
-let bsState='s0';
-function bsRender(ghost,msg,cls){
-  const s=BS[bsState];
-  document.getElementById('bsL').textContent=s.L;
-  document.getElementById('bsR').textContent=s.R;
-  document.getElementById('bsGhost').textContent=ghost||'';
-  document.getElementById('bsMain').classList.toggle('solved',!!s.solved);
-  const m=document.getElementById('bsMsg');
-  m.textContent=msg||''; m.className='bs-msg'+(cls?' '+cls:'');
-}
-document.querySelectorAll('.bs-op').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const op=b.dataset.op;
-    if(op==='reset'){ bsState='s0'; bsRender('','Back to the original formula. Goal: get k alone on one side.',''); return; }
-    const s=BS[bsState];
-    if(s.solved){ bsRender('','Already solved — press start again to explore a different route.',''); return; }
-    const tr=s.ops[op];
-    if(!tr){ bsRender('','This path has stalled. Press start again to take a cleaner route.','warn'); return; }
-    bsState=tr.to;
-    bsRender(tr.ghost,tr.msg,tr.cls);
-    if(BS[bsState].solved && !state.bsSolved){ state.bsSolved=true; updateProgress(); }
+const BS_SOLVE={
+  s0:{L:'3b + 2',R:'26',ops:{
+    sub2:{to:'s1',ghost:'3b + 2 − 2   =   26 − 2',
+      msg:'Good. Taking 2 from both sides keeps the balance and clears the constant.',cls:'good'},
+    div3:{to:'stuckA',ghost:'(3b + 2) ÷ 3   =   26 ÷ 3',
+      msg:'Legal, but dividing before clearing the constant makes ugly fractions. Start again.',cls:'warn'},
+    add2:{to:'stuckB',ghost:'3b + 2 + 2   =   26 + 2',
+      msg:'Legal, but the constant grew instead of vanishing. Start again.',cls:'warn'},
+    mul3:{to:'stuckC',ghost:'3(3b + 2)   =   3 × 26',
+      msg:'Legal, but b now has a bigger coefficient than before. Start again.',cls:'warn'}}},
+  s1:{L:'3b',R:'24',ops:{
+    div3:{to:'s2',ghost:'3b ÷ 3   =   24 ÷ 3',
+      msg:'Solved. b stands alone — and now you know how many fish are in one sealed box.',cls:'good'},
+    add2:{to:'s0',ghost:'3b + 2   =   24 + 2',
+      msg:'That undid your last move. Still balanced, just back at the start.',cls:'warn'},
+    sub2:{to:'stuckD',ghost:'3b − 2   =   24 − 2',
+      msg:'Legal, but a constant has appeared on the left again. Start again.',cls:'warn'},
+    mul3:{to:'stuckE',ghost:'3 × 3b   =   3 × 24',
+      msg:'Legal, but the coefficient got bigger. Start again.',cls:'warn'}}},
+  s2:{L:'b',R:'8',solved:true,ops:{}},
+  stuckA:{L:'b + 0.67',R:'8.67',ops:{}},
+  stuckB:{L:'3b + 4',R:'28',ops:{}},
+  stuckC:{L:'9b + 6',R:'78',ops:{}},
+  stuckD:{L:'3b − 2',R:'22',ops:{}},
+  stuckE:{L:'9b',R:'72',ops:{}}
+};
+function makeBS(rootId, machine, key, startMsg){
+  const root=document.getElementById(rootId);
+  if(!root) return null;
+  const L=root.querySelector('.bs-L'), R=root.querySelector('.bs-R'),
+        G=root.querySelector('.bs-ghost'), M=root.querySelector('.bs-main'),
+        MSG=root.querySelector('.bs-msg');
+  let cur='s0';
+  function render(ghost,msg,cls){
+    const st=machine[cur];
+    L.textContent=st.L; R.textContent=st.R;
+    G.textContent=ghost||'';
+    M.classList.toggle('solved',!!st.solved);
+    MSG.textContent=msg||''; MSG.className='bs-msg'+(cls?' '+cls:'');
+  }
+  root.querySelectorAll('.bs-op').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const op=b.dataset.op;
+      if(op==='reset'){ cur='s0'; state[key+'State']='s0'; render('',startMsg,''); saveState(); return; }
+      const st=machine[cur];
+      if(st.solved){ render('','Already solved — press start again to try a different route.',''); return; }
+      const tr=st.ops[op];
+      if(!tr){ render('','This path has stalled. Press start again for a cleaner route.','warn'); return; }
+      cur=tr.to; state[key+'State']=cur;
+      render(tr.ghost,tr.msg,tr.cls);
+      if(machine[cur].solved && !state[key+'Solved']){ state[key+'Solved']=true; updateProgress(); }
+      saveState();
+    });
   });
-});
+  return { render, restore(st){ cur=machine[st]?st:'s0'; render('','Restored from your last session.',''); },
+           reset(){ cur='s0'; render('',startMsg,''); } };
+}
 
 /* =====================================================================
    3D  —  minimal touch-friendly orbit controls (no external controls file)
@@ -1161,81 +1578,170 @@ function initFrame(){
   };
 }
 
-/* ---------- 3D #2 : Joglo, materials driven by W and T ---------- */
-let jogloViz=null;
+/* ---------- 3D #2 : Joglo — the object you must READ to proceed --------
+   Tiles are laid in rows of 8 so the count has structure: rows x 8. The
+   view switcher lets a student hide one material while counting the other,
+   and the formula terms below light up the material they refer to.       */
+let jogloViz=null, jogloTruth={W:8,rows:3,T:24}, jogloRevealed=false;
 function initJoglo(){
   const el=document.getElementById('cv-joglo');
   if(!el||el.dataset.init) return;
-  if(!el.clientWidth) return;                 // hidden tab — try again later
+  if(!el.clientWidth) return;                 // hidden tab — retry on switch
+  let sc;
+  try{ sc=makeScene(el); }
+  catch(err){ jogloFallback(el); return; }
   el.dataset.init='1';
-  const {renderer,scene,camera}=makeScene(el);
+  const {renderer,scene,camera}=sc;
   const group=new THREE.Group(); scene.add(group);
   const woodMat=new THREE.MeshLambertMaterial({color:0x8a5a33});
   const tileMat=new THREE.MeshLambertMaterial({color:0xc2603f});
   const baseMat=new THREE.MeshLambertMaterial({color:0x8d94a3});
+  const frameMat=new THREE.MeshLambertMaterial({color:0x5f6b7d});  // NOT counted
+  const PER_ROW=8;
 
-  function build(W,T){
+  function build(W,rows){
     while(group.children.length) group.remove(group.children[0]);
     const base=new THREE.Mesh(new THREE.BoxGeometry(5.4,.3,5.4),baseMat);
-    base.position.y=-.15; group.add(base);
-    for(let i=0;i<W;i++){
+    base.position.y=-.15; base.userData.grp='base'; group.add(base);
+
+    for(let i=0;i<W;i++){                       // the ONLY countable wood
       const p=squarePerim((i/W)*Math.PI*2,2.1);
-      const post=new THREE.Mesh(new THREE.BoxGeometry(.26,2.2,.26),woodMat);
-      post.position.set(p.x,1.1,p.z); group.add(post);
+      const post=new THREE.Mesh(new THREE.BoxGeometry(.32,2.3,.32),woodMat);
+      post.position.set(p.x,1.15,p.z); post.userData.grp='wood'; group.add(post);
     }
-    for(let s=0;s<4;s++){
-      const beam=new THREE.Mesh(new THREE.BoxGeometry(s%2?.2:4.5,.2,s%2?4.5:.2),woodMat);
-      beam.position.set(s===1?2.1:(s===3?-2.1:0),2.25,s===0?-2.1:(s===2?2.1:0));
-      group.add(beam);
+    for(let s=0;s<4;s++){                       // grey frame — deliberately NOT wood-coloured
+      const beam=new THREE.Mesh(new THREE.BoxGeometry(s%2?.16:4.6,.16,s%2?4.6:.16),frameMat);
+      beam.position.set(s===1?2.1:(s===3?-2.1:0),2.45,s===0?-2.1:(s===2?2.1:0));
+      beam.userData.grp='base'; group.add(beam);
     }
-    const rows=5; let placed=0;
-    for(let r=0;r<rows&&placed<T;r++){
-      const f=r/rows, radius=2.35-f*1.75, y=2.45+f*1.45;
-      const per=Math.max(1,Math.ceil((T-placed)/(rows-r)));
-      for(let i=0;i<per&&placed<T;i++,placed++){
-        const t=(i/per)*Math.PI*2, p=squarePerim(t,radius);
-        const tile=new THREE.Mesh(new THREE.BoxGeometry(.34,.08,.26),tileMat);
-        tile.position.set(p.x,y,p.z); tile.rotation.y=-t; tile.rotation.x=-.34;
-        group.add(tile);
+    for(let r=0;r<rows;r++){                    // tile rows, clearly separated
+      const radius=2.5-r*0.52;
+      const y=2.8+r*0.66;
+      for(let i=0;i<PER_ROW;i++){
+        const t=((i+.5)/PER_ROW)*Math.PI*2, p=squarePerim(t,radius);
+        const tile=new THREE.Mesh(new THREE.BoxGeometry(.42,.1,.34),tileMat);
+        tile.position.set(p.x,y,p.z); tile.rotation.y=-t; tile.rotation.x=-.3;
+        tile.userData.grp='tiles'; group.add(tile);
       }
     }
-    const ridge=new THREE.Mesh(new THREE.BoxGeometry(1.3,.16,.16),woodMat);
-    ridge.position.y=3.95; group.add(ridge);
+    const ridge=new THREE.Mesh(new THREE.BoxGeometry(1.1,.15,.15),frameMat);
+    ridge.position.y=2.95+rows*0.66; ridge.userData.grp='base'; group.add(ridge);
   }
-  const orb=makeOrbit(camera,renderer.domElement,{r:11,minR:6,maxR:28,phi:1.25,target:new THREE.Vector3(0,1.6,0)});
+  function focus(which){
+    [woodMat,tileMat,baseMat,frameMat].forEach(m=>{m.transparent=false;m.opacity=1;});
+    const dim=(m,o)=>{m.transparent=true;m.opacity=o;};
+    if(which==='wood'){ dim(tileMat,.07); dim(baseMat,.25); dim(frameMat,.25); }
+    if(which==='tiles'){ dim(woodMat,.07); dim(baseMat,.25); dim(frameMat,.25); }
+  }
+  const orb=makeOrbit(camera,renderer.domElement,
+    {r:11.5,minR:6,maxR:28,phi:1.22,target:new THREE.Vector3(0,1.8,0)});
   (function loop(){ requestAnimationFrame(loop); renderer.render(scene,camera); })();
-  jogloViz={build,orb,renderer,camera,el};
-  build(8,60);
+  jogloViz={build,focus,orb,renderer,camera,el};
+  build(jogloTruth.W,jogloTruth.rows);
   document.getElementById('joglo-reset').onclick=()=>orb.reset();
 }
-function jogloVals(){
-  return {W:+document.getElementById('wSlider').value, T:+document.getElementById('tSlider').value};
+function jogloFallback(el){
+  el.innerHTML='<p style="color:#8c9ab8;font-size:13px;text-align:center;padding:22px">'+
+    'This device cannot show 3D. Use these counts instead:<br><br>'+
+    '<b style="color:#e8a33d">'+jogloTruth.W+' wood posts</b> and '+
+    '<b style="color:#c2603f">'+jogloTruth.rows+' rows of 8 tiles</b>.</p>';
+  el.style.display='flex'; el.style.alignItems='center'; el.style.justifyContent='center';
+}
+
+/* roll a new house — the numbers stay hidden until the student counts them */
+function rollJoglo(){
+  jogloTruth.W=4+Math.floor(Math.random()*9);          // 4..12 posts
+  jogloTruth.rows=2+Math.floor(Math.random()*4);       // 2..5 rows
+  jogloTruth.T=jogloTruth.rows*8;
+  jogloRevealed=false;
+  const setA=(id,v)=>{const e=document.querySelector('[data-id="'+id+'"]');
+                      if(e){e.dataset.ans=v; e.value=''; e.classList.remove('ok','bad');
+                            state.correct[id]=false; state.answers[id]='';
+                            const st=e.closest('.stage'); if(st) st.classList.remove('done');}};
+  setA('q22w',jogloTruth.W); setA('q22t',jogloTruth.T);
+  const cost=document.querySelector('[data-id="q22cost"]');
+  if(cost){ cost.dataset.ans=400000*jogloTruth.W+5000*jogloTruth.T;
+            cost.value=''; cost.classList.remove('ok','bad');
+            state.correct['q22cost']=false; state.answers['q22cost']=''; }
+  ['wv','rv','tv'].forEach(i=>{const e=document.getElementById(i); if(e) e.textContent='?';});
+  const ws=document.getElementById('wSlider'), rs=document.getElementById('rSlider');
+  if(ws){ ws.value=jogloTruth.W; ws.disabled=true; }
+  if(rs){ rs.value=jogloTruth.rows; rs.disabled=true; }
+  if(jogloViz) jogloViz.build(jogloTruth.W,jogloTruth.rows);
+  else { const el=document.getElementById('cv-joglo'); if(el&&el.dataset.fallback) jogloFallback(el); }
+  applyGates(); updateProgress(); saveState(); updateJogloVerdict();
+}
+function revealJoglo(){
+  jogloRevealed=true;
+  document.getElementById('wv').textContent=jogloTruth.W;
+  document.getElementById('rv').textContent=jogloTruth.rows;
+  document.getElementById('tv').textContent=jogloTruth.T;
+  const ws=document.getElementById('wSlider'), rs=document.getElementById('rSlider');
+  ws.disabled=false; rs.disabled=false;
 }
 function updateJogloVerdict(){
-  const {W,T}=jogloVals();
   const out=document.getElementById('jogloOut');
+  if(!out) return;
+  const W=jogloTruth.W, T=jogloTruth.T;
   const truth=400000*W+5000*T;
-  const fmt=n=>'Rp '+n.toLocaleString('en-US').replace(/,/g,'.');
+  const fmt=n=>'Rp '+Math.round(n).toLocaleString('en-US').replace(/,/g,'.');
   if(!state.jogloFormula){
-    out.innerHTML='Materials shown: <b>'+W+'</b> wood blocks and <b>'+T+'</b> tiles. '+
-                  'Enter your formula above to unlock the check.';
+    out.textContent='Write your formula in Step 1 to unlock the check.';
+    return;
+  }
+  if(!jogloRevealed){
+    out.innerHTML='Formula saved. Now count the posts and tile rows on the model above &mdash; '+
+                  'the check unlocks once your counts are right.';
     return;
   }
   const mine=evalExpr(state.jogloFormula,{w:W,t:T});
   const match=!isNaN(mine)&&Math.abs(mine-truth)<1e-6;
-  out.innerHTML='W = '+W+' &nbsp; T = '+T+'<br>'+
-    'your formula gives &nbsp;'+(isNaN(mine)?'—':fmt(mine))+'<br>'+
-    'the materials shown cost &nbsp;'+fmt(truth)+'<br>'+
-    (match?'<span class="hit">✓ your model predicts the real object at every setting</span>'
-          :'<span class="miss">✗ these do not agree — re-check which price belongs to which letter</span>');
+  out.innerHTML='<div class="terms">Your model: '+
+    '<button class="term" data-focus="wood">wood part</button>'+
+    '<button class="term" data-focus="tiles">tile part</button>'+
+    '<span style="color:#8c9ab8;font-size:12px">tap a part to light it up on the house</span></div>'+
+    '<div style="margin-top:9px">W = '+W+' &nbsp; T = '+T+' ('+jogloTruth.rows+' rows &times; 8)<br>'+
+    'wood: '+W+' &times; Rp 400.000 = '+fmt(400000*W)+'<br>'+
+    'tiles: '+T+' &times; Rp 5.000 = '+fmt(5000*T)+'<br>'+
+    'your formula gives '+(isNaN(mine)?'&mdash;':fmt(mine))+' &nbsp;|&nbsp; true total '+fmt(truth)+'<br>'+
+    (match?'<span class="hit">&#10003; your model matches the real house at every setting</span>'
+          :'<span class="miss">&#10007; these disagree &mdash; check which price belongs to which letter</span>')+'</div>';
 }
-['wSlider','tSlider'].forEach(id=>{
+
+/* view switcher, term highlighting, re-roll, sliders */
+document.addEventListener('click',e=>{
+  const seg=e.target.closest('.segb');
+  if(seg){
+    document.querySelectorAll('#jogloView .segb').forEach(b=>b.classList.remove('active'));
+    seg.classList.add('active');
+    if(jogloViz) jogloViz.focus(seg.dataset.focus);
+    return;
+  }
+  const term=e.target.closest('.term');
+  if(term){
+    const on=term.classList.contains('on');
+    document.querySelectorAll('.term').forEach(t=>t.classList.remove('on'));
+    if(!on){ term.classList.add('on'); if(jogloViz) jogloViz.focus(term.dataset.focus); }
+    else if(jogloViz) jogloViz.focus('both');
+  }
+});
+const rollBtn=document.getElementById('joglo-challenge');
+if(rollBtn) rollBtn.onclick=()=>{
+  rollJoglo();
+  document.getElementById('jogloOut').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+['wSlider','rSlider'].forEach(id=>{
   const s=document.getElementById(id);
+  if(!s) return;
   s.addEventListener('input',()=>{
-    const {W,T}=jogloVals();
-    document.getElementById('wv').textContent=W;
-    document.getElementById('tv').textContent=T;
-    if(jogloViz) jogloViz.build(W,T);
+    if(!jogloRevealed) return;
+    jogloTruth.W=+document.getElementById('wSlider').value;
+    jogloTruth.rows=+document.getElementById('rSlider').value;
+    jogloTruth.T=jogloTruth.rows*8;
+    document.getElementById('wv').textContent=jogloTruth.W;
+    document.getElementById('rv').textContent=jogloTruth.rows;
+    document.getElementById('tv').textContent=jogloTruth.T;
+    if(jogloViz) jogloViz.build(jogloTruth.W,jogloTruth.rows);
     updateJogloVerdict();
   });
 });
@@ -1255,8 +1761,271 @@ function ensureViz(){
 window.addEventListener('resize',()=>{ clearTimeout(window._rz); window._rz=setTimeout(ensureViz,150); });
 
 /* =====================================================================
-   BOOT
+   MULTIPLE CHOICE  (used for "which substitution is written correctly?")
+   A wrong pick explains that specific error rather than just saying no.
    ===================================================================== */
+document.addEventListener('click',e=>{
+  const mc=e.target.closest('.mc');
+  if(!mc) return;
+  const box=mc.closest('.mcq'), id=box.dataset.id;
+  if(state.correct[id]) return;
+  let fb=box.querySelector('.fb');
+  if(!fb){ fb=document.createElement('p'); fb.className='fb'; box.appendChild(fb); }
+  state.attempts[id]=(state.attempts[id]||0)+1;
+  if(mc.hasAttribute('data-correct')){
+    box.querySelectorAll('.mc').forEach(b=>b.disabled=true);
+    mc.classList.add('right');
+    state.correct[id]=true; state.answers[id]=mc.textContent.trim();
+    fb.textContent='Correct — the brackets keep the whole value together.';
+    fb.className='fb ok';
+  }else{
+    mc.classList.add('wrong');
+    fb.textContent=mc.dataset.why||'Not that one — look again at where the brackets sit.';
+    fb.className='fb bad';
+  }
+  applyGates(); updateProgress(); saveState();
+});
+
+/* =====================================================================
+   3.1  BRACKET RULE DEMO
+   ===================================================================== */
+(function(){
+  const root=document.getElementById('brk');
+  if(!root) return;
+  const bad=document.getElementById('brkBad'), good=document.getElementById('brkGood'),
+        msg=document.getElementById('brkMsg');
+  root.querySelectorAll('.brkv').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const x=parseInt(b.dataset.x,10), sq=x*x;
+      root.querySelectorAll('.brkv').forEach(o=>o.classList.add('ghost'));
+      b.classList.remove('ghost');
+      if(x<0){
+        bad.textContent='without brackets:  x² → '+x+'² → −('+Math.abs(x)+'×'+Math.abs(x)+') = '+(-sq)+'   ✗';
+        good.innerHTML='<span class="bs-side">with brackets:  x² → ('+x+')² → ('+x+')×('+x+') = '+sq+'</span>';
+        msg.textContent='Same value of x, two different answers. The brackets are what stop the minus sign escaping.';
+        msg.className='bs-msg good';
+      }else{
+        bad.textContent='without brackets:  x² → '+x+'² = '+sq;
+        good.innerHTML='<span class="bs-side">with brackets:  x² → ('+x+')² = '+sq+'</span>';
+        msg.textContent='With a positive x both give the same answer — which is exactly why the habit is easy to forget, and why it bites on negatives.';
+        msg.className='bs-msg warn';
+      }
+    });
+  });
+})();
+
+/* =====================================================================
+   AUTOSAVE  —  survives refresh, screen lock, accidental back-swipe
+   ===================================================================== */
+const idEls=()=>({name:document.getElementById('stName'),
+                  cls:document.getElementById('stClass'),
+                  date:document.getElementById('stDate')});
+function saveState(){
+  try{
+    const e=idEls();
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      v:1, identity:{name:e.name.value, cls:e.cls.value, date:e.date.value},
+      correct:state.correct, answers:state.answers, attempts:state.attempts,
+      matched:state.matched, matchedKeys:state.matchedKeys,
+      bs1Solved:state.bs1Solved, bs1State:state.bs1State,
+      bs2Solved:state.bs2Solved, bs2State:state.bs2State, jogloFormula:state.jogloFormula,
+      jogloTruth:jogloTruth, jogloRevealed:jogloRevealed,
+      saved:new Date().toISOString()
+    }));
+    const n=document.getElementById('saveNote');
+    n.innerHTML='Your work saves automatically on this device. <b>Last saved '+
+                new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+'</b>';
+  }catch(err){
+    document.getElementById('saveNote').textContent=
+      'Autosave is unavailable in this browser — use Save as PDF before you close the tab.';
+  }
+}
+function restoreState(){
+  let d=null;
+  try{ d=JSON.parse(localStorage.getItem(STORE_KEY)||'null'); }catch(err){}
+  if(!d) return false;
+  const e=idEls();
+  if(d.identity){ e.name.value=d.identity.name||''; e.cls.value=d.identity.cls||''; if(d.identity.date) e.date.value=d.identity.date; }
+  Object.assign(state,{correct:d.correct||{}, answers:d.answers||{}, attempts:d.attempts||{},
+    matched:d.matched||0, matchedKeys:d.matchedKeys||[],
+    bs1Solved:!!d.bs1Solved, bs1State:d.bs1State||'s0',
+    bs2Solved:!!d.bs2Solved, bs2State:d.bs2State||'s0', jogloFormula:d.jogloFormula||null});
+  if(d.jogloTruth){ jogloTruth=d.jogloTruth; jogloRevealed=!!d.jogloRevealed; }
+
+  document.querySelectorAll('.ans[data-id]').forEach(el=>{
+    const id=el.dataset.id;
+    if(state.answers[id]!==undefined) el.value=state.answers[id];
+    if(state.correct[id]){ el.classList.add('ok'); const st=el.closest('.stage'); if(st) st.classList.add('done'); }
+  });
+  document.querySelectorAll('.mcq[data-id]').forEach(box=>{
+    if(!state.correct[box.dataset.id]) return;
+    box.querySelectorAll('.mc').forEach(b=>{
+      b.disabled=true;
+      if(b.hasAttribute('data-correct')) b.classList.add('right');
+    });
+  });
+  state.matchedKeys.forEach(k=>{
+    document.querySelectorAll('#match1 .mi[data-key="'+k+'"]').forEach(b=>b.classList.add('matched'));
+  });
+  if(state.matched) document.getElementById('fb-match1').textContent=
+    state.matched===5?'All five matched.':state.matched+' of 5 matched.';
+  if(state.matched) document.getElementById('fb-match1').className='fb ok';
+  if(bs1) bs1.restore(state.bs1State);
+  if(bs2) bs2.restore(state.bs2State);
+  return true;
+}
+
+/* =====================================================================
+   REPORT  —  one structure feeding PDF, clipboard, file and submission
+   ===================================================================== */
+function collect(){
+  const rows=[];
+  document.querySelectorAll('.act').forEach(act=>{
+    const title=act.querySelector('h3').textContent.trim();
+    const num=act.querySelector('.act-num').textContent.trim();
+    act.querySelectorAll('.mcq[data-id]').forEach(box=>{
+      const st=box.closest('.stage');
+      const step=(st&&st.querySelector('.stage-lbl')?st.querySelector('.stage-lbl').textContent.trim():'')+' — substitution chosen';
+      rows.push({activity:num+' '+title, step, id:box.dataset.id, kind:'choice',
+                 answer:state.answers[box.dataset.id]||'(not chosen)',
+                 correct:!!state.correct[box.dataset.id], attempts:state.attempts[box.dataset.id]||0});
+    });
+    act.querySelectorAll('.ans[data-id]').forEach(el=>{
+      const st=el.closest('.stage');
+      let step=st&&st.querySelector('.stage-lbl')?st.querySelector('.stage-lbl').textContent.trim():'';
+      const tr=el.closest('tr');
+      if(tr && tr.cells.length>1){
+        const first=tr.cells[0].textContent.trim();
+        if(first && !tr.cells[0].contains(el)) step=first;
+      }
+      const pre=el.closest('.field')?el.closest('.field').querySelector('.pre'):null;
+      if(pre && el.closest('.field').querySelectorAll('.ans').length>1)
+        step=step+' — '+pre.textContent.trim().replace(/:$/,'');
+      rows.push({activity:num+' '+title, step, id:el.dataset.id,
+                 kind:el.dataset.check, answer:(state.answers[el.dataset.id]||el.value||'').trim(),
+                 correct:!!state.correct[el.dataset.id], attempts:state.attempts[el.dataset.id]||0});
+    });
+  });
+  const e=idEls();
+  let done=Object.values(state.correct).filter(Boolean).length;
+  if(state.matched===5) done++;
+  if(state.bs1Solved) done++;
+  if(state.bs2Solved) done++;
+  return { name:e.name.value.trim(), cls:e.cls.value.trim(), date:e.date.value,
+           worksheet:'Algebraic Modelling — Expressions & Formulae',
+           done, total:totalSteps(), matched:state.matched,
+           bs1Solved:state.bs1Solved, bs2Solved:state.bs2Solved,
+           attempts:Object.values(state.attempts).reduce((a,b)=>a+b,0),
+           submitted:new Date().toISOString(), rows };
+}
+function buildReport(){
+  const d=collect(), r=document.getElementById('report');
+  let h='<h1>'+d.worksheet+'</h1><p class="rid">'+
+    '<span><b>Name:</b> '+(d.name||'__________')+'</span>'+
+    '<span><b>Class:</b> '+(d.cls||'______')+'</span>'+
+    '<span><b>Date:</b> '+(d.date||'__________')+'</span>'+
+    '<span><b>Completed:</b> '+d.done+'/'+d.total+'</span></p>';
+  let last='';
+  d.rows.forEach(row=>{
+    if(row.activity!==last){ h+='<h2>'+row.activity+'</h2>'; last=row.activity; }
+    h+='<div class="rq"><div class="rl">'+(row.step||'&nbsp;')+'</div>'+
+       '<div class="ra">'+(row.answer?escapeHtml(row.answer):'(not answered)')+'</div>'+
+       '<div class="rm">'+(row.kind==='open'?'written response':(row.correct?'correct':'not yet correct'))+
+       ' · '+row.attempts+' attempt'+(row.attempts===1?'':'s')+'</div></div>';
+  });
+  h+='<h2>Interactive tasks</h2><div class="rq"><div class="ra">Translation match-up: '+d.matched+
+     ' of 5 &nbsp;|&nbsp; Formula rearranged: '+(d.bs1Solved?'yes':'no')+
+     ' &nbsp;|&nbsp; Equation solved: '+(d.bs2Solved?'yes':'no')+'</div></div>';
+  r.innerHTML=h;
+  return d;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function asText(d){
+  let t=d.worksheet+'\n'+d.name+' · '+d.cls+' · '+d.date+'\nCompleted '+d.done+'/'+d.total+
+        ' · '+d.attempts+' attempts\n'+'='.repeat(46)+'\n';
+  let last='';
+  d.rows.forEach(r=>{
+    if(r.activity!==last){ t+='\n['+r.activity+']\n'; last=r.activity; }
+    t+='  '+(r.step||'-')+'\n   > '+(r.answer||'(blank)')+
+       '   ['+(r.kind==='open'?'written':(r.correct?'correct':'not correct'))+', '+r.attempts+' tries]\n';
+  });
+  t+='\nMatch-up '+d.matched+'/5 · rearranged: '+(d.bs1Solved?'yes':'no')+
+     ' · equation solved: '+(d.bs2Solved?'yes':'no')+'\n';
+  return t;
+}
+function needIdentity(){
+  const d=collect();
+  if(!d.name||!d.cls){
+    setStatus('Please fill in your name and class at the top first.','bad');
+    document.querySelector('.ident').scrollIntoView({behavior:'smooth',block:'center'});
+    return true;
+  }
+  return false;
+}
+
+function setStatus(msg,cls){
+  ['finStatus','quickStatus'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(e){ e.textContent=msg; e.className='fin-status'+(cls?' '+cls:''); }
+  });
+}
+function onAll(sel,fn){ document.querySelectorAll(sel).forEach(b=>b.addEventListener('click',fn)); }
+
+onAll('.act-print',()=>{
+  if(needIdentity()) return;
+  buildReport();
+  setTimeout(()=>window.print(),120);
+});
+onAll('.act-copy',async()=>{
+  const txt=asText(collect());
+  try{ await navigator.clipboard.writeText(txt); }
+  catch(err){
+    const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta);
+    ta.select(); try{document.execCommand('copy');}catch(e2){}
+    document.body.removeChild(ta);
+  }
+  setStatus('Copied. Paste it wherever you hand work in.','ok');
+});
+onAll('.act-download',()=>{
+  const d=collect();
+  const blob=new Blob([asText(d)],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(d.name||'student').replace(/\s+/g,'-').toLowerCase()+'-algebra-worksheet.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  setStatus('File downloaded. Upload it wherever you hand work in.','ok');
+});
+document.getElementById('btnSubmit').onclick=async()=>{
+  if(needIdentity()) return;
+  const btn=document.getElementById('btnSubmit');
+  const d=collect();
+  btn.disabled=true; setStatus('Sending…','');
+  try{
+    const res=await fetch(SUBMIT_URL,{method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(d)});
+    if(!res.ok) throw new Error('status '+res.status);
+    setStatus('Sent to Mr. Ghozi. You can still keep working — submit again to update it.','ok');
+  }catch(err){
+    try{
+      await fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(d)});
+      setStatus('Sent (delivery not confirmed). Please also use Save as PDF to be safe.','ok');
+    }catch(e2){
+      setStatus('Could not reach the server. Use Save as PDF or Download file instead.','bad');
+    }
+  }
+  btn.disabled=false;
+};
+document.getElementById('btnReset').onclick=()=>{
+  if(!confirm('Clear all answers on this device and start fresh?\n\nMake sure the current student has already submitted or saved a PDF.')) return;
+  try{ localStorage.removeItem(STORE_KEY); }catch(err){}
+  location.reload();
+};
+[['stName'],['stClass'],['stDate']].forEach(([id])=>
+  document.getElementById(id).addEventListener('change',saveState));
+
+
 window.addEventListener('load',()=>{
   if(typeof THREE==='undefined'){
     document.querySelectorAll('.canvas-box').forEach(b=>{
@@ -1267,7 +2036,33 @@ window.addEventListener('load',()=>{
   }
   ensureViz();
 });
-applyGates(); updateProgress(); bsRender('','Goal: get k alone on one side.','');
+const bs1=makeBS('bs',BS_TAXI,'bs1','Goal: get k alone on one side.');
+const bs2=makeBS('bs2',BS_SOLVE,'bs2','Goal: get b alone on one side.');
+if(bs1) bs1.reset(); if(bs2) bs2.reset();
+applyGates(); updateProgress();
+
+/* default today's date, hide Submit when no endpoint is configured, restore any saved work */
+(function(){
+  const dt=document.getElementById('stDate');
+  if(!dt.value) dt.value=new Date().toISOString().slice(0,10);
+  if(!SUBMIT_URL){
+    document.getElementById('btnSubmit').style.display='none';
+    document.getElementById('btnPrint').classList.replace('ghost','primary');
+  }
+  const had=restoreState();
+  if(had && state.answers['q22w']!==undefined){
+    const setA=(id,v)=>{const e=document.querySelector('[data-id="'+id+'"]'); if(e) e.dataset.ans=v;};
+    setA('q22w',jogloTruth.W); setA('q22t',jogloTruth.T);
+    setA('q22cost',400000*jogloTruth.W+5000*jogloTruth.T);
+    if(jogloRevealed) revealJoglo();
+    updateJogloVerdict();
+  } else { rollJoglo(); }
+  if(had){
+    applyGates(); updateProgress();
+    setStatus('Restored your saved work on this device.','ok');
+  }
+  saveState();
+})();
 </script>
 </body>
 </html>
