@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revised Guided Worksheets - Algebra (A-Level)</title>
+    <!-- MathJax Configuration -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['\\[', '\\]']] } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --concept: #ebf8ff;
+            --example: #f0fff4;
+            --scaffold: #fffff0;
+            --case: #fff5f5;
+            --exercise: #f7fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* A4 Print Setup */
+        @page { size: A4; margin: 15mm; }
+        @media print {
+            body { padding: 0; font-size: 11pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-after: always; }
+        }
+
+        /* Worksheet Header */
+        .ws-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ws-title { font-size: 1.4em; font-weight: bold; color: var(--primary); }
+        .student-info { display: flex; flex-direction: column; gap: 5px; width: 250px;}
+        .student-info div { display: flex; justify-content: space-between; border-bottom: 1px dotted #718096; }
+
+        /* Section Blocks */
+        .section-block {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e0;
+            position: relative;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 5px;
+        }
+
+        /* Specific Backgrounds */
+        .b-concept { background-color: var(--concept); border-left: 5px solid #3182ce; }
+        .b-example { background-color: var(--example); border-left: 5px solid #38a169; }
+        .b-scaffold { background-color: var(--scaffold); border-left: 5px solid #d69e2e; }
+        .b-case { background-color: var(--case); border-left: 5px solid #e53e3e; }
+        .b-exercise { background-color: var(--exercise); border-left: 5px solid #718096; }
+
+        .fill-blank {
+            display: inline-block; min-width: 50px; border-bottom: 1px solid #333; text-align: center;
+        }
+        .work-box {
+            border: 2px dashed #a0aec0; min-height: 120px; margin-top: 10px; padding: 10px;
+            border-radius: 5px; background-image: linear-gradient(#f7fafc 1px, transparent 1px), linear-gradient(90deg, #f7fafc 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .page-break { page-break-after: always; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Worksheets</button>
+
+    <!-- =====================================================================
+         MEETING 1: MODULUS EQUATIONS
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: The Modulus Function<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <!-- 1. Basic Concept -->
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: Absolute Value</div>
+            <p>The modulus $|x|$ represents the absolute distance from zero. Distance is always positive.<br>
+            $|x| = x$ if $x \ge 0$, and $|x| = -x$ if $x < 0$.<br>
+            To solve $|ax + b| = c$, split it into two possibilities:<br>
+            <strong>Positive Case:</strong> $ax + b = c$ &nbsp;&nbsp;&nbsp; <strong>Negative Case:</strong> $ax + b = -c$</p>
+        </div>
+
+        <!-- 2. Example & Solution -->
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Question:</strong> Solve $|2x - 5| = 9$.</p>
+            <p><strong>Solution:</strong><br>
+            <em>Positive Case:</em> $2x - 5 = 9 \implies 2x = 14 \implies x = 7$<br>
+            <em>Negative Case:</em> $2x - 5 = -9 \implies 2x = -4 \implies x = -2$<br>
+            <strong>Answer:</strong> $x = 7$ or $x = -2$.</p>
+        </div>
+
+        <!-- 3. Question with Scaffolding -->
+        <div class="section-block b-scaffold">
+            <div class="section-title">3. Question with Scaffolding (Real Context)</div>
+            <p><strong>CNC Machining Tolerance:</strong> A factory in Semarang uses a CNC machine to cut steel rods. The target length is exactly 50 cm. The machine has an error tolerance of 0.2 cm. Let $x$ be the actual length of the rod.</p>
+            <p>Write an equation using modulus to represent the acceptable limits, then solve for the maximum and minimum lengths.</p>
+            <p><strong>Step 1:</strong> Formulate the equation. The distance between $x$ and 50 is 0.2.<br>
+            $|x - 50| =$ <span class="fill-blank" style="width: 60px;"></span></p>
+            <p><strong>Step 2:</strong> Split into two cases.</p>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <em>Positive Case (Too long):</em><br>
+                    $x - 50 = 0.2$<br>
+                    $x = $ <span class="fill-blank" style="width: 60px;"></span>
+                </div>
+                <div style="flex: 1;">
+                    <em>Negative Case (Too short):</em><br>
+                    $x - 50 = -0.2$<br>
+                    $x = $ <span class="fill-blank" style="width: 60px;"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-break"></div> <!-- Page 2 of M1 starts here -->
+
+        <!-- 4. Case -->
+        <div class="section-block b-case">
+            <div class="section-title">4. Case: Variables on Both Sides (Extraneous Roots)</div>
+            <p>When solving equations like $|ax+b| = cx+d$, substituting your answers back into the original equation is mandatory. Some answers will yield a negative absolute value, which is impossible (Extraneous Root).</p>
+            <div class="work-box" style="min-height: 180px;">
+                <strong>Solve $|x - 4| = 2x + 1$ and check for extraneous roots.</strong><br><br><br><br><br><br>
+            </div>
+        </div>
+
+        <!-- 5. Exercises -->
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Solve the equation $|3x - 2| = 7$.</p>
+            <div class="work-box" style="min-height: 200px;"></div>
+            
+            <p><strong>Question 2:</strong> Solve the equation $|3x + 1| = |x - 5|$. <br><em>(Hint: Since both sides are absolute values, you can square both sides to remove the modulus.)</em></p>
+            <div class="work-box" style="min-height: 300px;"></div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- =====================================================================
+         MEETING 2: GRAPHING MODULUS
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: Graphing $y = |f(x)|$<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: Graphing Absolute Value</div>
+            <p>The graph of $y = |ax + b|$ takes the straight line $y = ax + b$ and <strong>reflects</strong> any part below the x-axis upwards. This creates a 'V' shape.<br>
+            <strong>Key Points:</strong><br>
+            1. x-intercept (Vertex): Set $ax + b = 0$.<br>
+            2. y-intercept: Set $x = 0$.</p>
+        </div>
+
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Question:</strong> Find the vertex and y-intercept of $y = |2x - 4|$.</p>
+            <p><strong>Solution:</strong><br>
+            <em>Vertex:</em> $2x - 4 = 0 \implies 2x = 4 \implies x = 2$. Coordinate: $(2, 0)$.<br>
+            <em>y-intercept:</em> $|2(0) - 4| = |-4| = 4$. Coordinate: $(0, 4)$.</p>
+        </div>
+
+        <div class="section-block b-scaffold">
+            <div class="section-title">3. Question with Scaffolding (Real Context)</div>
+            <p><strong>Laser Reflection:</strong> A laser beam is fired towards a mirror on the x-axis. Its path follows the equation $y = |x - 3|$.</p>
+            <p><strong>Step 1:</strong> Find the exact point where the laser hits the mirror (the vertex).<br>
+            $x - 3 = 0 \implies x =$ <span class="fill-blank" style="width: 50px;"></span>. Vertex coordinate: (<span class="fill-blank" style="width: 30px;"></span>, 0).</p>
+            <p><strong>Step 2:</strong> Find where the laser crossed the y-axis before hitting the mirror.<br>
+            $y = |0 - 3| \implies y =$ <span class="fill-blank" style="width: 50px;"></span>. Intercept: (0, <span class="fill-blank" style="width: 30px;"></span>).</p>
+            <p><strong>Step 3:</strong> Sketch the 'V' shape of the laser beam.</p>
+            <div class="work-box" style="min-height: 150px; text-align:center;">
+                <em>[Draw Sketch Here]</em>
+            </div>
+        </div>
+
+        <div class="page-break"></div> <!-- Page 2 of M2 starts here -->
+
+        <div class="section-block b-case">
+            <div class="section-title">4. Case: Intersections and Graphical Solutions</div>
+            <p>When solving an equation like $|x - 2| = 3$, graphically this means finding where the V-shaped graph $y = |x - 2|$ intersects the horizontal line $y = 3$. There will usually be two intersection points.</p>
+        </div>
+
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Sketch the graph of $y = |3x + 6|$ for $-3 \le x \le 2$. State the coordinates of the vertex and y-intercept.</p>
+            <div class="work-box" style="min-height: 350px;"></div>
+            
+            <p><strong>Question 2:</strong> On the same axes, sketch $y = |x - 2|$ and $y = \frac{1}{2}x + 1$. Hence, use algebra to find the exact coordinates of their points of intersection.</p>
+            <div class="work-box" style="min-height: 350px;"></div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- =====================================================================
+         MEETING 3: MODULUS INEQUALITIES
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: Modulus Inequalities<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: Inequality Logic</div>
+            <p><strong>Less-THAND ($<$):</strong> Represents a trapped boundary.<br>
+            $|x| < a \iff -a < x < a$<br>
+            <strong>Great-OR ($>$):</strong> Represents escaped, outer bounds.<br>
+            $|x| > a \iff x > a$ <strong>OR</strong> $x < -a$</p>
+        </div>
+
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Question:</strong> Solve $|x - 2| < 4$.</p>
+            <p><strong>Solution:</strong> Less than means "trapped inside".<br>
+            $-4 < x - 2 < 4$<br>
+            Add 2 to all three parts: $-2 < x < 6$.</p>
+        </div>
+
+        <div class="section-block b-scaffold">
+            <div class="section-title">3. Question with Scaffolding (Real Context)</div>
+            <p><strong>Server Room Tolerance:</strong> A server room's optimal temperature is $20^\circ\text{C}$. The safety protocol states the temperature $T$ must NOT fluctuate by $3^\circ\text{C}$ or more.</p>
+            <p><strong>Step 1:</strong> Formulate the modulus inequality. The distance between $T$ and 20 must be STRICTLY LESS THAN 3.<br>
+            $|T - 20| <$ <span class="fill-blank" style="width: 50px;"></span></p>
+            <p><strong>Step 2:</strong> Expand the inequality using the "Less-THAND" rule.<br>
+            <span class="fill-blank" style="width: 40px;"></span> $< T - 20 < $ <span class="fill-blank" style="width: 40px;"></span></p>
+            <p><strong>Step 3:</strong> Solve for $T$ (add 20 to all parts).<br>
+            The safe temperature range is: <span class="fill-blank" style="width: 40px;"></span> $< T < $ <span class="fill-blank" style="width: 40px;"></span></p>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="section-block b-case">
+            <div class="section-title">4. Case: Modulus on Both Sides</div>
+            <p>When solving $|ax+b| \ge |cx+d|$, the safest algebraic method is to <strong>square both sides</strong>. Since both sides are strictly positive, squaring preserves the inequality while destroying the modulus bars.</p>
+            <p>$(ax+b)^2 \ge (cx+d)^2$</p>
+        </div>
+
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Solve the inequality $|2x + 1| \ge 7$ and represent your solution on a number line.</p>
+            <div class="work-box" style="min-height: 250px;"></div>
+            
+            <p><strong>Question 2:</strong> Find the set of values of $x$ satisfying $|3x - 1| < |x + 5|$. <em>(Square both sides!)</em></p>
+            <div class="work-box" style="min-height: 350px;"></div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- =====================================================================
+         MEETING 4/5: POLYNOMIAL DIVISION
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: Polynomial Division<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: Long Division</div>
+            <p>Polynomial division works exactly like numerical long division.<br>
+            Golden Rule: $P(x) = D(x)Q(x) + R(x)$<br>
+            <em>(Polynomial = Divisor $\times$ Quotient + Remainder)</em><br>
+            <strong>Crucial:</strong> Always insert placeholders (like $+0x^2$) for any missing terms!</p>
+        </div>
+
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Question:</strong> Divide $x^2 + 5x + 6$ by $x + 2$.</p>
+            <p><strong>Solution:</strong><br>
+            $x(x) = x^2 \implies (x^2 + 5x) - (x^2 + 2x) = 3x$. Bring down 6.<br>
+            $3(x) = 3x \implies (3x + 6) - (3x + 6) = 0$.<br>
+            Quotient = $x + 3$, Remainder = 0.</p>
+        </div>
+
+        <div class="section-block b-scaffold">
+            <div class="section-title">3. Question with Scaffolding (Real Context)</div>
+            <p><strong>Logistics Box Volume:</strong> A logistics company has a formula for a shipping container volume: $V(x) = x^3 + 3x^2 - 4x - 12$. If the height is given by the linear polynomial $(x - 2)$, divide the volume by the height to find the base area.</p>
+            <div class="work-box" style="min-height: 250px;">
+                <p><strong>Set up the division:</strong></p>
+                $x - 2 \overline{ ) \ x^3 + 3x^2 - 4x - 12}$<br><br><br><br>
+                Quotient (Base Area) = <span class="fill-blank" style="width: 150px;"></span>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="section-block b-case">
+            <div class="section-title">4. Case: Quadratic Divisors</div>
+            <p>When dividing by a quadratic polynomial (degree 2), your remainder will not just be a number. It can be a linear polynomial (degree 1) in the form $R(x) = ax + b$.</p>
+        </div>
+
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Find the quotient and remainder when $x^3 - 4x^2 + 2x + 5$ is divided by $(x - 2)$.</p>
+            <div class="work-box" style="min-height: 250px;"></div>
+            
+            <p><strong>Question 2:</strong> Find the quotient and remainder when $2x^4 - 3x^3 + x - 7$ is divided by $(x^2 - x + 2)$. <br><em>(Hint: Insert $+ 0x^2$ into the dividend!)</em></p>
+            <div class="work-box" style="min-height: 350px;"></div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- =====================================================================
+         MEETING 6/7: FACTOR AND REMAINDER THEOREMS
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: Factor & Remainder Theorems<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: The Theorems</div>
+            <p><strong>Remainder Theorem:</strong> When polynomial $P(x)$ is divided by $(ax - b)$, the remainder is EXACTLY $P(b/a)$.<br>
+            <strong>Factor Theorem:</strong> A special case of the remainder theorem. If $P(b/a) = 0$, then $(ax - b)$ is a perfect factor!</p>
+        </div>
+
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Question:</strong> Show that $(x - 2)$ is a factor of $x^2 - 4$.</p>
+            <p><strong>Solution:</strong> Let $P(x) = x^2 - 4$. Evaluate $P(2)$.<br>
+            $P(2) = (2)^2 - 4 = 4 - 4 = 0$. Since Remainder = 0, $(x-2)$ is a factor.</p>
+        </div>
+
+        <div class="section-block b-case">
+            <div class="section-title">3. Case: Simultaneous Equations</div>
+            <p>Often, a polynomial will have unknown coefficients (like $a$ and $b$). The question will give you two clues (e.g., "divisible by $x-1$" and "remainder 4 when divided by $x+2$"). Set up two equations and solve them simultaneously.</p>
+        </div>
+
+        <div class="section-block b-scaffold">
+            <div class="section-title">4. Question with Scaffolding</div>
+            <p>The polynomial $f(x) = x^3 + ax^2 + bx - 4$ is exactly divisible by $(x-1)$ and leaves a remainder of $16$ when divided by $(x+3)$. Find $a$ and $b$.</p>
+            <p><strong>Eq 1:</strong> Divisible by $(x-1) \implies f(1) = 0$<br>
+            $(1)^3 + a(1)^2 + b(1) - 4 = 0 \implies a + b =$ <span class="fill-blank" style="width: 50px;"></span></p>
+            <p><strong>Eq 2:</strong> Remainder 16 by $(x+3) \implies f(-3) = 16$<br>
+            $(-3)^3 + a(-3)^2 + b(-3) - 4 = 16 \implies 9a - 3b =$ <span class="fill-blank" style="width: 50px;"></span></p>
+            <div class="work-box" style="min-height: 100px;">
+                <em>Solve Eq 1 and Eq 2 simultaneously here:</em>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Find the remainder when $2x^3 - x^2 + 4x - 1$ is divided by $(2x - 1)$.</p>
+            <div class="work-box" style="min-height: 300px;"></div>
+            
+            <p><strong>Question 2:</strong> Given $(x + 3)$ is a factor of $P(x) = 2x^3 + x^2 - 13x + 6$, fully factorise $P(x)$ into three linear brackets. <em>(Hint: Use division to find the remaining quadratic, then factorise it).</em></p>
+            <div class="work-box" style="min-height: 350px;"></div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- =====================================================================
+         MEETING 8: MATHEMATICAL MODELLING SYNTHESIS
+    ====================================================================== -->
+    <div class="worksheet">
+        <div class="ws-header">
+            <div class="ws-title">Worksheet: Mathematical Modelling<br><span style="font-size: 0.6em; color: #718096;">Grade 12 - Pure Math 2 & 3</span></div>
+            <div class="student-info">
+                <div><span>Name:</span> <span></span></div>
+                <div><span>Class:</span> <span></span></div>
+            </div>
+        </div>
+
+        <div class="section-block b-concept">
+            <div class="section-title">1. Basic Concept: Translating Reality to Algebra</div>
+            <p>Mathematical Modelling takes physical constraints and translates them into algebra. If a bridge anchors to the ground, its height/stress at that point is zero. In polynomial terms, those points are <strong>roots</strong>, and their corresponding brackets are <strong>factors</strong>.</p>
+        </div>
+
+        <div class="section-block b-example">
+            <div class="section-title">2. Example Question and Solution</div>
+            <p><strong>Context:</strong> A roof curve $y = x^2 + cx - 8$ hits the ground at $x = 2$. Find $c$.<br>
+            <strong>Solution:</strong> Hits ground $\implies y=0$. Therefore $P(2) = 0$.<br>
+            $(2)^2 + 2c - 8 = 0 \implies 2c - 4 = 0 \implies c = 2$.</p>
+        </div>
+
+        <div class="section-block b-scaffold">
+            <div class="section-title">3. Question with Scaffolding (Bridge Engineering)</div>
+            <p>A structural engineer is designing a curved bridge support in Semarang. The stress curve of the bridge is modeled by the polynomial $P(x) = x^4 + ax^3 + bx^2 - 16x - 12$. The support must anchor perfectly into the ground (zero stress) at $x = -2$ and $x = 3$.</p>
+            <p><strong>Step 1:</strong> Translate the English into Math.<br>
+            "Anchors at $x = -2$" means $P($<span class="fill-blank" style="width: 30px;"></span>$) = 0$.<br>
+            "Anchors at $x = 3$" means $P($<span class="fill-blank" style="width: 30px;"></span>$) = 0$.</p>
+            <p><strong>Step 2:</strong> Set up the simultaneous equations.</p>
+            <div class="work-box" style="min-height: 120px;">
+                <em>Eq 1 (Substitute -2):</em><br><br>
+                <em>Eq 2 (Substitute 3):</em>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="section-block b-case">
+            <div class="section-title">4. Case: Fully Solving the Model</div>
+            <p>Once you find the unknown coefficients ($a$ and $b$), the model is complete. But engineers often need to find ALL anchor points. This requires fully factorising a degree-4 polynomial using the two known linear factors.</p>
+        </div>
+
+        <div class="section-block b-exercise">
+            <div class="section-title">5. Exercise</div>
+            <p><strong>Question 1:</strong> Solve the simultaneous equations from Step 2 to find the exact values of $a$ and $b$ for the bridge support.</p>
+            <div class="work-box" style="min-height: 300px;"></div>
+            
+            <p><strong>Question 2:</strong> Using your values of $a$ and $b$, write out the full polynomial $P(x)$. Divide it by the known factors to find the remaining quadratic, and factorise it to find the <strong>other two anchor points</strong> on the ground.</p>
+            <div class="work-box" style="min-height: 350px;"></div>
+        </div>
+    </div>
+
+</body>
+</html>

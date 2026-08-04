@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Plan - Algebra (Pure Math 2 & 3) - SMA Semesta</title>
+    <!-- MathJax Configuration fixed to accept both \( \) and $ $ -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = { 
+            tex: { 
+                inlineMath: [['\\(', '\\)'], ['$', '$']], 
+                displayMath: [['\\[', '\\]']] 
+            } 
+        };
+    </script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2b6cb0;
+            --accent-bg: #ebf8ff;
+            --mindful: #2980b9;
+            --meaningful: #27ae60;
+            --joyful: #d35400;
+            --rme: #8e44ad;
+            --char: #c0392b;
+            --hook: #f39c12;
+            --exit: #8e44ad;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+        mjx-container { font-size: 1.15em !important; }
+
+        /* Print Button */
+        .print-btn {
+            position: fixed; top: 20px; right: 20px; background-color: var(--secondary);
+            color: #fff; border: none; padding: 10px 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .print-btn:hover { background-color: var(--primary); }
+
+        /* Print Styles */
+        @page { size: A4; margin: 12mm; margin-bottom: 20mm; }
+        @media print {
+            body { padding: 0; font-size: 9.5pt; }
+            .print-btn { display: none !important; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; margin-top: 15px; margin-bottom: 5px;}
+            .header, .info-grid { page-break-inside: avoid; }
+            #print-footer { display: block !important; position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9pt; font-style: italic; color: #555; }
+        }
+        #print-footer { display: none; text-align: center; margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-style: italic; color: #555; }
+
+        /* Header Elements */
+        .header { display: flex; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header img { width: 90px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 1.5em; color: var(--primary); }
+        .header-text p { margin: 2px 0; font-size: 0.95em; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8f9fa; padding: 12px; border: 1px solid #dee2e6; margin-bottom: 15px; }
+        .info-grid p { margin: 3px 0; }
+        
+        h2 { color: var(--primary); border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 20px; font-size: 1.3em;}
+        h3 { color: var(--secondary); margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;}
+        
+        .char-dev, .rme, .joyful, .mindful, .meaningful, .hook-hl, .exit-hl { font-weight: bold; }
+        .char-dev { color: var(--char); } .rme { color: var(--rme); } .joyful { color: var(--joyful); } .mindful { color: var(--mindful); } .meaningful { color: var(--meaningful); } .hook-hl { color: var(--hook); } .exit-hl { color: var(--exit); }
+
+        /* 5E Phase Detailed Table Design */
+        .phase-container {
+            border: 1px solid var(--secondary);
+            margin-bottom: 15px;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+        }
+        .phase-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+        }
+        .phase-header span:first-child { font-size: 1.1em; letter-spacing: 0.5px; }
+        .phase-body { display: flex; width: 100%; }
+        .phase-left {
+            width: 22%;
+            background-color: var(--accent-bg);
+            padding: 12px;
+            font-style: italic;
+            color: var(--primary);
+            font-weight: bold;
+            border-right: 1px solid #cbd5e0;
+            font-size: 0.9em;
+        }
+        .phase-right {
+            width: 78%;
+            padding: 12px;
+            background-color: white;
+            font-size: 0.95em;
+        }
+        .phase-right h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1em; }
+        .phase-right ul { margin: 0 0 10px 0; padding-left: 20px; }
+        .phase-right li { margin-bottom: 4px; }
+        .scaffold-text {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+            font-size: 0.9em;
+            background-color: #f0f4f8;
+            padding: 5px 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        /* Differentiation Table Styles */
+        .diff-header {
+            display: flex; align-items: center; color: var(--primary); font-size: 1.4em; font-weight: bold;
+            margin-top: 30px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; page-break-after: avoid;
+        }
+        .diff-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; page-break-inside: avoid; }
+        .diff-table th, .diff-table td { border: 1px solid #cbd5e0; padding: 10px 15px; text-align: left; vertical-align: top; }
+        .diff-table th { background-color: #f8f9fa; color: #2d3748; font-weight: bold; }
+        .diff-table td:first-child { font-weight: bold; color: #2c3e50; width: 25%; }
+
+        .worksheet-box { border: 1px dashed #7f8c8d; padding: 15px; margin-bottom: 15px; background-color: #fbfcfa; page-break-inside: avoid;}
+        .signatures { display: flex; justify-content: space-between; margin-top: 50px; page-break-inside: avoid; }
+        .signature-block { width: 45%; text-align: left; }
+        .signature-title { margin-bottom: 60px; line-height: 1.2; }
+        .signature-name { font-weight: bold; text-decoration: underline; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Print Lesson Plan</button>
+
+    <div class="header">
+        <img src="https://semesta.sch.id/wp-content/uploads/2025/09/cropped-Logo-Semesta-2017-200x200-1-1-300x300.png" alt="SMA Semesta Logo">
+        <div class="header-text">
+            <h1>Lesson Plan: Algebra (Pure Math 2 & 3)</h1>
+            <p><strong>School:</strong> SMA Semesta 2026/2025 | <strong>Grade:</strong> 12</p>
+            <p><strong>Time Allocation:</strong> 9 Meetings (2 x 40 minutes = 80 mins per meeting)</p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div>
+            <p><strong>📌 Topic:</strong> 1. Algebra</p>
+            <p><strong>Reference:</strong> Cambridge Mathematics Pure Math 2-3 A Level textbook</p>
+            <p><strong>Method:</strong> 5E, Problem Based Learning, Math Modelling Task</p>
+        </div>
+        <div>
+            <p><strong>Approach:</strong> Hands-on Activity</p>
+            <p><strong>Character Focus:</strong> <span class="char-dev">Self-Regulated, Collaboration, Creativity, Critical Thinking</span></p>
+            <p><strong>Differentiation:</strong> Extension, Scaffolding, EAL, SEN</p>
+        </div>
+    </div>
+
+    <h2>🎯 Objectives</h2>
+    <ul style="font-size: 0.95em;">
+        <li><strong>2.1.1:</strong> Understand the meaning of $|x|$, sketch the graph of $y = |ax + b|$ and use relations such as $|a − b| = |b − a|$ and $|x − a| < b \iff a − b < x < a + b$ when solving equations and inequalities.</li>
+        <li><strong>2.1.2 & 3.1.2:</strong> Divide a polynomial, of degree not exceeding 4, by a linear or quadratic polynomial, and identify the quotient and remainder.</li>
+        <li><strong>2.1.3 & 3.1.3:</strong> Use the factor theorem to factorise a polynomial of degree not exceeding 4.</li>
+        <li><strong>2.1.4 & 3.1.4:</strong> Use the remainder theorem to find the remainder when a polynomial is divided by a linear polynomial.</li>
+    </ul>
+
+    <!-- ==========================================
+         MEETING 1
+    =========================================== -->
+    <h2>📅 Meeting 1: The Modulus Function Concept (Subtopic 1.1)</h2>
+    
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Contextual Problem</span>
+            <span>[15 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>Display a picture of a CNC machining part from a factory in Semarang. "A steel rod must be exactly 50 cm long. The machine has an error tolerance of 0.2 cm."</li>
+                    <li>Ask: "What is the acceptable range of lengths?" (49.8 to 50.2). "How do we write the error distance mathematically without caring if it's too long or too short?"</li>
+                </ul>
+                <h4>Introduce Notation (5 min):</h4>
+                <ul>
+                    <li>Introduce $|x|$ as the "absolute distance from zero."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Hands-On Number Line</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Motoric Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Walking the Number Line (20 min):</h4>
+                <ul>
+                    <li>Use masking tape to create a giant number line on the classroom floor.</li>
+                    <li>Ask a student to stand at 5. Ask another to stand at 2. "Walk to each other. How many steps?" (3).</li>
+                    <li>Now swap: Stand at 2, walk to 5. "How many steps?" (3).</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Students deduce that physical distance is always positive, proving $|a - b| = |b - a|$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Solving Simple Modulus Equations</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Formal definition: $|x| = x$ if $x \ge 0$, and $|x| = -x$ if $x < 0$.</li>
+                    <li><strong>Slide 3:</strong> Solving $|2x - 3| = 7$. Model splitting into two cases: $2x - 3 = 7$ OR $2x - 3 = -7$.</li>
+                    <li><strong>Slide 4:</strong> Solving equations with two moduli: $|3x + 1| = |x - 5|$. (Square both sides to remove modulus).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Low achievers should always write "Positive Case" and "Negative Case" as explicit headers before doing the algebra to prevent forgetting the second answer.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Practice<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (15 min):</h4>
+                <ul>
+                    <li>Students complete Worksheet 1 solving linear modulus equations.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Solve for $x$: $|x - 4| = 2x + 1$. Check for extraneous solutions!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 2
+    =========================================== -->
+    <h2>📅 Meeting 2: Graphing $y = |f(x)|$ (Subtopic 1.2)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 ENGAGE | Laser Reflection Hook</span>
+            <span>[10 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Visual Q&A<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Teacher Hook — Slide 1 (10 min):</span></h4>
+                <ul>
+                    <li>"If I fire a laser beam at the x-axis, it bounces off perfectly like a mirror."</li>
+                    <li>Draw the line $y = 2x - 4$ dipping below the x-axis. "If the x-axis is a solid floor, what happens to the negative y-values?" (They bounce up!).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E2 EXPLORE | Tracing Paper Folding</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Activity<br>(Student-led)</div>
+            <div class="phase-right">
+                <h4>Paper Folding Reflection (20 min):</h4>
+                <ul>
+                    <li>Provide students with tracing paper and axes pre-drawn.</li>
+                    <li>Students draw $y = x - 3$. Then, they fold the paper EXACTLY along the x-axis.</li>
+                    <li>They trace the negative part of the line onto the positive side, creating the classic 'V' shape of $y = |x - 3|$.</li>
+                    <li><span class="char-dev">Creativity:</span> Students visually understand that modulus applies a mathematical "reflection" to negative outputs.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Vertex and Intercepts</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 2–4 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 2:</strong> Steps to graph $y = |ax + b|$: Find the x-intercept (the vertex where the bounce happens) and the y-intercept.</li>
+                    <li><strong>Slide 3:</strong> Solving equations graphically. Draw $y = |x - 2|$ and $y = 3$. Find where they intersect.</li>
+                    <li><strong>Slide 4:</strong> Why extraneous solutions happen (the algebra finds the 'ghost' line that was reflected away).</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: EAL students annotate the graph with terms "Vertex", "y-intercept", and "Reflected line".</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task<br>& Exit Slip</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 2. Students sketch various modulus graphs and find intersection points with horizontal lines.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Find the coordinates of the vertex and the y-intercept for the graph of $y = |3x + 6|$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 3
+    =========================================== -->
+    <h2>📅 Meeting 3: Solving Modulus Inequalities (Subtopic 1.3)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Modelling Tolerances</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">PBL Exploration<br>(Group Work)</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Math Modeling Task (20 min):</span></h4>
+                <ul>
+                    <li>"A server room must be kept at $20^\circ\text{C}$. An alarm sounds if the temperature $T$ fluctuates by more than $3^\circ\text{C}$."</li>
+                    <li>Ask groups to write this as a mathematical inequality WITHOUT modulus ($17 < T < 23$) and WITH modulus ($|T - 20| < 3$).</li>
+                    <li><span class="char-dev">Collaboration:</span> Groups map the logic: $|x| < a$ means "trapped inside", while $|x| > a$ means "escaped outside".</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Inequality Logic</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction<br>(Teacher-led)</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1–4 (25 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Formalize the theorem: $|x - a| < b \iff a - b < x < a + b$.</li>
+                    <li><strong>Slide 2:</strong> Model solving $|2x - 1| \ge 5$. Split into $2x - 1 \ge 5$ OR $2x - 1 \le -5$.</li>
+                    <li><strong>Slide 3:</strong> Graphical interpretation. Why does "$<$" create a connected line segment, and "$>$" create two separate outward arrows?</li>
+                    <li><strong>Slide 4:</strong> Squaring both sides for $|ax + b| < |cx + d|$.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Teach the mnemonic "Great-OR" (Greater than splits into OR) and "Less-THAND" (Less than merges into AND).</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[35 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (25 min):</h4>
+                <ul>
+                    <li>Worksheet 3. Solve inequalities algebraically and shade solutions on number lines.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Solve the inequality $|x + 2| < 3x - 4$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 4
+    =========================================== -->
+    <h2>📅 Meeting 4: Division of Polynomials (Linear Divisors) (Subtopic 1.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | The Area Model Reborn</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Hands-On Modeling</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook (5 min):</span></h4>
+                <ul>
+                    <li>"If we know the volume of a box is $x^3 + 3x^2 - 4x - 12$ and the height is $x-2$, how do we find the base area? We must divide polynomials!"</li>
+                </ul>
+                <h4>Explore — The Grid Method (20 min):</h4>
+                <ul>
+                    <li>Provide whiteboards. Show how to do division using an Area/Grid model (reverse of expansion).</li>
+                    <li>Students deduce what must go in the top header to make the inside boxes equal the dividend.</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students realize this is a puzzle of finding missing pieces.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Algebraic Long Division</span>
+            <span>[25 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1–4 (25 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Compare polynomial long division directly to primary school numerical long division.</li>
+                    <li><strong>Slide 2:</strong> Model dividing $2x^3 - 5x^2 + x - 7$ by $(x - 3)$.</li>
+                    <li><strong>Slide 3:</strong> The golden rule: Write the answer as $P(x) = D(x)Q(x) + R(x)$.</li>
+                    <li><strong>Slide 4:</strong> What happens when a term is missing? (e.g., $x^3 - 8$). Must insert placeholders ($+ 0x^2 + 0x$)!</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Allow students who struggle with long division syntax to use the Grid/Tabular method or Synthetic Division for linear divisors.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[30 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (20 min):</h4>
+                <ul>
+                    <li>Worksheet 4. Perform division and state the quotient and remainder.</li>
+                </ul>
+                <h4><span class="exit-hl">🎟️ Exit Ticket (10 min):</span></h4>
+                <ul>
+                    <li>Divide $x^3 - 2x^2 + 5$ by $x + 1$. State the remainder.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 5
+    =========================================== -->
+    <h2>📅 Meeting 5: Division by Quadratic Polynomials (Subtopic 1.4)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Scaling Up Complexity</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Group Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (20 min):</span></h4>
+                <ul>
+                    <li>"What if the base area of our box is given as a quadratic, like $x^2 + 2x - 1$? Can we still divide a degree-4 polynomial by it?"</li>
+                    <li>Groups attempt to set up the long division. The structure is the same, but the tracking requires extreme neatness.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Managing Quadratic Divisors</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-3 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> Model dividing $x^4 + 2x^3 - 3x^2 + 4x - 5$ by $x^2 - x + 2$.</li>
+                    <li><strong>Slide 2:</strong> Highlight that the remainder can now be linear ($ax + b$), not just a constant.</li>
+                    <li><strong>Slide 3:</strong> Equating coefficients method as a powerful alternative to long division. Let $P(x) = (x^2+px+q)(x^2+cx+d) + (rx+s)$ and expand.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: Extension students must use the Equating Coefficients method to solve for unknowns in a division identity.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Mastery Practice</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (30 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 5. High-concentration long division tasks.</li>
+                    <li><strong>Exit Ticket:</strong> What is the maximum possible degree of the remainder when dividing by a quadratic polynomial? (Answer: Degree 1, linear).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MEETING 6
+    =========================================== -->
+    <h2>📅 Meeting 6: The Factor Theorem (Subtopic 1.5)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Discovery via Substitution</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">PBL Discovery</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (20 min):</span></h4>
+                <ul>
+                    <li>"Long division takes a long time. What if we just want to know IF something is a perfect factor (remainder zero) without doing the division?"</li>
+                    <li>Have half the class divide $x^3 - x^2 - 4x + 4$ by $(x - 2)$.</li>
+                    <li>Have the other half calculate the value of $P(2)$.</li>
+                    <li>Compare results. They are both Zero!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Formalizing the Theorem</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-3 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> The Factor Theorem: If $P(c) = 0$, then $(x - c)$ is a factor. Conversely, if $(x - c)$ is a factor, $P(c) = 0$.</li>
+                    <li><strong>Slide 2:</strong> General form: If $P(b/a) = 0$, then $(ax - b)$ is a factor.</li>
+                    <li><strong>Slide 3:</strong> Using the theorem to fully factorise a cubic equation. (Guess a root, use theorem, then divide to find the remaining quadratic).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Application & Evaluation</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (30 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 6. Find roots and fully factorise cubic and quartic equations.</li>
+                    <li><strong>Exit Ticket:</strong> Given $(x + 3)$ is a factor of $x^3 + kx^2 - x - 6$, find the value of $k$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 7
+    =========================================== -->
+    <h2>📅 Meeting 7: The Remainder Theorem (Subtopic 1.6)</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | Extending the Logic</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Teacher-led &<br>Pair Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Hook & Explore (20 min):</span></h4>
+                <ul>
+                    <li>"If $P(c) = 0$ means no remainder, what does it mean if $P(c) = 5$?"</li>
+                    <li>Pairs test this: Calculate $P(1)$ for $P(x) = x^2 + 2x + 4$. Then divide it by $(x - 1)$. Compare the remainder to $P(1)$.</li>
+                    <li><span class="char-dev">Critical Thinking:</span> Students generalize that $P(c)$ ALWAYS equals the remainder!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 EXPLAIN | Simultaneous Equations Context</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Direct Instruction</div>
+            <div class="phase-right">
+                <h4>Direct Instruction — Slides 1-3 (20 min):</h4>
+                <ul>
+                    <li><strong>Slide 1:</strong> The Remainder Theorem: When $P(x)$ is divided by $(ax - b)$, the remainder is $P(b/a)$.</li>
+                    <li><strong>Slide 2:</strong> Prove it algebraically: $P(x) = (ax - b)Q(x) + R$. If we sub $x = b/a$, the $Q(x)$ term becomes zero, leaving $P(b/a) = R$.</li>
+                    <li><strong>Slide 3:</strong> Solving for unknown coefficients. "When divided by $(x-1)$, remainder is 4. When divided by $(x+2)$, remainder is 16." Set up and solve simultaneous equations.</li>
+                </ul>
+                <span class="scaffold-text">Scaffold students: SEN/Low students use a color-coding system to keep track of Equation 1 and Equation 2 before solving simultaneously.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E4 & E5 | Advanced Problem Solving</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Independent Task</div>
+            <div class="phase-right">
+                <h4>Elaborate (30 min) & Exit Ticket (10 min):</h4>
+                <ul>
+                    <li>Worksheet 7. Finding unknown constants using the Remainder Theorem.</li>
+                    <li><strong>Exit Ticket:</strong> Find the remainder when $2x^3 - x^2 + 4x - 1$ is divided by $(2x - 1)$.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MEETING 8
+    =========================================== -->
+    <h2>📅 Meeting 8: Mathematical Modelling & Complex Synthesis</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E1 & E2 | The Engineering Task</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">PBL Group Work</div>
+            <div class="phase-right">
+                <h4><span class="hook-hl">🪝 Math Modeling Task (20 min):</span></h4>
+                <ul>
+                    <li><span class="rme">Culturally STEM:</span> "A structural engineer is designing a curved bridge support in Semarang. The stress curve is modeled by $P(x) = x^4 + ax^3 + bx^2 - 16x - 12$. The support must anchor perfectly (zero stress) at $x = -2$ and $x = 3$."</li>
+                    <li>Formulate: Groups must translate "anchor perfectly" into "is a factor of" and set up the math model.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E3 & E4 | Execute & Validate</span>
+            <span>[40 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Collaborative Solving</div>
+            <div class="phase-right">
+                <h4>Solve & Interpret (40 min):</h4>
+                <ul>
+                    <li>Groups use the Factor Theorem to find $a$ and $b$.</li>
+                    <li>Then, they must fully factorise the quartic polynomial to find the other two anchor points on the ground.</li>
+                    <li><span class="char-dev">Collaboration:</span> Groups present their solutions on the whiteboard, defending their mathematical steps.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 | Formative Review</span>
+            <span>[20 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Peer Assessment</div>
+            <div class="phase-right">
+                <h4>Closure (20 min):</h4>
+                <ul>
+                    <li>Review common errors seen during the PBL task (e.g., sign errors in simultaneous equations). Prepare for the exam.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         MEETING 9
+    =========================================== -->
+    <h2>📅 Meeting 9: Summative Evaluation</h2>
+
+    <div class="phase-container">
+        <div class="phase-header">
+            <span>E5 | Chapter Evaluation</span>
+            <span>[80 minutes]</span>
+        </div>
+        <div class="phase-body">
+            <div class="phase-left">Summative Test<br>(Teacher-monitored)</div>
+            <div class="phase-right">
+                <h4>Chapter 1 Test (70 min):</h4>
+                <ul>
+                    <li>Distribute the Chapter Evaluation covering Modulus Functions, Inequalities, Polynomial Division, Factor, and Remainder Theorems (Cambridge A-Level standard).</li>
+                    <li><span class="char-dev">Self-Regulated:</span> Students manage time efficiently across multiple complex algebraic proofs.</li>
+                </ul>
+                <h4>Closure & Reflection (10 min):</h4>
+                <ul>
+                    <li>Exit Slip: "Rate your ability to equate coefficients on a scale of 1-5."</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ==========================================
+         DIFFERENTIATION STRATEGIES
+    =========================================== -->
+    <div class="diff-header">
+        🌟 Differentiation Strategies
+    </div>
+    <table class="diff-table">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Strategies & Actions in Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Extension (High Achievers)</td>
+                <td>Introduce rational root theorem for finding the first factor of a cubic. Challenge them with modulus inequalities involving rational functions, e.g., $\left| \frac{2x-1}{x+3} \right| \ge 4$.</td>
+            </tr>
+            <tr>
+                <td>Scaffolding (Middle/Low)</td>
+                <td>Mandate the "squaring both sides" method for modulus inequalities rather than logical branching, as it provides a strict algebraic routine. Provide the Grid/Tabular method template for polynomial division.</td>
+            </tr>
+            <tr>
+                <td>EAL (English Additional Language)</td>
+                <td>Provide a glossary: <em>Quotient (Hasil bagi), Remainder (Sisa), Divisor (Pembagi), Absolute Value (Nilai mutlak)</em>. Ensure they understand "exactly divisible by" means remainder equals zero.</td>
+            </tr>
+            <tr>
+                <td>SEN (Special Educational Needs)</td>
+                <td>Allow use of highlighters to map corresponding terms during long division subtraction steps to prevent sign errors. Break multi-part word problems into bullet points.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==========================================
+         WORKSHEETS & EVALUATION
+    =========================================== -->
+    <h2>📝 Worksheets Compilation (For Practice & Homework)</h2>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 1 & 2: Modulus Functions & Graphs</h3>
+        <p>1. Solve the equation: $|3x - 2| = 7$.</p>
+        <p>2. Solve the equation: $|2x + 5| = |x - 4|$.</p>
+        <p>3. Sketch the graph of $y = |2x - 6|$ for $-1 \le x \le 5$. State the coordinates of the vertex and the y-intercept.</p>
+        <p>4. On the same axes, sketch $y = |x - 2|$ and $y = \frac{1}{2}x + 1$. Hence, find the coordinates of their points of intersection.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 3: Modulus Inequalities</h3>
+        <p>1. Solve the inequality $|x - 5| < 3$ and represent the solution on a number line.</p>
+        <p>2. Solve the inequality $|2x + 1| \ge 7$.</p>
+        <p>3. Find the set of values of $x$ satisfying $|3x - 1| < |x + 5|$.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 4 & 5: Polynomial Division</h3>
+        <p>1. Find the quotient and remainder when $x^3 - 4x^2 + 2x + 5$ is divided by $(x - 2)$.</p>
+        <p>2. Find the quotient and remainder when $2x^4 - 3x^3 + x - 7$ is divided by $x^2 - x + 2$.</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Worksheet 6 & 7: Factor and Remainder Theorems</h3>
+        <p>1. Show that $(x + 3)$ is a factor of $P(x) = 2x^3 + x^2 - 13x + 6$. Hence, fully factorise $P(x)$.</p>
+        <p>2. The polynomial $x^3 + ax^2 + bx - 4$ is exactly divisible by $(x-1)$ and leaves a remainder of $16$ when divided by $(x+3)$. Find $a$ and $b$.</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>💯 Chapter 1 Evaluation (Used in Meeting 9)</h2>
+    <p><em>Instructions: Answer all questions. Show all working steps clearly. (Cambridge A-Level Style)</em></p>
+
+    <div class="worksheet-box">
+        <h3>Part A: Modulus Functions (15 Marks)</h3>
+        <p>1. Solve the inequality $|3x - 2| > |x + 4|$. (5 marks)</p>
+        <p>2. Sketch the graph of $y = |2x + 3|$. (3 marks)</p>
+        <p>3. Solve the equation $|5x - 1| = 3x + 7$. You must clearly show how you reject any extraneous roots. (7 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part B: Polynomial Division (10 Marks)</h3>
+        <p>4. The polynomial $P(x) = x^4 - 2x^3 + 3x^2 - 4x + 5$ is divided by $(x^2 - x + 1)$. <br>
+           Find the quotient and the remainder. (6 marks)</p>
+        <p>5. Find the remainder when $4x^3 - 5x + 2$ is divided by $(2x - 1)$. (4 marks)</p>
+    </div>
+
+    <div class="worksheet-box">
+        <h3>Part C: Theorems & Modeling Synthesis (15 Marks)</h3>
+        <p>6. A polynomial is defined by $f(x) = 2x^3 + px^2 + qx - 15$, where $p$ and $q$ are constants.<br>
+           a) Given that $(x - 3)$ is a factor of $f(x)$, write down an equation in $p$ and $q$. (2 marks)<br>
+           b) When $f(x)$ is divided by $(x + 2)$, the remainder is $-35$. Write down a second equation in $p$ and $q$. (2 marks)<br>
+           c) Solve these equations simultaneously to find $p$ and $q$. (4 marks)<br>
+           d) With these values of $p$ and $q$, completely factorise $f(x)$. (7 marks)
+        </p>
+    </div>
+
+    <div class="signatures">
+        <div class="signature-block">
+            <div class="signature-title">Acknowledged by,<br><strong>Principal</strong></div>
+            <div class="signature-name">Ahmad Nurani, S.T., M.Pd.</div>
+        </div>
+        <div class="signature-block">
+            <div class="signature-title"><br><strong>Subject Teacher</strong></div>
+            <div class="signature-name">Muhammad Ghozian Kafi Ahsan, S.Pd., M.Pd., Gr.</div>
+        </div>
+    </div>
+
+    <div id="print-footer">Made with ❤️ by Mr Ghozi</div>
+    <script>document.getElementById('print-footer').style.display = 'block';</script>
+</body>
+</html>
