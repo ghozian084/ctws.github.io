@@ -114,6 +114,17 @@ const LEARNING_KIT_DATA = {
             ha: { label: "Hands-on Activity", files: [{ index: 1, file: "ha-01.html", title: "Hands-on Activity 1" }] },
           },
         },
+         {
+          id: 2,
+          slug: "t02-algebra",
+          title: "Algebra",
+          sections: {
+            lp: { label: "Lesson Plan", files: [{ file: "lp.html", title: "Lesson Plan" }] },
+            bd: { label: "Board", files: [{ index: 1, file: "bd-01.html", title: "Board 1" }] },
+            im: { label: "Interactive Media", files: [{ index: 1, file: "im-01.html", title: "Interactive Media 1" }] },
+            ws: { label: "Worksheet", files: [{ index: 1, file: "ws-01.html", title: "Worksheet 1" }] },
+          },
+        },
       ],
     },
   ],
