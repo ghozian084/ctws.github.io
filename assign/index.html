@@ -285,10 +285,26 @@
                 let debugText = `colsLength (from response.table.cols): ${colsLength}\n`;
                 debugText += `Data columns expected (colsLength - 1): ${expectedCols}\n`;
                 debugText += `Sum of computed chapter spans: ${spanSum}  ${groupingOk ? '✓ matches' : '✗ MISMATCH'}\n\n`;
-                debugText += `Raw Chapter row, column by column (index: "value"):\n`;
+                debugText += `Raw Chapter row (row index ${IDX_CHAPTER}), column by column:\n`;
                 rawChapterCells.forEach((v, i) => { debugText += `  [${i + 1}] ${v === "" ? '(blank)' : `"${v}"`}\n`; });
                 debugText += `\nComputed chapter groups:\n`;
                 chapters.forEach((ch) => { debugText += `  "${ch.name}"  ×${ch.span} column(s)\n`; });
+
+                debugText += `\nRaw Exercise row (row index ${IDX_EXERCISE}), column by column:\n`;
+                for (let c = 1; c < colsLength; c++) {
+                    const v = getCellText(IDX_EXERCISE, c);
+                    debugText += `  [${c}] ${v === "" ? '(blank)' : `"${v}"`}\n`;
+                }
+                debugText += `\nRaw Page row (row index ${IDX_PAGE}), column by column:\n`;
+                for (let c = 1; c < colsLength; c++) {
+                    const v = getCellText(IDX_PAGE, c);
+                    debugText += `  [${c}] ${v === "" ? '(blank)' : `"${v}"`}\n`;
+                }
+                debugText += `\nRaw cell objects for row index ${IDX_EXERCISE} (first 12 columns, straight from the response):\n`;
+                for (let c = 1; c < Math.min(colsLength, 13); c++) {
+                    const raw = (rows[IDX_EXERCISE] && rows[IDX_EXERCISE].c) ? rows[IDX_EXERCISE].c[c] : undefined;
+                    debugText += `  [${c}] ${JSON.stringify(raw)}\n`;
+                }
                 document.getElementById('debug-panel').innerHTML =
                     (groupingOk ? '<span class="dbg-ok">✓ Grouping check passed.</span>' : '<span class="dbg-bad">✗ Grouping check FAILED — see below.</span>')
                     + '\n\n' + debugText;
