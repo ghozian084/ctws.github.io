@@ -68,6 +68,7 @@
         .sticky-corner { z-index: 20 !important; background: #f8fafc !important; vertical-align: bottom; padding-bottom: 1rem; }
 
         .head-ex { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 0.25rem; display: block; }
+        .head-ex-missing { font-size: 0.85rem; font-weight: 600; font-style: italic; color: var(--text-muted); margin-bottom: 0.25rem; display: block; }
         .head-pg { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: block; }
 
         /* --- Badges --- */
@@ -150,7 +151,7 @@
 
         function openMenu() { 
             switchView('menu-view', 'dashboard-view'); 
-            window.history.pushState({}, document.title, window.location.pathname);
+            try { window.history.pushState({}, document.title, window.location.pathname); } catch (e) { /* ignore in sandboxed preview */ }
         }
 
         function triggerPasswordModal(className) {
@@ -186,7 +187,7 @@
             if (!isRefresh) {
                 switchView('dashboard-view', 'menu-view');
                 const secretToken = CLASS_TOKENS[className];
-                window.history.pushState({ class: className }, '', '?ref=' + secretToken);
+                try { window.history.pushState({ class: className }, '', '?ref=' + secretToken); } catch (e) { /* ignore in sandboxed preview */ }
             }
             
             document.getElementById('dash-title').innerText = `Grade ${className}`;
@@ -254,7 +255,7 @@
                 html += `</tr><tr class="tr-exercise">`;
                 
                 for (let c = 1; c < colsLength; c++) {
-                    const exercise = getCellText(IDX_EXERCISE, c) || `Exercise`;
+                    const exercise = getCellText(IDX_EXERCISE, c);
                     const page = getCellText(IDX_PAGE, c);
                     
                     // Cleaner Page rendering
@@ -263,7 +264,13 @@
                         pageHTML = `<span class="head-pg">Page ${page}</span>`;
                     }
 
-                    html += `<th><span class="head-ex">${exercise}</span>${pageHTML}</th>`;
+                    // Be honest when the Exercise cell in the sheet is actually empty,
+                    // instead of showing a generic "Exercise" label that looks like real data.
+                    const exerciseHTML = exercise
+                        ? `<span class="head-ex">${exercise}</span>`
+                        : `<span class="head-ex-missing">— belum diisi —</span>`;
+
+                    html += `<th>${exerciseHTML}${pageHTML}</th>`;
                 }
                 html += `</tr></thead><tbody>`;
 
