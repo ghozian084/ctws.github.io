@@ -86,6 +86,19 @@
         .badge-graded { background: var(--badge-green-bg); color: var(--badge-green-text); }
         .badge-none { background: var(--badge-red-bg); color: var(--badge-red-text); }
 
+        /* --- Percentage Column --- */
+        .col-pct { position: sticky; right: 0; z-index: 11; background: var(--bg-card); border-left: 2px solid var(--border-light); text-align: center; box-shadow: -2px 0 5px rgba(0,0,0,0.02); }
+        th.col-pct { z-index: 20; background: #f8fafc; vertical-align: bottom; padding-bottom: 1rem; }
+        td.col-pct { font-weight: 800; font-variant-numeric: tabular-nums; user-select: all; cursor: copy; }
+        td.col-pct:hover { background: #eef2ff; }
+        td.col-pct.copied { background: var(--badge-green-bg); color: var(--badge-green-text); }
+        .pct-low { color: var(--badge-red-text); }
+        .pct-mid { color: #92400e; }
+        .pct-high { color: var(--badge-green-text); }
+        .btn-copy-pct { display: inline-flex; align-items: center; gap: 4px; margin-top: 0.4rem; padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 0.4rem; cursor: pointer; }
+        .btn-copy-pct:hover { background: #eef2ff; }
+        .btn-copy-pct.copied { border-color: var(--badge-green-text); color: var(--badge-green-text); background: var(--badge-green-bg); }
+
         /* --- Loader --- */
         .loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; gap: 1rem; }
         .spinner { width: 40px; height: 40px; border: 4px solid var(--border-light); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -221,6 +234,36 @@
             document.body.appendChild(script);
         }
 
+        function copyText(text, el) {
+            const flash = () => {
+                if (!el) return;
+                el.classList.add('copied');
+                setTimeout(() => el.classList.remove('copied'), 1200);
+            };
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); flash(); } catch (e) { alert('Gagal menyalin. Silakan salin manual:\n\n' + text); }
+                ta.remove();
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(flash, fallback);
+            } else {
+                fallback();
+            }
+        }
+
+        // Copies every student's percentage, one per line in table order,
+        // so it can be pasted straight into a single spreadsheet column.
+        function copyAllPercentages(btn) {
+            const values = Array.from(document.querySelectorAll('#table-container td.col-pct')).map(td => td.dataset.pct);
+            copyText(values.join('\n'), btn);
+        }
+
         window.processSheetData = function(response) {
             document.getElementById('btn-refresh').classList.remove('spinning');
             const container = document.getElementById('table-container');
@@ -320,6 +363,7 @@
                 chapters.forEach(chap => {
                     html += `<th colspan="${chap.span}">${chap.name}</th>`;
                 });
+                html += `<th rowspan="2" class="col-pct">Persentase<br><button class="btn-copy-pct" onclick="copyAllPercentages(this)" title="Salin semua persentase (satu baris per siswa, urutan sesuai tabel)">📋 Copy</button></th>`;
                 html += `</tr><tr class="tr-exercise">`;
                 
                 for (let c = 1; c < colsLength; c++) {
@@ -348,12 +392,14 @@
 
                     html += `<tr><td>${studentName}</td>`;
                     
+                    let doneCount = 0;
                     for (let c = 1; c < colsLength; c++) {
                         const stringVal = getCellText(r, c);
                         
                         if (stringVal === "" || stringVal.toLowerCase() === "none") {
                             html += `<td><span class="badge badge-none">None</span></td>`;
                         } else {
+                            doneCount++;
                             html += `
                                 <td>
                                     <span class="badge badge-graded" title="Score: ${stringVal}">
@@ -362,6 +408,10 @@
                                 </td>`;
                         }
                     }
+                    const totalCount = colsLength - 1;
+                    const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+                    const pctClass = pct >= 80 ? 'pct-high' : (pct >= 50 ? 'pct-mid' : 'pct-low');
+                    html += `<td class="col-pct ${pctClass}" data-pct="${pct}%" title="${doneCount}/${totalCount} selesai — klik untuk menyalin" onclick="copyText(this.dataset.pct, this)">${pct}%</td>`;
                     html += `</tr>`;
                 }
 
