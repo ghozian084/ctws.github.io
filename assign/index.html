@@ -99,6 +99,15 @@
         .btn-copy-pct:hover { background: #eef2ff; }
         .btn-copy-pct.copied { border-color: var(--badge-green-text); color: var(--badge-green-text); background: var(--badge-green-bg); }
 
+        /* --- Single-exercise filter --- */
+        .tr-exercise th.th-ex { cursor: pointer; transition: background 0.15s; }
+        .tr-exercise th.th-ex:hover { background: #eef2ff; }
+        .filter-bar { position: sticky; left: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.75rem 1rem; background: #eef2ff; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; }
+        .filter-bar b { color: var(--primary); }
+        .filter-bar .filter-sum { color: var(--text-muted); font-weight: 600; margin-left: 0.5rem; }
+        .btn-show-all { padding: 0.4rem 0.9rem; font-size: 0.8rem; font-weight: 700; border: 1px solid var(--primary); color: var(--primary); background: white; border-radius: 0.4rem; cursor: pointer; }
+        .btn-show-all:hover { background: var(--primary); color: white; }
+
         /* --- Loader --- */
         .loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; gap: 1rem; }
         .spinner { width: 40px; height: 40px; border: 4px solid var(--border-light); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -158,6 +167,14 @@
         const TOKEN_TO_CLASS = { 'x7k9p2m': '9A', 'v4b8q1z': '9B', 'n3c6w9d': '12A', 't8j2f5h': '12B' };
 
         let currentActiveClass = '';
+        let lastSheetResponse = null;   // last data received, so filtering doesn't need a re-fetch
+        let selectedCol = null;         // sheet column index of the exercise being viewed alone, or null for all
+
+        // Click an exercise header -> show only that exercise's checklist. Click again (or "Tampilkan semua") -> back to all.
+        function selectExercise(col) {
+            selectedCol = (selectedCol === col) ? null : col;
+            if (lastSheetResponse) renderSheet(lastSheetResponse);
+        }
 
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -214,6 +231,7 @@
         function openClass(className, isRefresh = false) {
             currentActiveClass = className;
             if (!isRefresh) {
+                selectedCol = null;
                 switchView('dashboard-view', 'menu-view');
                 const secretToken = CLASS_TOKENS[className];
                 try { window.history.pushState({ class: className }, '', '?ref=' + secretToken); } catch (e) { /* ignore in sandboxed preview */ }
@@ -266,6 +284,11 @@
 
         window.processSheetData = function(response) {
             document.getElementById('btn-refresh').classList.remove('spinning');
+            lastSheetResponse = response;
+            renderSheet(response);
+        };
+
+        function renderSheet(response) {
             const container = document.getElementById('table-container');
             
             try {
@@ -357,16 +380,48 @@
                     html += `<div class="warn-banner"><b>⚠️ Data mismatch detected</b>Kolom chapter tidak terhitung pas (lihat panel Debug). Menampilkan data apa adanya, tapi mohon dicek — kemungkinan ada baris/kolom yang formatnya tidak biasa di sheet ini.</div>`;
                 }
 
+                // Which sheet columns to show: all of them, or only the clicked exercise.
+                if (selectedCol !== null && (selectedCol < 1 || selectedCol >= colsLength)) selectedCol = null;
+                const isFiltered = selectedCol !== null;
+                const visibleCols = [];
+                for (let c = 1; c < colsLength; c++) if (!isFiltered || c === selectedCol) visibleCols.push(c);
+
+                // Chapter that the selected column belongs to (for the header + filter bar).
+                let selectedChapterName = '';
+                if (isFiltered) {
+                    let start = 1;
+                    for (const ch of chapters) {
+                        if (selectedCol < start + ch.span) { selectedChapterName = ch.name; break; }
+                        start += ch.span;
+                    }
+                }
+
+                if (isFiltered) {
+                    const exName = getCellText(IDX_EXERCISE, selectedCol) || '— belum diisi —';
+                    let doneInCol = 0, studentsInCol = 0;
+                    for (let r = IDX_STUDENTS_START; r < rows.length; r++) {
+                        if (!getCellText(r, 0)) continue;
+                        studentsInCol++;
+                        const v = getCellText(r, selectedCol);
+                        if (v !== "" && v.toLowerCase() !== "none") doneInCol++;
+                    }
+                    html += `<div class="filter-bar"><span>Menampilkan: <b>${exName}</b> <span class="filter-sum">${selectedChapterName} · ${doneInCol}/${studentsInCol} siswa selesai</span></span><button class="btn-show-all" onclick="selectExercise(null)">← Tampilkan semua tugas</button></div>`;
+                }
+
                 html += `<table><thead><tr class="tr-chapter">`;
                 html += `<th rowspan="2" class="sticky-col sticky-corner">Student Name</th>`; 
                 
-                chapters.forEach(chap => {
-                    html += `<th colspan="${chap.span}">${chap.name}</th>`;
-                });
-                html += `<th rowspan="2" class="col-pct">Persentase<br><button class="btn-copy-pct" onclick="copyAllPercentages(this)" title="Salin semua persentase (satu baris per siswa, urutan sesuai tabel)">📋 Copy</button></th>`;
+                if (isFiltered) {
+                    html += `<th>${selectedChapterName}</th>`;
+                } else {
+                    chapters.forEach(chap => {
+                        html += `<th colspan="${chap.span}">${chap.name}</th>`;
+                    });
+                }
+                if (!isFiltered) html += `<th rowspan="2" class="col-pct">Persentase<br><button class="btn-copy-pct" onclick="copyAllPercentages(this)" title="Salin semua persentase (satu baris per siswa, urutan sesuai tabel)">📋 Copy</button></th>`;
                 html += `</tr><tr class="tr-exercise">`;
                 
-                for (let c = 1; c < colsLength; c++) {
+                for (const c of visibleCols) {
                     const exercise = getCellText(IDX_EXERCISE, c);
                     const page = getCellText(IDX_PAGE, c);
                     
@@ -382,7 +437,8 @@
                         ? `<span class="head-ex">${exercise}</span>`
                         : `<span class="head-ex-missing">— belum diisi —</span>`;
 
-                    html += `<th>${exerciseHTML}${pageHTML}</th>`;
+                    const thTitle = isFiltered ? 'Klik untuk menampilkan semua tugas' : 'Klik untuk menampilkan tugas ini saja';
+                    html += `<th class="th-ex" title="${thTitle}" onclick="selectExercise(${c})">${exerciseHTML}${pageHTML}</th>`;
                 }
                 html += `</tr></thead><tbody>`;
 
@@ -395,11 +451,13 @@
                     let doneCount = 0;
                     for (let c = 1; c < colsLength; c++) {
                         const stringVal = getCellText(r, c);
+                        const isDone = !(stringVal === "" || stringVal.toLowerCase() === "none");
+                        if (isDone) doneCount++;
+                        if (isFiltered && c !== selectedCol) continue;
                         
-                        if (stringVal === "" || stringVal.toLowerCase() === "none") {
+                        if (!isDone) {
                             html += `<td><span class="badge badge-none">None</span></td>`;
                         } else {
-                            doneCount++;
                             html += `
                                 <td>
                                     <span class="badge badge-graded" title="Score: ${stringVal}">
@@ -411,7 +469,7 @@
                     const totalCount = colsLength - 1;
                     const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
                     const pctClass = pct >= 80 ? 'pct-high' : (pct >= 50 ? 'pct-mid' : 'pct-low');
-                    html += `<td class="col-pct ${pctClass}" data-pct="${pct}%" title="${doneCount}/${totalCount} selesai — klik untuk menyalin" onclick="copyText(this.dataset.pct, this)">${pct}%</td>`;
+                    if (!isFiltered) html += `<td class="col-pct ${pctClass}" data-pct="${pct}%" title="${doneCount}/${totalCount} selesai — klik untuk menyalin" onclick="copyText(this.dataset.pct, this)">${pct}%</td>`;
                     html += `</tr>`;
                 }
 
@@ -426,7 +484,7 @@
                         <span style="font-weight:normal;color:#64748b;">Please go to Google Sheets, highlight the entire sheet (Ctrl+A), and click <b>Format > Number > Plain text</b>. Then retype one of the page numbers to refresh it.</span>
                     </div>`;
             }
-        };
+        }
     </script>
 </body>
 </html>
