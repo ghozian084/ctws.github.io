@@ -242,14 +242,76 @@
             const container = document.getElementById('table-container');
             container.innerHTML = `<div class="loader-container"><div class="spinner"></div><div class="loader-text">Loading Grade ${className} Data...</div></div>`;
 
-            const oldScript = document.getElementById('jsonp-script');
-            if (oldScript) oldScript.remove();
+            const seq = ++loadSeq;
+            loadSheet(className)
+                .then(resp => { if (seq === loadSeq) processSheetData(resp); })
+                .catch(err => {
+                    if (seq !== loadSeq) return;
+                    console.error(err);
+                    document.getElementById('btn-refresh').classList.remove('spinning');
+                    container.innerHTML = `<div style="padding:3rem;text-align:center;color:red;font-weight:bold;">Gagal memuat data dari Google Sheets.<br><br><span style="font-weight:normal;color:#64748b;">${err.message}. Coba tekan Refresh.</span></div>`;
+                });
+        }
 
-            const timestamp = new Date().getTime();
-            const script = document.createElement('script');
-            script.id = 'jsonp-script';
-            script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:processSheetData&sheet=${encodeURIComponent(className)}&headers=0&_=${timestamp}`;
-            document.body.appendChild(script);
+        // --- Loading the sheet ---
+        // Google's gviz endpoint forces ONE data type per column, chosen by majority. Any cell whose
+        // type is in the minority comes back as null — e.g. "Worksheet" in a column of mostly numbers,
+        // or 100 in a column of mostly "v". Formatting the sheet as Plain text doesn't fix values that
+        // were already stored as numbers, nor formula results. A single row has only one cell per
+        // column, so nothing can conflict: we fetch the whole sheet once (to learn its size), then
+        // re-fetch every row on its own and use those cells instead.
+        let loadSeq = 0;
+        let jsonpCounter = 0;
+
+        function gvizRequest(sheetName, extraParams = '') {
+            return new Promise((resolve, reject) => {
+                const cb = 'gvizCb' + (++jsonpCounter);
+                const script = document.createElement('script');
+                const timer = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 30000);
+                function cleanup() { clearTimeout(timer); delete window[cb]; script.remove(); }
+                window[cb] = (resp) => {
+                    cleanup();
+                    if (!resp || resp.status === 'error' || !resp.table) {
+                        const msg = resp && resp.errors && resp.errors[0] ? (resp.errors[0].detailed_message || resp.errors[0].message) : 'Respons tidak valid';
+                        reject(new Error(msg));
+                    } else resolve(resp);
+                };
+                script.onerror = () => { cleanup(); reject(new Error('Koneksi gagal')); };
+                script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:${cb}&sheet=${encodeURIComponent(sheetName)}&headers=0${extraParams}&_=${Date.now()}`;
+                document.body.appendChild(script);
+            });
+        }
+
+        function colLetter(index) { // 0 -> A, 25 -> Z, 26 -> AA
+            let s = '';
+            for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + (n - 1) % 26) + s;
+            return s;
+        }
+
+        const cellHasValue = (cell) => cell && ((cell.v !== null && cell.v !== undefined) || (cell.f !== null && cell.f !== undefined));
+
+        async function loadSheet(sheetName) {
+            const full = await gvizRequest(sheetName);
+            const rows = full.table.rows;
+            const lastCol = colLetter(full.table.cols.length - 1);
+
+            const perRow = await Promise.all(rows.map((_, r) =>
+                gvizRequest(sheetName, `&range=A${r + 1}:${lastCol}${r + 1}`).catch(() => null)
+            ));
+
+            let recovered = 0, failedRows = 0;
+            rows.forEach((row, r) => {
+                const single = perRow[r] && perRow[r].table.rows[0];
+                if (!perRow[r]) { failedRows++; return; }
+                if (!single || !single.c) return;
+                if (!row.c) row.c = [];
+                single.c.forEach((cell, c) => {
+                    if (cellHasValue(cell) && !cellHasValue(row.c[c])) { row.c[c] = cell; recovered++; }
+                });
+            });
+            full._recovered = recovered;
+            full._failedRows = failedRows;
+            return full;
         }
 
         function copyText(text, el) {
@@ -282,11 +344,11 @@
             copyText(values.join('\n'), btn);
         }
 
-        window.processSheetData = function(response) {
+        function processSheetData(response) {
             document.getElementById('btn-refresh').classList.remove('spinning');
             lastSheetResponse = response;
             renderSheet(response);
-        };
+        }
 
         function renderSheet(response) {
             const container = document.getElementById('table-container');
@@ -348,7 +410,8 @@
                 const spanSum = chapters.reduce((s, ch) => s + ch.span, 0);
                 const groupingOk = spanSum === expectedCols;
 
-                let debugText = `colsLength (from response.table.cols): ${colsLength}\n`;
+                let debugText = `Sel yang dipulihkan lewat pengambilan per baris: ${response._recovered || 0}` + (response._failedRows ? `  (⚠ ${response._failedRows} baris gagal diambil ulang)` : '') + `\n`;
+                debugText += `colsLength (from response.table.cols): ${colsLength}\n`;
                 debugText += `Data columns expected (colsLength - 1): ${expectedCols}\n`;
                 debugText += `Sum of computed chapter spans: ${spanSum}  ${groupingOk ? '✓ matches' : '✗ MISMATCH'}\n\n`;
                 debugText += `Raw Chapter row (row index ${IDX_CHAPTER}), column by column:\n`;
@@ -480,8 +543,8 @@
                 console.error(err);
                 container.innerHTML = `
                     <div style="padding:3rem;text-align:center;color:red;font-weight:bold;">
-                        Data formatting error!<br><br>
-                        <span style="font-weight:normal;color:#64748b;">Please go to Google Sheets, highlight the entire sheet (Ctrl+A), and click <b>Format > Number > Plain text</b>. Then retype one of the page numbers to refresh it.</span>
+                        Gagal menampilkan data.<br><br>
+                        <span style="font-weight:normal;color:#64748b;">${err.message} — buka panel Debug untuk detail, lalu coba Refresh.</span>
                     </div>`;
             }
         }
