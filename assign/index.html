@@ -99,6 +99,12 @@
         .btn-copy-pct:hover { background: #eef2ff; }
         .btn-copy-pct.copied { border-color: var(--badge-green-text); color: var(--badge-green-text); background: var(--badge-green-bg); }
 
+        /* --- Links inside cells --- */
+        .cell-link { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+        .cell-link:hover { color: #312e81; }
+        a.badge { text-decoration: none; cursor: pointer; }
+        a.badge-graded:hover { filter: brightness(0.95); text-decoration: underline; }
+
         /* --- Single-exercise filter --- */
         .tr-exercise th.th-ex { cursor: pointer; transition: background 0.15s; }
         .tr-exercise th.th-ex:hover { background: #eef2ff; }
@@ -288,6 +294,33 @@
             return s;
         }
 
+        // --- Links: any http(s):// or www. text in a cell becomes clickable ---
+        const URL_RE = /\b(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+        const escapeHtml = (t) => String(t).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+        const toHref = (u) => /^https?:\/\//i.test(u) ? u : 'https://' + u;
+        const firstUrl = (text) => { const m = String(text).match(URL_RE); return m ? toHref(m[0]) : null; };
+        // Long URLs are shown shortened (host + last path segment); the full URL is in the tooltip.
+        function shortUrl(u) {
+            try {
+                const x = new URL(toHref(u));
+                const host = x.hostname.replace(/^www\./, '');
+                const parts = x.pathname.split('/').filter(Boolean);
+                if (parts.length === 0) return host;
+                const lastPart = decodeURIComponent(parts[parts.length - 1]);
+                return host + (parts.length > 1 ? '/…/' : '/') + (lastPart.length > 30 ? lastPart.slice(0, 30) + '…' : lastPart);
+            }
+            catch (e) { return u.length > 35 ? u.slice(0, 35) + '…' : u; }
+        }
+        function linkify(text) {
+            let out = '', last = 0;
+            String(text).replace(URL_RE, (m, _g, idx) => {
+                out += escapeHtml(text.slice(last, idx));
+                out += `<a class="cell-link" href="${escapeHtml(toHref(m))}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(m)}" onclick="event.stopPropagation()">${escapeHtml(shortUrl(m))}</a>`;
+                last = idx + m.length;
+            });
+            return out + escapeHtml(String(text).slice(last));
+        }
+
         const cellHasValue = (cell) => cell && ((cell.v !== null && cell.v !== undefined) || (cell.f !== null && cell.f !== undefined));
 
         async function loadSheet(sheetName) {
@@ -475,10 +508,10 @@
                 html += `<th rowspan="2" class="sticky-col sticky-corner">Student Name</th>`; 
                 
                 if (isFiltered) {
-                    html += `<th>${selectedChapterName}</th>`;
+                    html += `<th>${linkify(selectedChapterName)}</th>`;
                 } else {
                     chapters.forEach(chap => {
-                        html += `<th colspan="${chap.span}">${chap.name}</th>`;
+                        html += `<th colspan="${chap.span}">${linkify(chap.name)}</th>`;
                     });
                 }
                 if (!isFiltered) html += `<th rowspan="2" class="col-pct">Persentase<br><button class="btn-copy-pct" onclick="copyAllPercentages(this)" title="Salin semua persentase (satu baris per siswa, urutan sesuai tabel)">📋 Copy</button></th>`;
@@ -491,13 +524,13 @@
                     // Cleaner Page rendering
                     let pageHTML = "";
                     if (page !== "" && page !== "-") {
-                        pageHTML = `<span class="head-pg">Page ${page}</span>`;
+                        pageHTML = `<span class="head-pg">Page ${linkify(page)}</span>`;
                     }
 
                     // Be honest when the Exercise cell in the sheet is actually empty,
                     // instead of showing a generic "Exercise" label that looks like real data.
                     const exerciseHTML = exercise
-                        ? `<span class="head-ex">${exercise}</span>`
+                        ? `<span class="head-ex">${linkify(exercise)}</span>`
                         : `<span class="head-ex-missing">— belum diisi —</span>`;
 
                     const thTitle = isFiltered ? 'Klik untuk menampilkan semua tugas' : 'Klik untuk menampilkan tugas ini saja';
@@ -509,7 +542,7 @@
                     const studentName = getCellText(r, 0);
                     if (!studentName) continue; 
 
-                    html += `<tr><td>${studentName}</td>`;
+                    html += `<tr><td>${linkify(studentName)}</td>`;
                     
                     let doneCount = 0;
                     for (let c = 1; c < colsLength; c++) {
@@ -521,17 +554,16 @@
                         if (!isDone) {
                             html += `<td><span class="badge badge-none">None</span></td>`;
                         } else {
-                            html += `
-                                <td>
-                                    <span class="badge badge-graded" title="Score: ${stringVal}">
-                                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg> Done
-                                    </span>
-                                </td>`;
+                            const check = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`;
+                            const url = firstUrl(stringVal);
+                            html += url
+                                ? `<td><a class="badge badge-graded" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="Buka link: ${escapeHtml(stringVal)}">${check} Done ↗</a></td>`
+                                : `<td><span class="badge badge-graded" title="Score: ${escapeHtml(stringVal)}">${check} Done</span></td>`;
                         }
                     }
                     const totalCount = colsLength - 1;
                     const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
-                    const pctClass = pct >= 80 ? 'pct-high' : (pct >= 50 ? 'pct-mid' : 'pct-low');
+                    const pctClass = pct >= 70 ? 'pct-high' : (pct >= 50 ? 'pct-mid' : 'pct-low');
                     if (!isFiltered) html += `<td class="col-pct ${pctClass}" data-pct="${pct}%" title="${doneCount}/${totalCount} selesai — klik untuk menyalin" onclick="copyText(this.dataset.pct, this)">${pct}%</td>`;
                     html += `</tr>`;
                 }
